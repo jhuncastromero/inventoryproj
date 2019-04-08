@@ -38,9 +38,9 @@
               <div class="input-field col s6">
                 <select id="department" name="department" class="validate" required="true">
                   <option value="" disabled selected>Choose Department</option>
-                  <option value="Dept1">Option 1 </option>
-                  <option value="Dept2">Option 2 </option>
-                  <option value="Dept3">Option 3 </option>
+                  @foreach($pull_department as $list)
+                         <option value="{{ $list->deptcode }}"> {{ $list->deptcode }} - {{ $list->deptname }} </option>
+                  @endforeach
                 </select>
                 <label for="department">Choose Department</label>
               </div>

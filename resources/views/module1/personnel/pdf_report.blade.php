@@ -55,5 +55,24 @@
 
 				 </table>
 		</div>
+		<div class="row">
+						
+					<ul class="pagination">
+		   		         <li class="waves-effect"><a href="{{$get_personnel_lists->previousPageUrl()}}"><i class="material-icons">chevron_left</i></a></li>
+
+		   		         	@if(($get_personnel_lists->total()%10) > 0)
+		   		         		@for($i=1; $i<=($get_personnel_lists->total()/10)+1; $i++)
+		   		         			 <li class="waves-effect circle"><a href="{{$get_personnel_lists->url($i)}}">{{$i}}</a></li>
+		   		         		@endfor
+		   		         	@else
+		   		         		@for($i=1; $i<=($get_personnel_lists->total()/10); $i++)
+		   		         			 <li class="waves-effect"><a href="{{$get_personnel_lists->url($i)}}">{{$i}}</a></li>
+		   		         		@endfor
+		   		         	@endif
+
+		   		         <li class="waves-effect"><a href="{{$get_personnel_lists->nextPageUrl()}}"><i class="material-icons">chevron_right</i></a></li>
+		   		    </ul>     
+		
+   		    </div>
 	</div>
 @endsection

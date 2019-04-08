@@ -189,7 +189,7 @@ class personnel extends Model
     return [$countID, $countName, $countEmail];
 
     }
-    
+
     public static function list_update()
     {
       $query = personnel::whereNull('deleted_at')->orderBy('last_name')->Paginate(5);
@@ -198,7 +198,7 @@ class personnel extends Model
 
     public static function report_all_data()
     {
-       $query = personnel::whereNull('deleted_at')->orderBy('last_name')->get();
+       $query = personnel::whereNull('deleted_at')->orderBy('last_name')->Paginate(10);
        return $query;
     }
 

@@ -159,8 +159,8 @@
 		  		</div>		
 
 			<div class="row">
-				<input type="text" id="hidden_r_index" name = "hidden_r_index">
-				<input type="text" id="quick_search" name = "quick_search">
+				<input type="hidden" id="hidden_r_index" name = "hidden_r_index">
+				<input type="hidden" id="quick_search" name = "quick_search">
 			</div>			
 		  </form>
 

@@ -95,8 +95,13 @@
 	          </div>
 			
 			  <div class="input-field col s6" >
-	            <input type="text" value="{{ $query_personnels[0]->department }}" class="validate" required="true" name="department" id="department">
-	            <label for="department">Department</label>
+	             <select id="department" name="department">
+                  <option value="" disabled selected> {{ $query_personnels[0]->department }} - {{ $deptname }} </option>
+                  @foreach($pull_department as $list)
+                         <option value="{{ $list->deptcode }}"> {{ $list->deptcode }} - {{ $list->deptname }} </option>
+                  @endforeach
+                </select>
+        
 	          </div>
 
 			  <div class="input-field col s6" >

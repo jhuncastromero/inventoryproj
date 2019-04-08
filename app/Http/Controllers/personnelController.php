@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\personnel;
+use App\department;
 use App\Http\Requests;
 
 use Illuminate\Http\Request;
@@ -35,10 +36,32 @@ class personnelController extends Controller
         $error_title = '';
         $error_message = '';
         $error_icon = '';
+        $pull_department = '';
+        $deptname = '';
+
+
+        $department = new department; // populate dropdown department code
+        $pull_department = $department::pull_department_data();
+
+        if ($pull_department == '')
+        {
+            $pull_department = '';            
+        }   
 
         $personnel = new personnel;
         $query_personnels = $personnel::getdetails_2($id);
-        return view('module1.personnel.updatedetails',compact('query_personnels','updatevalue','error_title','error_message', 'error_icon','photo_status'));
+        $query_departments = $department::getDepartment_name($query_personnels[0]->department);
+
+        if($query_departments->isEmpty())
+        {
+            $deptname = '';
+        }
+        else
+        {
+            $deptname = $query_departments[0]->deptname;
+        }
+
+        return view('module1.personnel.updatedetails',compact('query_personnels','updatevalue','error_title','error_message', 'error_icon','photo_status','pull_department','deptname'));
         
     }
 
@@ -67,7 +90,17 @@ class personnelController extends Controller
         $error_title = '';
         $error_message = '';
         $error_icon = '';
-        return view('module1.personnel.create', compact('createvalue','error_title','error_message','error_icon'));   
+        $department = '';
+        $pull_department = '';
+
+        $department = new department;
+        $pull_department = $department::pull_department_data();
+
+        if ($pull_department == '')
+        {
+            $pull_department = '';            
+        }   
+        return view('module1.personnel.create', compact('createvalue','error_title','error_message','error_icon','pull_department'));   
 
     }
 
@@ -84,6 +117,17 @@ class personnelController extends Controller
         $error_title = '';
         $error_message = '';
         $error_icon = '';
+        $pull_department = '';
+
+
+        $department = new department; // populate dropdown department code
+        $pull_department = $department::pull_department_data();
+
+        if ($pull_department == '')
+        {
+            $pull_department = '';            
+        }   
+
 
         $photofile = $request->file('photofile');
         if($photofile)
@@ -99,13 +143,15 @@ class personnelController extends Controller
             $photo_filename = "";
         }
 
+
+
         $personnel = new personnel;
         $error = $personnel::create_new($request->emp_id, $request->last_name, $request->first_name, $request->middle_initial, $request->department, $request->job_position, $photo_filename ,$request->email_add );
         
         if($error==0)
         {
             $createvalue=2;
-            return view('module1.personnel.create',compact('createvalue', 'error_title','error_message','error_icon'));
+            return view('module1.personnel.create',compact('createvalue', 'error_title','error_message','error_icon','pull_department'));
         }
         else
         {
@@ -138,8 +184,9 @@ class personnelController extends Controller
             }
 
             //return view('module1.message_page',compact('error_title','error_icon','error_message'));
+
             $createvalue=1;
-            return view('module1.personnel.create',compact('createvalue', 'error_title','error_message','error_icon'));
+            return view('module1.personnel.create',compact('createvalue', 'error_title','error_message','error_icon','pull_department'));
         }
 
         
@@ -154,9 +201,22 @@ class personnelController extends Controller
     public function show($id)
     {
         //
+       
+        $deptname = '';
+        $department = new department;
         $personnel = new personnel;
+
         $query_personnels = $personnel::getdetails($id);
-        return view('module1.personnel.show',compact('query_personnels'));
+        $query_departments = $department::getDepartment_name($query_personnels[0]->department);
+        if($query_departments->isEmpty())
+        {
+            $deptname = '';
+        }
+        else
+        {
+            $deptname = $query_departments[0]->deptname;
+        }
+        return view('module1.personnel.show',compact('query_personnels','deptname'));
         
     }
 
@@ -192,6 +252,7 @@ class personnelController extends Controller
        $error_message = '';
        $photo_status='';
        $update_photo_dbase='';
+       $deptname = '';
        $test_photofile=0;
        
        $old_emp_id = $data[0]->emp_id;
@@ -205,8 +266,19 @@ class personnelController extends Controller
        
        $photo_filename = $request->emp_id.'.jpg'; //photo filename
        $personnel_folder_name = $request->emp_id;  //folder name
+
+       $department = new department; // code for identifying the department name where the employee belong. use for display purposes ex. DEP002 - CONSULTING AND TRAINING
+       $query_departments = $department::getDepartment_name($data[0]->department); 
+        if($query_departments->isEmpty())
+        {
+            $deptname = '';
+        }
+        else
+        {
+            $deptname = $query_departments[0]->deptname;
+        }
         
-       $go_update = $personnel::update_profile($id, $request->emp_id, $request->last_name, $request->first_name, $request->middle_initial, $request->department, $request->job_position, $request->email_add, $old_emp_id, $old_last_name,$old_first_name, $old_middle_initial, $old_email_add );
+        $go_update = $personnel::update_profile($id, $request->emp_id, $request->last_name, $request->first_name, $request->middle_initial, $request->department, $request->job_position, $request->email_add, $old_emp_id, $old_last_name,$old_first_name, $old_middle_initial, $old_email_add );
 
        if( $go_update[0] == 0 && $go_update[1] == 0 && $go_update[2] == 0 )
        {
@@ -380,9 +452,19 @@ class personnelController extends Controller
                  $error_message = "You have entered an existing Email Address. Please check your entry.";
             }
 
+
+            $department = new department; // populate dropdown department code
+            $pull_department = $department::pull_department_data();
+
+            if ($pull_department == '')
+            {
+                $pull_department = '';            
+            }
+
             $updatevalue = 1;
 
-            return view('module1.personnel.updatedetails',compact('query_personnels','updatevalue', 'error_title','error_message','error_icon','photo_status'));
+            
+            return view('module1.personnel.updatedetails',compact('query_personnels','updatevalue', 'error_title','error_message','error_icon','photo_status','pull_department','deptname'));
 
        }   
 
