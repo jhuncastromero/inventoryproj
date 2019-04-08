@@ -402,7 +402,7 @@ class personnelController extends Controller
        $id = '';
        
        $id = $request->hidden_r_index;
-    
+           
        $personnel = new personnel;
        $query_personnels = $personnel::list_update();
        $deletevalue = personnel::personnel_delete($id);

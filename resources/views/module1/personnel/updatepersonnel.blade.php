@@ -69,10 +69,24 @@
 			</div>
 
 		  	 <div class="row">
-				{{ $query_personnels->links() }}
-			</div>	
-		
+						
+					<ul class="pagination">
+		   		         <li class="waves-effect"><a href="{{$query_personnels->previousPageUrl()}}"><i class="material-icons">chevron_left</i></a></li>
 
+		   		         	@if(($query_personnels->total()%5) > 0)
+		   		         		@for($i=1; $i<=($query_personnels->total()/5)+1; $i++)
+		   		         			 <li class="waves-effect circle"><a href="{{$query_personnels->url($i)}}">{{$i}}</a></li>
+		   		         		@endfor
+		   		         	@else
+		   		         		@for($i=1; $i<=($query_personnels->total()/5); $i++)
+		   		         			 <li class="waves-effect"><a href="{{$query_personnels->url($i)}}">{{$i}}</a></li>
+		   		         		@endfor
+		   		         	@endif
+
+		   		         <li class="waves-effect"><a href="{{$query_personnels->nextPageUrl()}}"><i class="material-icons">chevron_right</i></a></li>
+		   		    </ul>     
+		
+   		    </div>
 	        <div class="row">  <!--Search Header-->
 				<div id=""><i class="material-icons">search</i>&nbsp;<b>Quick Search Profile to Update </b></div>
 			</div>
@@ -126,7 +140,7 @@
 	      			@endif
 	    </div>
 		<!-- FORM Below is for MODAL Window-->
-		 <form action=" {{ route('personnel.destroy',$query_personnel->id) }}" method="POST" id="delete-form">
+		 <form action=" {{ route('personnel.destroy',0) }}" method="POST" id="delete-form">
 	          {{ csrf_field() }}
               {{ method_field('DELETE') }}
 	
@@ -145,8 +159,8 @@
 		  		</div>		
 
 			<div class="row">
-				<input type="hidden" id="hidden_r_index" name = "hidden_r_index">
-				<input type="hidden" id="quick_search" name = "quick_search">
+				<input type="text" id="hidden_r_index" name = "hidden_r_index">
+				<input type="text" id="quick_search" name = "quick_search">
 			</div>			
 		  </form>
 
@@ -202,11 +216,11 @@
       			success: function(data){
       				
       				$('#personnelDetails').html(data);
-      				
+      				$('#hidden_r_index').val('');		
       			}
 
      		})
-     		$('#hidden_r_index').val('');
+     		
 		 	
 		 });
 

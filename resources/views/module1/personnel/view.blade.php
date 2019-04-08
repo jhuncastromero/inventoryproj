@@ -57,19 +57,19 @@
 		<div class="row">
 			
 			<ul class="pagination">
-   		         <li class=""><a href="{{$query_personnels->previousPageUrl()}}"><i class="material-icons">chevron_left</i></a></li>
+   		         <li class="waves-effect"><a href="{{$query_personnels->previousPageUrl()}}"><i class="material-icons">chevron_left</i></a></li>
 
    		         	@if(($query_personnels->total()%5) > 0)
    		         		@for($i=1; $i<=($query_personnels->total()/5)+1; $i++)
-   		         			 <li class=""><a href="{{$query_personnels->url($i)}}">{{$i}}</a></li>
+   		         			 <li class="waves-effect circle"><a href="{{$query_personnels->url($i)}}">{{$i}}</a></li>
    		         		@endfor
    		         	@else
    		         		@for($i=1; $i<=($query_personnels->total()/5); $i++)
-   		         			 <li class=""><a href="{{$query_personnels->url($i)}}">{{$i}}</a></li>
+   		         			 <li class="waves-effect"><a href="{{$query_personnels->url($i)}}">{{$i}}</a></li>
    		         		@endfor
    		         	@endif
 
-   		         <li class=""><a href="{{$query_personnels->nextPageUrl()}}"><i class="material-icons">chevron_right</i></a></li>
+   		         <li class="waves-effect"><a href="{{$query_personnels->nextPageUrl()}}"><i class="material-icons">chevron_right</i></a></li>
    		    </ul>     
 
 		</div>

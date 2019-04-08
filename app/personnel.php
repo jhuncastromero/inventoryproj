@@ -192,7 +192,7 @@ class personnel extends Model
     
     public static function list_update()
     {
-      $query = personnel::whereNull('deleted_at')->orderBy('last_name')->simplePaginate(5);
+      $query = personnel::whereNull('deleted_at')->orderBy('last_name')->Paginate(5);
       return $query; 
     }
 
