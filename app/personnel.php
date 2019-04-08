@@ -153,6 +153,7 @@ class personnel extends Model
         elseif(!empty($last_name)){
 
             $query = personnel::where('last_name','like',$last_name.'%')->whereNull('deleted_at')->get();    
+        
         }
 
          return $query;

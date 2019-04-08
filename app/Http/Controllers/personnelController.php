@@ -504,8 +504,8 @@ class personnelController extends Controller
     {
 
            $personnel = new personnel;
-            $query_personnels = $personnel::personnel_query($request->search_empid, $request->search_lastname);
-            return view('module1.personnel.home',compact('query_personnels')); 
+           $query_personnels = $personnel::personnel_query($request->search_empid, $request->search_lastname);
+           return view('module1.personnel.home',compact('query_personnels')); 
 
         
     }
