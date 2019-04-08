@@ -597,7 +597,7 @@ class personnelController extends Controller
         $output .= '<div class="col s10 m10 l10">';
                     $output .= '<div style="font-size:24px;padding-top:18px;">'.$query_personnels[0]->first_name.' '.$query_personnels[0]->middle_initial.'. '.$query_personnels[0]->last_name.'</div>';
                     $output .= '<div style="font-size:16; font-style:italic;">'.$query_personnels[0]->job_position.'</div>';
-                    $output .= '<div style="font-size:16; font-style:italic;">'.$query_personnels[0]->deptcode.'</div>';
+                    $output .= '<div style="font-size:16; font-style:italic;">'.$query_personnels[0]->deptname.'</div>';
         $output .= '</div>';
         
         $output .= '</div>';
@@ -685,7 +685,7 @@ class personnelController extends Controller
         $output .= '<div class="col s10 m10 l10">';
                     $output .= '<div style="font-size:24px;padding-top:18px;">'.$query_personnels[0]->first_name.' '.$query_personnels[0]->middle_initial.'. '.$query_personnels[0]->last_name.'</div>';
                     $output .= '<div style="font-size:16; font-style:italic;">'.$query_personnels[0]->job_position.'</div>';
-                    $output .= '<div style="font-size:16; font-style:italic;">'.$query_personnels[0]->deptcode.'</div>';
+                    $output .= '<div style="font-size:16; font-style:italic;">'.$query_personnels[0]->deptname.'</div>';
         $output .= '</div>';
         
         $output .= '</div>';

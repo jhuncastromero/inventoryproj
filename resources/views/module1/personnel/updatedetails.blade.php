@@ -125,7 +125,7 @@
 		 <div class="row">
 
 		 	 <button class=" btn waves-effect waves-light" type="submit" name="action" style="background-color: #c62828;">Update<i class="material-icons right">update</i>
-            </button> <span style="padding-left:20px; text-align: center;"><a href="">Cancel</a></span>
+            </button> <span style="padding-left:20px; text-align: center;"><a href="{{ route('personnel.updatepersonnel') }}">Cancel</a></span>
 
 		 </div>
 		 
