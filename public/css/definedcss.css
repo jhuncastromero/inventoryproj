@@ -1,0 +1,38 @@
+nav {
+	background-color :#212121;
+}
+
+#div_header{
+	font-size:20px;
+	font-weight: bold;
+}
+#sidenav_motif_style{
+	background-color: #c62828;
+	padding:20px 0;
+}
+
+#offset_content{
+	padding-top: 30px;
+	padding-left: 400px;
+}
+#logo-name{
+		padding-left: 350px;	
+	}
+
+@media screen and (max-width: 500px)
+{
+	#offset_content{
+	padding-top: 30px;
+	padding-left: 50px;
+	}
+	
+	#logo-name{
+		padding-left: 0px;	
+	}
+
+
+}
+.modal{
+	width:50% !important;
+	
+}
