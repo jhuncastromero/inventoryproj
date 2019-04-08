@@ -36,13 +36,13 @@
             </div>
             <div class="row">
               <div class="input-field col s6">
-                <select id="department" name="department" class="validate" required="true">
+                <select id="deptcode" name="deptcode" class="validate" required="true">
                   <option value="" disabled selected>Choose Department</option>
                   @foreach($pull_department as $list)
                          <option value="{{ $list->deptcode }}"> {{ $list->deptcode }} - {{ $list->deptname }} </option>
                   @endforeach
                 </select>
-                <label for="department">Choose Department</label>
+                <label for="deptcode">Choose Department</label>
               </div>
               <div class="input-field col s6">
                 <input type="text" id="job_position" name="job_position" class="validate" required="true">

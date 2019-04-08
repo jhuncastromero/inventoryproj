@@ -55,7 +55,7 @@
 		         <div class="row">
 
 				          <div class="input-field col s6">
-				             <input type="text" readonly value="{{ $query_personnels[0]->department }}" class="validate">
+				             <input type="text" readonly value="{{ $query_personnels[0]->deptcode }}" class="validate">
 				            <label for="department">Department</label>
 				          </div>
 
@@ -84,4 +84,3 @@
 	
 @endsection
 
-@section('navlinks-section')

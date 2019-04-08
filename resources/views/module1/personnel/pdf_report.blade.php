@@ -35,7 +35,7 @@
 				 		<tr>
 				 			<td>{{ $list->emp_id }}</a></td>
 				 			<td>{{ $list->last_name }}, {{ $list->first_name }} {{ $list->middle_initial }}.  </td>
-				 			<td>{{ $list->department }}</a></td>
+				 			<td>{{ $list->deptname }}</a></td>
 				 			<td>{{ $list->job_position }}</a></td>
 				 			<td>{{ $list->email_add }}</a></td>
 				 			<td>

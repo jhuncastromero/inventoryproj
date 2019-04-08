@@ -19,7 +19,7 @@ class CreateTablePersonnels extends Migration
             $table->string('last_name',50);
             $table->string('first_name',50);
             $table->string('middle_initial',3)->nullable();
-            $table->string('department',35)->nullable();
+            $table->string('deptcode',35)->nullable();
             $table->string('job_position',50)->nullable();
             $table->string('email_add',40)->nullable();
             $table->string('photo_name',40)->nullable();

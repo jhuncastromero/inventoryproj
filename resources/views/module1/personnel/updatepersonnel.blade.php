@@ -216,7 +216,6 @@
       			success: function(data){
       				
       				$('#personnelDetails').html(data);
-      				$('#hidden_r_index').val('');		
       			}
 
      		})

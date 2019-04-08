@@ -50,7 +50,7 @@ class personnelController extends Controller
 
         $personnel = new personnel;
         $query_personnels = $personnel::getdetails_2($id);
-        $query_departments = $department::getDepartment_name($query_personnels[0]->department);
+        $query_departments = $department::getDepartment_name($query_personnels[0]->deptcode);
 
         if($query_departments->isEmpty())
         {
@@ -146,7 +146,7 @@ class personnelController extends Controller
 
 
         $personnel = new personnel;
-        $error = $personnel::create_new($request->emp_id, $request->last_name, $request->first_name, $request->middle_initial, $request->department, $request->job_position, $photo_filename ,$request->email_add );
+        $error = $personnel::create_new($request->emp_id, $request->last_name, $request->first_name, $request->middle_initial, $request->deptcode, $request->job_position, $photo_filename ,$request->email_add );
         
         if($error==0)
         {
@@ -207,7 +207,7 @@ class personnelController extends Controller
         $personnel = new personnel;
 
         $query_personnels = $personnel::getdetails($id);
-        $query_departments = $department::getDepartment_name($query_personnels[0]->department);
+        $query_departments = $department::getDepartment_name($query_personnels[0]->deptcode);
         if($query_departments->isEmpty())
         {
             $deptname = '';
@@ -268,7 +268,7 @@ class personnelController extends Controller
        $personnel_folder_name = $request->emp_id;  //folder name
 
        $department = new department; // code for identifying the department name where the employee belong. use for display purposes ex. DEP002 - CONSULTING AND TRAINING
-       $query_departments = $department::getDepartment_name($data[0]->department); 
+       $query_departments = $department::getDepartment_name($data[0]->deptcode); 
         if($query_departments->isEmpty())
         {
             $deptname = '';
@@ -278,7 +278,7 @@ class personnelController extends Controller
             $deptname = $query_departments[0]->deptname;
         }
         
-        $go_update = $personnel::update_profile($id, $request->emp_id, $request->last_name, $request->first_name, $request->middle_initial, $request->department, $request->job_position, $request->email_add, $old_emp_id, $old_last_name,$old_first_name, $old_middle_initial, $old_email_add );
+        $go_update = $personnel::update_profile($id, $request->emp_id, $request->last_name, $request->first_name, $request->middle_initial, $request->deptcode, $request->job_position, $request->email_add, $old_emp_id, $old_last_name,$old_first_name, $old_middle_initial, $old_email_add );
 
        if( $go_update[0] == 0 && $go_update[1] == 0 && $go_update[2] == 0 )
        {
@@ -597,7 +597,7 @@ class personnelController extends Controller
         $output .= '<div class="col s10 m10 l10">';
                     $output .= '<div style="font-size:24px;padding-top:18px;">'.$query_personnels[0]->first_name.' '.$query_personnels[0]->middle_initial.'. '.$query_personnels[0]->last_name.'</div>';
                     $output .= '<div style="font-size:16; font-style:italic;">'.$query_personnels[0]->job_position.'</div>';
-                    $output .= '<div style="font-size:16; font-style:italic;">'.$query_personnels[0]->department.'</div>';
+                    $output .= '<div style="font-size:16; font-style:italic;">'.$query_personnels[0]->deptcode.'</div>';
         $output .= '</div>';
         
         $output .= '</div>';
@@ -685,7 +685,7 @@ class personnelController extends Controller
         $output .= '<div class="col s10 m10 l10">';
                     $output .= '<div style="font-size:24px;padding-top:18px;">'.$query_personnels[0]->first_name.' '.$query_personnels[0]->middle_initial.'. '.$query_personnels[0]->last_name.'</div>';
                     $output .= '<div style="font-size:16; font-style:italic;">'.$query_personnels[0]->job_position.'</div>';
-                    $output .= '<div style="font-size:16; font-style:italic;">'.$query_personnels[0]->department.'</div>';
+                    $output .= '<div style="font-size:16; font-style:italic;">'.$query_personnels[0]->deptcode.'</div>';
         $output .= '</div>';
         
         $output .= '</div>';

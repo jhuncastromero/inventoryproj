@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\personnel;
+use App\department;
 use PDF;
 use Illuminate\Support\Facades\File;
 
@@ -85,12 +86,13 @@ class DynamicPDFController extends Controller
 
                     <thead style="background-color:#454444; color:white;">  <!-- Column headings-->
                         <tr>
-                            <th> ID No.  </th>
+                            <th> <center>Photo</center> </th>
                             <th> Name </th>
+                            <th> ID No.  </th>
                             <th> Department </th>
                             <th> Designation </th>
                             <th> Email </th>
-                            <th> <center>Photo</center> </th>
+                            
                         </tr>
                     </thead>
 
@@ -100,11 +102,6 @@ class DynamicPDFController extends Controller
                     {
                        $output .='
                         <tr>
-                            <td height="25px" width="15%">'. $list->emp_id.'</td>
-                            <td style="padding-right:10px;">'. $list->last_name .', ' . $list->first_name. ' '.$list->middle_initial. '.   </td>
-                            <td width="20%">'. $list->department. '</td>
-                            <td>'. $list->job_position. '</td>
-                            <td width="15%">'. $list->email_add. '</td>
                             <td>';
 
                                 if(!empty($list->photo_name))
@@ -121,9 +118,16 @@ class DynamicPDFController extends Controller
                                 {
                                     $output.='<center><i>(no photo)</i></center>';
                                 }
-                                                      
+                            $output.='</td>
+
+                            <td style="padding-right:10px;">'. $list->last_name .', ' . $list->first_name. ' '.$list->middle_initial. '.   </td>
+                            <td height="25px" width="15%">'. $list->emp_id.'</td>
+                            <td width="20%">'. $list->deptname. '</td>
+                            <td>'. $list->job_position. '</td>
+                            <td width="15%">'. $list->email_add. '</td>';
+                            
                      }
-                     $output.='</td></tr></tbody></table>';
+                     $output.'</tr></tbody></table>';
             return $output;
 
     }

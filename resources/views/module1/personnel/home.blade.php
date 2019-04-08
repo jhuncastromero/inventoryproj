@@ -61,7 +61,7 @@
 							    <div>
 									<div class="card-stacked">
 										<div class="card-content">
-											<p>{{ $query_personnel->department }}</p>
+											<p>{{ $query_personnel->deptcode }}</p>
 										</div>
 									</div>
 									<div class="card-action">

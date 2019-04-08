@@ -5,15 +5,16 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use App\department;
 
 class personnel extends Model
 {
     //
     use SoftDeletes;
     protected $dates =['deleted_at'];
-    protected $fillable = ['emp_id','last_name','first_name','middle_initial','department','job_position','photo_name','email_add'];
+    protected $fillable = ['emp_id','last_name','first_name','middle_initial','deptcode','job_position','photo_name','email_add'];
 
-  public static function create_new($emp_id, $last_name, $first_name, $middle_initial, $department, $job_position, $photo_name, $email_add)
+  public static function create_new($emp_id, $last_name, $first_name, $middle_initial, $deptcode, $job_position, $photo_name, $email_add)
     {
        $countDuplicate = personnel::getDuplicate($emp_id, $last_name, $first_name, $middle_initial, $email_add);
 
@@ -40,7 +41,7 @@ class personnel extends Model
 
       //save data if no duplicates were found
 
-      personnel::create(['emp_id' => $emp_id,'last_name' => $last_name,'first_name' => $first_name,'middle_initial' => $middle_initial,'department' => $department,'job_position' => $job_position,'photo_name'=> $photo_name,'email_add' => $email_add]);
+      personnel::create(['emp_id' => $emp_id,'last_name' => $last_name,'first_name' => $first_name,'middle_initial' => $middle_initial,'deptcode' => $deptcode,'job_position' => $job_position,'photo_name'=> $photo_name,'email_add' => $email_add]);
             
     }
 
@@ -51,7 +52,7 @@ class personnel extends Model
         $personnel->save();        
     }
 
-    public static function update_profile($id, $emp_id, $last_name, $first_name, $middle_initial, $department, $job_position, $email_add, $old_emp_id, $old_last_name, $old_first_name, $old_middile_initial, $old_email_add)
+    public static function update_profile($id, $emp_id, $last_name, $first_name, $middle_initial, $deptcode, $job_position, $email_add, $old_emp_id, $old_last_name, $old_first_name, $old_middile_initial, $old_email_add)
     {
       
          $countID = 0;
@@ -86,7 +87,7 @@ class personnel extends Model
             $personnel->last_name = $last_name;
             $personnel->first_name = $first_name;
             $personnel->middle_initial = $middle_initial;
-            $personnel->department = $department;
+            $personnel->deptcode = $deptcode;
             $personnel->job_position = $job_position;
             $personnel->email_add = $email_add;
             $personnel->save();        
@@ -198,8 +199,13 @@ class personnel extends Model
 
     public static function report_all_data()
     {
-       $query = personnel::whereNull('deleted_at')->orderBy('last_name')->Paginate(10);
-       return $query;
+      
+      //$query = personnel::whereNull('deleted_at')->orderBy('last_name')->Paginate(10);
+      $query = DB::table('personnels')
+      ->join('departments','personnels.deptcode','=','departments.deptcode')
+      ->select('personnels.emp_id','personnels.last_name','personnels.first_name','personnels.middle_initial','personnels.job_position','personnels.email_add','personnels.photo_name','departments.deptname')
+      ->Paginate(10);
+      return $query;
     }
 
 
