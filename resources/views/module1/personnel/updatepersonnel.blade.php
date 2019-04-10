@@ -70,21 +70,30 @@
 
 		  	 <div class="row">
 						
-					<ul class="pagination">
-		   		         <li class="waves-effect"><a href="{{$query_personnels->previousPageUrl()}}"><i class="material-icons">chevron_left</i></a></li>
+					<!---->
+					@if($pagination_number != 0)
+						<div>
+							<ul class="pagination">
+				   		         <li class="waves-effect"><a href="{{$query_personnels->previousPageUrl()}}"><i class="material-icons">chevron_left</i></a></li>
 
-		   		         	@if(($query_personnels->total()%5) > 0)
-		   		         		@for($i=1; $i<=($query_personnels->total()/5)+1; $i++)
-		   		         			 <li class="waves-effect circle"><a href="{{$query_personnels->url($i)}}">{{$i}}</a></li>
-		   		         		@endfor
-		   		         	@else
-		   		         		@for($i=1; $i<=($query_personnels->total()/5); $i++)
-		   		         			 <li class="waves-effect"><a href="{{$query_personnels->url($i)}}">{{$i}}</a></li>
-		   		         		@endfor
-		   		         	@endif
+				   		         	@if(($query_personnels->total()% $pagination_number) > 0)
+				   		         		@for($i=1; $i<=($query_personnels->total()/ $pagination_number)+1; $i++)
+				   		         			 <li class="waves-effect circle"><a href="{{$query_personnels->url($i)}}">{{$i}}</a></li>
+				   		         		@endfor
+				   		         	@else
+				   		         		@for($i=1; $i<=($query_personnels->total()/ $pagination_number); $i++)
+				   		         			 <li class="waves-effect"><a href="{{$query_personnels->url($i)}}">{{$i}}</a></li>
+				   		         		@endfor
+				   		         	@endif
 
-		   		         <li class="waves-effect"><a href="{{$query_personnels->nextPageUrl()}}"><i class="material-icons">chevron_right</i></a></li>
-		   		    </ul>     
+				   		         <li class="waves-effect"><a href="{{$query_personnels->nextPageUrl()}}"><i class="material-icons">chevron_right</i></a></li>
+				   		    </ul> 
+				   		  </div>
+				    @else
+				    	<div style="font-size:14px; font-style:italic;">
+				    		<p> (A Pagination Control should appear here. However, Pagination was not properly set. Please see PAGINATION on Settings Module)</p>
+				    	</div>
+		   		    @endif    
 		
    		    </div>
 	        <div class="row">  <!--Search Header-->

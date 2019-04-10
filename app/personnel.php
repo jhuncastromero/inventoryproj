@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use App\department;
+use App\paginationsetting;
 
 class personnel extends Model
 {
@@ -109,7 +110,16 @@ class personnel extends Model
 
     public static function listview()
     {
-      $query = personnel::whereNull('deleted_at')->orderBy('last_name')->Paginate(5);
+      $paginate = paginationsetting::whereNull('deleted_at')->where('pagination_module','=','personnel')->get();
+      if ($paginate=='' || $paginate[0]->pagination_number ==0)
+      {
+        $query = personnel::whereNull('deleted_at')->orderBy('last_name')->get();  
+      }
+      else
+      {
+        $query = personnel::whereNull('deleted_at')->orderBy('last_name')->Paginate($paginate[0]->pagination_number);  
+      }
+      
       return $query;
     }
 
@@ -194,7 +204,15 @@ class personnel extends Model
 
     public static function list_update()
     {
-      $query = personnel::whereNull('deleted_at')->orderBy('last_name')->Paginate(5);
+      $paginate = paginationsetting::whereNull('deleted_at')->where('pagination_module','=','personnel')->get();
+      if ($paginate=='' || $paginate[0]->pagination_number ==0)
+      {
+        $query = personnel::whereNull('deleted_at')->orderBy('last_name')->get();  
+      }
+      else
+      {
+        $query = personnel::whereNull('deleted_at')->orderBy('last_name')->Paginate($paginate[0]->pagination_number);  
+      }
       return $query; 
     }
 
@@ -204,11 +222,40 @@ class personnel extends Model
       //$query = personnel::whereNull('deleted_at')->orderBy('last_name')->Paginate(10);
       $query = DB::table('personnels')
       ->join('departments','personnels.deptcode','=','departments.deptcode')
-      ->select('personnels.emp_id','personnels.last_name','personnels.first_name','personnels.middle_initial','personnels.job_position','personnels.email_add','personnels.photo_name','departments.deptname')
-      ->Paginate(10);
+      ->select('personnels.*','departments.deptname')
+      ->whereNull('personnels.deleted_at')
+      ->orderBy('last_name')
+      ->Paginate(5);
       return $query;
     }
 
+    public static function print_all_data()
+    {
+      
+      //$query = personnel::whereNull('deleted_at')->orderBy('last_name')->Paginate(10);
+      $query = DB::table('personnels')
+      ->join('departments','personnels.deptcode','=','departments.deptcode')
+      ->select('personnels.*','departments.deptname')
+      ->whereNull('personnels.deleted_at')
+      ->orderBy('last_name')
+      ->get();
+      return $query;
+    }
 
+    public static function pagination_setting($module)
+    {
+      $pagination_number = '';
+
+      $pagination = paginationsetting::whereNull('deleted_at')->where('pagination_module','=',$module)->get();
+      if($pagination=='')
+      {
+        $pagination_number = 0;
+      }
+      else
+      {
+        $pagination_number = $pagination[0]->pagination_number;
+      }
+      return $pagination_number;
+    }
 
 }

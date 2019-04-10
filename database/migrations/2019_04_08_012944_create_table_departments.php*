@@ -18,6 +18,7 @@ class CreateTableDepartments extends Migration
             $table->string('deptcode',20);
             $table->string('deptname',50);
             $table->string('roomno',10)->nullable();
+             $table->softDeletes();
             $table->timestamps();
            
         });

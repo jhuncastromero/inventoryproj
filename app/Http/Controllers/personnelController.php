@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\personnel;
 use App\department;
+use App\paginationsetting;
 use App\Http\Requests;
 
 use Illuminate\Http\Request;
@@ -24,9 +25,12 @@ class personnelController extends Controller
     {
         $deletevalue = '';
         $promptvalue = '';
+        $pagination_number = '';
+
         $personnel = new personnel;
+        $pagination_number = $personnel::pagination_setting('personnel');
         $query_personnels = $personnel::list_update();
-        return view('module1.personnel.updatepersonnel',compact('query_personnels','deletevalue','promptvalue'));
+        return view('module1.personnel.updatepersonnel',compact('query_personnels','deletevalue','promptvalue','pagination_number'));
 
     }
     public function personnelUpdate_details($id)
@@ -254,6 +258,7 @@ class personnelController extends Controller
        $update_photo_dbase='';
        $deptname = '';
        $test_photofile=0;
+       $pagination_number = '';
        
        $old_emp_id = $data[0]->emp_id;
        $old_last_name =$data[0]->last_name;
@@ -266,6 +271,10 @@ class personnelController extends Controller
        
        $photo_filename = $request->emp_id.'.jpg'; //photo filename
        $personnel_folder_name = $request->emp_id;  //folder name
+
+       //$pagination_number = $personnel::pagination_setting('personnel'); // for obtaining the pagination_number setting in PAGINATIONSETTINGS table
+
+
 
        $department = new department; // code for identifying the department name where the employee belong. use for display purposes ex. DEP002 - CONSULTING AND TRAINING
        $query_departments = $department::getDepartment_name($data[0]->deptcode); 
@@ -496,8 +505,9 @@ class personnelController extends Controller
     public function listView()
     {
         $personnel = new personnel;
+        $pagination_number = $personnel::pagination_setting('personnel');
         $query_personnels = $personnel::listview();
-        return view('module1.personnel.view',compact('query_personnels'));
+        return view('module1.personnel.view',compact('query_personnels','pagination_number'));
 
     }
     public function personnel_query(Request $request)

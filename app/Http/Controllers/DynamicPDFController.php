@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\personnel;
 use App\department;
+use App\reportsetting;
 use PDF;
 use Illuminate\Support\Facades\File;
 
@@ -26,10 +27,13 @@ class DynamicPDFController extends Controller
          return view('module1.personnel.pdf_report',compact('get_personnel_lists'));
 
     }
-    public function get_personnel_list()
+    public function get_personnel_list() // for getting display in report page with paginate 5
     {
-        $personnel = new personnel;
-        return $personnel::report_all_data();
+     return personnel::report_all_data();
+    }
+    public function print_all() // for loading all data in report PDF
+    {
+       return personnel::print_all_data();
     }
 
     public function pdf()
@@ -52,7 +56,18 @@ class DynamicPDFController extends Controller
     }
     public function convert_personnel_data_to_html()
     {
-         $get_personnel_lists = $this->get_personnel_list();
+         $get_personnel_lists = $this->print_all();
+         $rpt_setting = reportsetting::return_report_setting('personnel');
+         if ($rpt_setting->isEmpty())
+         {
+            $rpt_header ='';
+            $rpt_sub_header ='';
+         }
+         else
+         {
+            $rpt_header =$rpt_setting[0]->report_header;
+            $rpt_sub_header =$rpt_setting[0]->report_sub_header;;
+         }
          $output = '
 
                 <style>
@@ -79,8 +94,8 @@ class DynamicPDFController extends Controller
 
                 </style>
 
-                   <div style="font-size:14px;"> SSA Consulting Group International Services</div>
-                   <div style="font-size:18px;">Personnel Profile Summary Report</div>
+                   <div style="font-size:14px;">'.$rpt_header.'
+                   <div style="font-size:18px;">'.$rpt_sub_header.'</div>
                    <br>
                     <table>
 
