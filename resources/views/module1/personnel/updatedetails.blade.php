@@ -90,8 +90,8 @@
 	          </div>
 			
 			  <div class="input-field col s6" >
-	             <select id="deptcode" name="deptcode">
-                  <option value="" disabled selected> {{ $query_personnels[0]->deptcode }} - {{ $deptname }} </option>
+	             <select id="deptcode" name="deptcode" required="true">
+                  <option value="{{ $query_personnels[0]->deptcode }}" selected> {{ $query_personnels[0]->deptcode }} - {{ $deptname }} </option>
                   @foreach($pull_department as $list)
                          <option value="{{ $list->deptcode }}"> {{ $list->deptcode }} - {{ $list->deptname }} </option>
                   @endforeach
