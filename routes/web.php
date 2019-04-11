@@ -37,4 +37,4 @@ Route::get('/personnel/generatereport/pdf','DynamicPDFController@pdf')->name('pe
 
 //Resource Route
 Route::resource('personnel','personnelController');
-Route::resource('equipment','EquipmentController');
+Route::resource('hardware_equipment','HardwareEquipmentController');

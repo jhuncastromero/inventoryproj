@@ -26,12 +26,12 @@
   </div>
   <div class="row">
     
-    <FORM ACTION="" METHOD="" enctype="multipart/form-data">
+    <FORM ACTION=" {{ route('hardware_equipment.store') }}" METHOD="POST" enctype="multipart/form-data">
       {{ csrf_field() }}
             
             <div class="row">
                <div class="input-field col s6">
-                   <input type="text" id="tag_no" name="emp_id" class="" maxlength="30" >
+                   <input type="text" id="tag_no" name="tag_no" class="" maxlength="30" >
                    <label for="tag_no">Equipment Tag</label>
                 </div>
                 <div class="input-field col s6" >
@@ -56,10 +56,10 @@
             
             <div class="row">
               
-              <div class="input-field col s6">
-                <input type="text" id="origin" name="origin" class="validate" maxlength="5">
-                <label for="origin">Origin</label>
-              </div>
+               <div class="input-field col s6">
+                  <input type="text" id="brand" name="brand" maxlength="30">
+                  <label for="brand">Brand/ Make</label>
+              </div>             
 
               <div class="input-field col s6">
                 <textarea id="description" name="description" maxlength="100" class="materialize-textarea" required="" validate=""></textarea>
@@ -71,13 +71,29 @@
      		   <div class="row">
 
               <div class="input-field col s6">
+                <input type="text" id=mac_address name="mac_address" class="validate" maxlength="60">
+                <label for="mac_address">MAC Address/ Code</label>
+              </div>
+
+              <div class="input-field col s6">
+                <input type="text" id="origin" name="origin" class="validate" maxlength="5">
+                <label for="origin">Origin</label>
+              </div>
+
+            </div>
+
+            <div class="row">
+
+              <div class="input-field col s6">
                   <input type="text" id="status" name="status" maxlength="20">
                   <label for="status">Status</label>
               </div>
+            
               <div class="input-field col s6">
                   <input type="text" id="date_acquired" name="date_acquired" class="datepicker" required="">
                   <label for="date_acquired">Date Acquired</label>
               </div>  
+
 
             </div>
 
@@ -105,7 +121,7 @@
 
     <div class="row">
 
-        <input type="hidden" name="hiddentext" id="hiddentext" value="">
+        <input type="hidden" name="hiddentext" id="hiddentext" value=" {{ $createvalue }} ">
 
     </div>
 
@@ -114,8 +130,8 @@
  <!--Modal Structure -->
   <div id="messageprompt" class="modal">
     <div class="modal-content">
-      <h4> <i class="medium material-icons" style="color:red;"></i>&nbsp;</h4>
-      <p></p>
+      <h4> <i class="medium material-icons" style="color:red;">{{ $error_icon }}</i>&nbsp; {{ $error_title }}</h4>
+      <p>{{ $error_message }}</p>
     </div>
     <div class="modal-footer">
       <a href="#!" class="modal-close waves-effect waves-green btn-flat">OK</a>
