@@ -1,7 +1,21 @@
 @extends('layouts.master-page-layout')
 
 @section('title-section')
+
 	Personnel : Update Profile Details
+
+@endsection
+
+@section('navlinks')
+      
+      @include('module1.personnel.personnel-nav-links')  
+
+@endsection
+      
+@section('sidenavlinks')
+
+   @include('module1.personnel.personnel-sidenav-links')
+
 @endsection
 
 @section('content-section')

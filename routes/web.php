@@ -29,9 +29,12 @@ Route::post('/personnel/previewdelete','personnelController@ajax_preview_delete'
 Route::post('/personnel/updatesearchpreview','personnelController@ajax_search_preview_delete_list')->name('personnel.updatesearchpreview');
 Route::post('/personnel/updatesearchdetails','personnelController@ajax_search_preview_delete_details')->name('personnel.updatesearchdetails');
 
+
+
 // personnel report related routes
 Route::get('/personnel/generatereport','DynamicPDFController@index')->name('personnel.generatereport');
 Route::get('/personnel/generatereport/pdf','DynamicPDFController@pdf')->name('personnel.pdf');
 
 //Resource Route
 Route::resource('personnel','personnelController');
+Route::resource('equipment','EquipmentController');

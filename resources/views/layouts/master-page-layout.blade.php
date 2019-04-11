@@ -12,8 +12,8 @@
 	
 </head>
 <body id="mainpage" name="mainpage">
-		@include('module1.personnel.personnel-nav-links')
-		@include('module1.personnel.personnel-sidenav-links')
+		@yield('navlinks')
+		@include('layouts.sidenav-links')
 		<div id="offset_content">
 		    @yield('content-section')
 		</div>

@@ -2,19 +2,19 @@
 
 @section('title-section')
 
-  Personnel : Create New Personnel Profile
+  Personnel : Add New Personnel Profile
 
 @endsection
 
 @section('navlinks')
       
-      @include('module1.personnel.personnel-nav-links')  
+      @include('module2.equipment.equipment-nav-links')  
 
 @endsection
       
 @section('sidenavlinks')
 
-   @include('module1.personnel.personnel-sidenav-links')
+   @include('module2.equipment.equipment-sidenav-links')
 
 @endsection
 
@@ -26,7 +26,7 @@
   </div>
   <div class="row">
     
-    <FORM ACTION="{{ route('personnel.store') }}" METHOD="POST" enctype="multipart/form-data">
+    <FORM ACTION="" METHOD="" enctype="multipart/form-data">
       {{ csrf_field() }}
           <div class="row">
           <div class="input-field col s6">
@@ -98,7 +98,7 @@
 
 </div>
 
-<!-- Modal Structure -->
+<!-- Modal Structure 
   <div id="messageprompt" class="modal">
     <div class="modal-content">
       <h4> <i class="medium material-icons" style="color:red;">{{ $error_icon }}</i>&nbsp;{{ $error_title }}</h4>
@@ -107,7 +107,7 @@
     <div class="modal-footer">
       <a href="#!" class="modal-close waves-effect waves-green btn-flat">OK</a>
     </div>
-  </div>
+  </div>-->
   
 @endsection
 

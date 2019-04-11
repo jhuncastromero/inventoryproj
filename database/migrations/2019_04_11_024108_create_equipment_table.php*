@@ -1,0 +1,43 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateEquipmentTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('equipments', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('tag_no',30)->nullable();
+            $table->string('serial_no',30)->nullable();
+            $table->string('category',10)->nullable();
+            $table->string('type',50)->nullable();
+            $table->string('origin',5)->nullable();
+            $table->string('mac_address',60)->nullable();
+            $table->string('description',100)->nullable();
+            $table->string('photo_name',50)->nullable();
+            $table->string('status',20)->nullable();
+            $table->date('date_acquired',50)->nullable();
+            $table->string('QRCode_name',50)->nullable();
+            $table->softDeletes();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('equipments');
+    }
+}
