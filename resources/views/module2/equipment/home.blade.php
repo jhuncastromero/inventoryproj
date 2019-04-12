@@ -56,6 +56,7 @@
 
 		<div class="row">  <!--cards preview row--> 
 					
+					<img class="" src="{{ asset(Storage::url('/hardware_photo/IT/bbb.jpg'))}}" width="75px" height="75px">					
 
 		</div>
   

@@ -16,26 +16,7 @@ class hardware_equipment extends Model
    	public static function create_new($tag_no, $serial_no,$category,$type,$origin,$mac_address,$description,$photo_name,$status,$date_acquired, $qrcode_name, $brand) {
 
 		$hardware_equipment = new hardware_equipment;
-		$query_result = $hardware_equipment::get_duplicate_tag_serial($tag_no,$serial_no);
-
-		if ($query_result[0] != 0 || $query_result[1] != 0) {
-			
-			if  ( $query_result[0] != 0 && $query_result[1] != 0) {
-				
-				return 1; // user entered duplicated tagno and serial no.
-			}
-			else if ( $query_result[0] != 0 ) {
-
-				return 2; //user entered duplicated tag no.
-			}
-			else if  ( $query_result[1] != 0 ) {
-
-				return 3; //user entered duplicated serial no.
-			}
-			
-		} 
-
-		$hardware_equipment = new hardware_equipment;
+		
 		$hardware_equipment->tag_no = $tag_no;
 		$hardware_equipment->serial_no = $serial_no;
 		$hardware_equipment->category = $category;
@@ -61,6 +42,30 @@ class hardware_equipment extends Model
 	
 		$hardware_equipment->save();
 
+	}
+   	public static function get_error_warning($tag_no, $serial_no) {
+
+		$hardware_equipment = new hardware_equipment;
+		$query_result = $hardware_equipment::get_duplicate_tag_serial($tag_no,$serial_no);
+
+		if ($query_result[0] != 0 || $query_result[1] != 0) {
+			
+			if  ( $query_result[0] != 0 && $query_result[1] != 0) {
+				
+				return 1; // user entered duplicated tagno and serial no.
+			}
+			else if ( $query_result[0] != 0 ) {
+
+				return 2; //user entered duplicated tag no.
+			}
+			else if  ( $query_result[1] != 0 ) {
+
+				return 3; //user entered duplicated serial no.
+			}
+			
+		} 
+
+		
 	}
 	public static function get_duplicate_tag_serial($tag_no,$serial_no)	{
 

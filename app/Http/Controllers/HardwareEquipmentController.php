@@ -4,6 +4,12 @@ namespace App\Http\Controllers;
 
 use App\hardware_equipment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Filesystem;
+use Intervention\Image\Facades\Image;
 
 class HardwareEquipmentController extends Controller
 {
@@ -46,23 +52,39 @@ class HardwareEquipmentController extends Controller
         $error_message = '';
         $error_icon = '';
 
-        if ($request->category == 'IT'){
-
-            $photo_name = $request->serial_no;
-            $qrcode_name= $request->serial_no;
-        }
-        else {
-
-            $photo_name = $request->tag_no;
-            $qrcode_name= $request->tag_no;
-
-        }   
-        
         $hardware_equipment = new hardware_equipment;
+        $error_warning = $hardware_equipment::get_error_warning($request->tag_no, $request->serial_no);
+        
+        if($error_warning == 0) { //no duplicated values detected
 
-        $error_warning = $hardware_equipment::create_new($request->tag_no, $request->serial_no,$request->category,$request->type,$request->origin,$request->mac_addres,$request->description,$photo_name,$request->status,$request->date_acquired, $qrcode_name, $request->brand);
+                if ($request->category == 'IT'){
 
-        if($error_warning == 0) {
+                    $photo_name = $request->serial_no;
+                    $qrcode_name= $request->serial_no;
+                }
+                else {
+
+                    $photo_name = $request->tag_no;
+                    $qrcode_name= $request->tag_no;
+
+                }   
+
+                $photofile = $request->file('photofile'); //save photo
+                
+                if($photofile) {
+
+                     $file_name = $photo_name . '.jpg';  
+                     $file_category = $request->category;
+                     $photofile->storeAs('public/hardware_photo/'.$file_category, $file_name);
+
+                    
+                }
+                else {
+
+                    $photo_name = '';
+                }
+
+            $add_new = $hardware_equipment::create_new($request->tag_no, $request->serial_no,$request->category,$request->type,$request->origin,$request->mac_addres,$request->description,$photo_name,$request->status,$request->date_acquired, $qrcode_name, $request->brand);
 
             $createvalue = 2;
         }
@@ -88,9 +110,7 @@ class HardwareEquipmentController extends Controller
                  $error_icon = "warning";
                  $error_message ="You have entered an existing Equipment Serial No. Please check your entry.";
 
-
             }
-
 
             $createvalue=1;
             

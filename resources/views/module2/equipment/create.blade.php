@@ -43,8 +43,11 @@
             <div class="row">
               
               <div class="input-field col s6">
-                <input type="text" id="category" name="category" class="validate" required="true" maxlength="10">
-                <label for="category">Equipment Category</label>
+                <select id="category" name="category" class="validate" required="true" >
+                  <option value="" selected>Choose Department</option>
+                  <option value="IT">IT</option>
+                  <option value="Non-IT">Non-IT</option>
+                </select>
               </div>
 
               <div class="input-field col s6">
@@ -160,9 +163,18 @@
           $('#hiddentext').val(''); 
        }
 
+      
     });
 
+    $('#category').change(function(){
 
+        if($('#category').val() =='IT'){
+          $('#mac_address').attr('disabled','disabled');
+        }
+        else if($('#category').val()=='Non-IT') {
+         $('#mac_address').removeAttr('disabled');
+        }
+    });
 
   </script>
 
