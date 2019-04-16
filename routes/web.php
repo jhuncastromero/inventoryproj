@@ -17,7 +17,7 @@
 
 Auth::routes();
 
-//personnel user defined route
+//PERSONNEL user defined route
 Route::get('/personnel/view','personnelController@listview')->name('personnel.view');
 Route::post('/personnel/viewlist','personnelController@ajax_search_view_list')->name('personnel.viewdlist');
 Route::get('/personnel/updatepersonnel','personnelController@personnelUpdate')->name('personnel.updatepersonnel');
@@ -29,11 +29,25 @@ Route::post('/personnel/previewdelete','personnelController@ajax_preview_delete'
 Route::post('/personnel/updatesearchpreview','personnelController@ajax_search_preview_delete_list')->name('personnel.updatesearchpreview');
 Route::post('/personnel/updatesearchdetails','personnelController@ajax_search_preview_delete_details')->name('personnel.updatesearchdetails');
 
-
-
 // personnel report related routes
 Route::get('/personnel/generatereport','DynamicPDFController@index')->name('personnel.generatereport');
 Route::get('/personnel/generatereport/pdf','DynamicPDFController@pdf')->name('personnel.pdf');
+
+
+
+//HARDWARE_EQUIPMENT user defined route
+
+Route::post('/hardware_equipment/preview_qrcode','HardwareEquipmentController@generate_qr_code')->name('hardware_equipment.preview_qrcode');
+Route::get('/hardware_equipment/view','HardwareEquipmentController@list_view_equipment')->name('hardware_equipment.view');
+
+
+
+
+
+
+
+
+
 
 //Resource Route
 Route::resource('personnel','personnelController');

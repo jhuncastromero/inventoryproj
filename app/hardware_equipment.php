@@ -30,13 +30,13 @@ class hardware_equipment extends Model
 		
 		if ($category == 'IT'){
 
-			$hardware_equipment->photo_name = $serial_no;
-			$hardware_equipment->qrcode_name= $serial_no;
+			$hardware_equipment->photo_name = $serial_no.'.jpg';
+			$hardware_equipment->qrcode_name= $serial_no.'.jpg';
 		}
 		else {
 
-			$hardware_equipment->photo_name = $tag_no;
-			$hardware_equipment->qrcode_name= $tag_no;
+			$hardware_equipment->photo_name = $tag_no.'.jpg';
+			$hardware_equipment->qrcode_name= $tag_no.'.jpg';
 
 		}
 	
@@ -76,5 +76,11 @@ class hardware_equipment extends Model
 		$count_serial_no = hardware_equipment::where('serial_no','=',$serial_no)->count();
 
 		return[$count_tag_no, $count_serial_no];
+	}
+
+	public static function list_view_equipment() {
+		$query_result = '';
+		$query_result = hardware_equipment::whereNull('deleted_at')->get();
+		return $query_result;
 	}
 }

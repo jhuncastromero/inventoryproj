@@ -139,8 +139,7 @@ class personnelController extends Controller
               $photo_filename = $request->emp_id.'.jpg';
               $personnel_folder_name = $request->emp_id;
               
-              Storage::makeDirectory('personnel_photo');    
-              $photofile->storeAs('public/personnel_photo/'.$personnel_folder_name, $photo_filename);
+               $photofile->storeAs('public/personnel_photo/'.$personnel_folder_name, $photo_filename);
         }
         else
         {

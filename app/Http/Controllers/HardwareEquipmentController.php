@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Filesystem;
 use Intervention\Image\Facades\Image;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class HardwareEquipmentController extends Controller
 {
@@ -51,6 +52,7 @@ class HardwareEquipmentController extends Controller
         $error_title = '';
         $error_message = '';
         $error_icon = '';
+        $qr_code ='';
 
         $hardware_equipment = new hardware_equipment;
         $error_warning = $hardware_equipment::get_error_warning($request->tag_no, $request->serial_no);
@@ -59,13 +61,13 @@ class HardwareEquipmentController extends Controller
 
                 if ($request->category == 'IT'){
 
-                    $photo_name = $request->serial_no;
-                    $qrcode_name= $request->serial_no;
+                    $photo_name = $request->serial_no.'.jpg';
+                    $qrcode_name= $request->serial_no.'.jpg';
                 }
                 else {
 
-                    $photo_name = $request->tag_no;
-                    $qrcode_name= $request->tag_no;
+                    $photo_name = $request->tag_no.'.jpg';
+                    $qrcode_name= $request->tag_no.'.jpg';
 
                 }   
 
@@ -73,7 +75,7 @@ class HardwareEquipmentController extends Controller
                 
                 if($photofile) {
 
-                     $file_name = $photo_name . '.jpg';  
+                     $file_name = $photo_name;  
                      $file_category = $request->category;
                      $photofile->storeAs('public/hardware_photo/'.$file_category, $file_name);
 
@@ -85,6 +87,8 @@ class HardwareEquipmentController extends Controller
                 }
 
             $add_new = $hardware_equipment::create_new($request->tag_no, $request->serial_no,$request->category,$request->type,$request->origin,$request->mac_addres,$request->description,$photo_name,$request->status,$request->date_acquired, $qrcode_name, $request->brand);
+
+            $qr_code = $this->save_qr_code($request->category,$request->tag_no, $request->serial_no); 
 
             $createvalue = 2;
         }
@@ -163,4 +167,63 @@ class HardwareEquipmentController extends Controller
     {
         //
     }
+
+
+    //defined function
+
+    
+    /* 1 */ public function generate_qr_code(Request $request)
+    {
+       
+    
+    $qr_data = '';
+
+    if($request->category == 'IT') {
+        $qr_data = $request->serial_no;    
+    }
+    else if($request->category == 'Non-IT') {
+        $qr_data = $request->tag_no;
+    }
+    
+    if($qr_data == '') {
+        $output ='<i style="font-size: 14px;">(Please Choose a Category and Input Serial and Tag No for QR Code Generation) </i>';
+    }
+    else {
+
+        $qr_code = QrCode::format('png')->size(100)->generate($qr_data);
+        $output = '<img class="" src="data:image/png;base64,'.base64_encode($qr_code).'" width="90px" height="90px">';
+        $output.='&nbsp;<i style="font-size:14px;">(QR Code: &nbsp;'.$qr_data.')</i>';    
+    }
+    
+    return $output;
+    
+
+    }
+
+    /* 2 */public function save_qr_code($category, $tag_no, $serial_no)
+    {
+      
+        $qr_data = '';
+
+        if($category == 'IT') {
+            $qr_data = $serial_no;    
+        }
+        else if($request->category == 'Non-IT') {
+            $qr_data = $tag_no;
+        }
+        
+        if($qr_data != '') {
+      
+          Storage::makeDirectory('public/qrcode');   
+          $qr_code = QrCode::format('png')->size(100)->generate($qr_data, storage_path().'/app/public/qrcode/'.$qr_data.'.png');
+        }   
+    }
+    public function list_view_equipment()
+    {
+        $hardware_equipment = new hardware_equipment;
+        $query_results = $hardware_equipment::list_view_equipment();
+        return view('module2.equipment.view',compact('query_results'));
+       
+    }
+    
 }

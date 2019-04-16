@@ -44,7 +44,7 @@
               
               <div class="input-field col s6">
                 <select id="category" name="category" class="validate" required="true" >
-                  <option value="" selected>Choose Department</option>
+                  <option value="" selected>Choose Category</option>
                   <option value="IT">IT</option>
                   <option value="Non-IT">Non-IT</option>
                 </select>
@@ -112,6 +112,16 @@
                         </div>
                     </div>
                 </div>
+                <div class="col s4" style="padding-bottom: 20px;">  
+                      <div id="div_qr" name="div_qr" style=""></div>
+                </div>
+             </div>
+             <div class="row">   
+               
+               <div class="col s6" style="padding-bottom: 10px;">          
+                
+
+               </div>
             </div>
 
             <button class=" btn waves-effect waves-light" type="submit" name="action" style="background-color: #c62828;">Create<i class="material-icons right">send</i>
@@ -146,8 +156,14 @@
 @section('jquery-section')
 
   <script type="text/javascript">
+
+    $.ajaxSetup({
+         headers: {
+            'X-CSRF-TOKEN' : $('meta[name="csrf_token"').attr('content')
+          }
+      });
     
-    $(document).ready(function(){
+    $(document).ready(function() {
 
        var xValue;
        xValue = $('#hiddentext').val();
@@ -166,15 +182,41 @@
       
     });
 
-    $('#category').change(function(){
+    $('#category').change(function() {
 
         if($('#category').val() =='IT'){
-          $('#mac_address').attr('disabled','disabled');
+          $('#mac_address').removeAttr('disabled');
         }
         else if($('#category').val()=='Non-IT') {
-         $('#mac_address').removeAttr('disabled');
+            $('#mac_address').attr('disabled','disabled');
         }
-    });
+        generate_qr_code();
+    });  
+
+
+      // AJAX
+    function generate_qr_code() {
+
+      var category = $('#category').val();
+      var tag_no = $('#tag_no').val();
+      var serial_no = $('#serial_no').val();
+      var dataString;
+
+      dataString = 'serial_no=' + serial_no + '&tag_no=' + tag_no + '&category=' + category;
+    
+      $.ajax({
+            type: "POST",
+            url: "/hardware_equipment/preview_qrcode",
+            data : dataString,
+            success: function(data){
+              
+              $('#div_qr').html(data);
+            }
+
+        })
+ 
+     
+    }
 
   </script>
 
