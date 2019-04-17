@@ -62,12 +62,12 @@ class HardwareEquipmentController extends Controller
                 if ($request->category == 'IT'){
 
                     $photo_name = $request->serial_no.'.jpg';
-                    $qrcode_name= $request->serial_no.'.jpg';
+                    $qrcode_name= $request->serial_no.'.png';
                 }
                 else {
 
                     $photo_name = $request->tag_no.'.jpg';
-                    $qrcode_name= $request->tag_no.'.jpg';
+                    $qrcode_name= $request->tag_no.'.png';
 
                 }   
 
@@ -129,9 +129,13 @@ class HardwareEquipmentController extends Controller
      * @param  \App\hardware_equipment  $hardware_equipment
      * @return \Illuminate\Http\Response
      */
-    public function show(hardware_equipment $hardware_equipment)
+    public function show($id)
     {
-        //
+        $query_result = '';
+        $hardware_equipment = new hardware_equipment;
+        $query_result = $hardware_equipment::show_details($id);
+
+        return view('module2.equipment.show',compact('query_result'));
     }
 
     /**

@@ -30,16 +30,16 @@
 			
 			<div class="col s8">
 
-				 <table class="responsive-table" style="width:90%;">
+				 <table class="responsive-table" style="width:100%; font-size:14px;" >
 
 				 	<thead>  <!-- Column headings-->
  				 		<tr>
-				 			<th> <i class="small material-icons">picture_in_picture</i> </th>
+				 			<th> <i class="small material-icons">photo</i> </th>
 				 			<th> Tag No. </th>
 				 			<th> Serial No.  </th>
 				 			<th> Type  </th>
-				 			<th> Category  </th>
-				 			<th> Details  </th>
+				 			<th colspan=2> Category  </th>
+				 			<th></th>
 				 		</tr>
 				 	</thead>
 
@@ -53,14 +53,14 @@
 
 									
 								@else
-									<i class="small material-icons">photo</i>
+									<i style="font-size:12px;">( no photo )</i>
 								@endif
 				 			</td>
 				 			<td>{{ $list->tag_no }}</td>
 				 			<td>{{ $list->serial_no }}</td>
 				 			<td>{{ $list->type }}</td>
-				 			<td>{{ $list->category }}</td>
-				 			<td><a href="#!"><i class="small material-icons">chevron_right</i></a></td>
+				 			<td><center>{{ $list->category }}</center></td>
+				 			<td><a href="{{ route('hardware_equipment.show', $list->id) }}" ><i style="font-size:18px;"class="small material-icons">more_vert</i></a></td>
 				 			
 				 			
 				 		</tr>

@@ -26,23 +26,23 @@ class hardware_equipment extends Model
 		$hardware_equipment->description = $description;
 		$hardware_equipment->brand = $brand;
 		$hardware_equipment->status = $status;
+		$hardware_equipment->qrcode_name = $qrcode_name;
 		$hardware_equipment->date_acquired = Carbon::parse($date_acquired)->format('Y-m-d');
-		
-		if ($category == 'IT'){
-
-			$hardware_equipment->photo_name = $serial_no.'.jpg';
-			$hardware_equipment->qrcode_name= $serial_no.'.jpg';
-		}
-		else {
-
-			$hardware_equipment->photo_name = $tag_no.'.jpg';
-			$hardware_equipment->qrcode_name= $tag_no.'.jpg';
-
-		}
-	
 		$hardware_equipment->save();
 
 	}
+   	
+   	public static function show_details($id) {
+
+ 		$query_result = '';
+ 		$hardware_equipment = new hardware_equipment;
+ 		$query_result = $hardware_equipment::where('id','=',$id)
+ 			->whereNull('deleted_at')
+ 			->get();
+ 		return $query_result;
+   	}
+
+
    	public static function get_error_warning($tag_no, $serial_no) {
 
 		$hardware_equipment = new hardware_equipment;
