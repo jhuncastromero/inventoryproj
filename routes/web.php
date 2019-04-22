@@ -39,6 +39,8 @@ Route::get('/personnel/generatereport/pdf','DynamicPDFController@pdf')->name('pe
 
 Route::post('/hardware_equipment/preview_qrcode','HardwareEquipmentController@generate_qr_code')->name('hardware_equipment.preview_qrcode');
 Route::get('/hardware_equipment/view','HardwareEquipmentController@list_view_equipment')->name('hardware_equipment.view');
+Route::get('/hardware_equipment/updatelist','HardwareEquipmentController@update_list_equipment')->name('hardware_equipment.updatelist');
+Route::get('/hardware_equipment/updatedetails/{id}','HardwareEquipmentController@update_details_equipment')->name('hardware_equipment.updatedetails');
 
 
 

@@ -55,7 +55,7 @@ class HardwareEquipmentController extends Controller
         $qr_code ='';
 
         $hardware_equipment = new hardware_equipment;
-        $error_warning = $hardware_equipment::get_error_warning($request->tag_no, $request->serial_no);
+        $error_warning = $hardware_equipment::get_error_warning($request->tag_no, $request->serial_no, $request->mac_address);
         
         if($error_warning == 0) { //no duplicated values detected
 
@@ -86,7 +86,7 @@ class HardwareEquipmentController extends Controller
                     $photo_name = '';
                 }
 
-            $add_new = $hardware_equipment::create_new($request->tag_no, $request->serial_no,$request->category,$request->type,$request->origin,$request->mac_addres,$request->description,$photo_name,$request->status,$request->date_acquired, $qrcode_name, $request->brand);
+            $add_new = $hardware_equipment::save_data($request->tag_no, $request->serial_no,$request->category,$request->type,$request->origin,$request->mac_addres,$request->description,$photo_name,$request->status,$request->date_acquired, $qrcode_name, $request->brand);
 
             $qr_code = $this->save_qr_code($request->category,$request->tag_no, $request->serial_no); 
 
@@ -113,6 +113,13 @@ class HardwareEquipmentController extends Controller
                  $error_title = "Existing Equipment Serial No.";
                  $error_icon = "warning";
                  $error_message ="You have entered an existing Equipment Serial No. Please check your entry.";
+
+            }
+            else if($error_warning == 4) {
+
+                 $error_title = "Existing MAC Address/ Code.";
+                 $error_icon = "warning";
+                 $error_message ="You have entered an existing MAC Address/ Code. Please check your entry.";
 
             }
 
@@ -156,9 +163,29 @@ class HardwareEquipmentController extends Controller
      * @param  \App\hardware_equipment  $hardware_equipment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, hardware_equipment $hardware_equipment)
+    public function update(Request $request)
     {
         //
+        $error_warning = '';
+        $photo_name  = '';
+        $old_photo_name_value ='';
+
+        $hardware_equipment = new hardware_equipment;
+        $error_warning = $hardware_equipment::get_error_warning($request->tag_no, $request->serial_no, $request->mac_address);
+
+        if($error_warning == 0) {
+
+            if($request->serial_no !='') {
+                $old_photo_name_value = $hardware_equipment::flexible_search('serial_no', $request->serial_no);
+            }
+            else if($request->tag_no !='') {
+              $old_photo_name_value = $hardware_equipment::flexible_search('serial_no', $request->tag_no);   
+            }
+
+            
+
+
+        } 
     }
 
     /**
@@ -222,12 +249,24 @@ class HardwareEquipmentController extends Controller
           $qr_code = QrCode::format('png')->size(100)->generate($qr_data, storage_path().'/app/public/qrcode/'.$qr_data.'.png');
         }   
     }
-    public function list_view_equipment()
+    /*3 */public function list_view_equipment()
     {
         $hardware_equipment = new hardware_equipment;
         $query_results = $hardware_equipment::list_view_equipment();
         return view('module2.equipment.view',compact('query_results'));
        
     }
-    
+    /* 4 */ public function update_list_equipment()
+    {
+       $hardware_equipment = new hardware_equipment;
+        $query_results = $hardware_equipment::list_view_equipment();
+        return view('module2.equipment.update_list_equipment',compact('query_results'));
+    }
+    /* 5 */ public function update_details_equipment($id)
+    {
+        $photo_status = '';
+        $hardware_equipment = new hardware_equipment;
+        $query_results = $hardware_equipment::show_details($id);
+        return view('module2.equipment.update_details_equipment',compact('query_results','photo_status'));
+    }
 }

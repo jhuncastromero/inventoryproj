@@ -2,8 +2,7 @@
 
 @section('title-section')
 
-  Equipment : View Equipment Database
-
+  Equipment : Update Database
 @endsection
 
 @section('navlinks')
@@ -23,7 +22,7 @@
 <div class="container">
 
 		<div class="row">
-			<div id="div_header"><i class="material-icons">view_list</i>&nbsp;List View Equipment Database</div>
+			<div id="div_header"><i class="material-icons">update</i>&nbsp;Update Equipment Database</div>
 		</div>
 
 		<div class="row">
@@ -38,7 +37,8 @@
 				 			<th> Tag No. </th>
 				 			<th> Serial No.  </th>
 				 			<th> Type  </th>
-				 			<th colspan=2> Category  </th>
+				 			<th> Category</th>
+				 			<th colspan=2> <center>Actions</center></th>
 				 			<th></th>
 				 		</tr>
 				 	</thead>
@@ -60,8 +60,8 @@
 				 			<td>{{ $list->serial_no }}</td>
 				 			<td>{{ $list->type }}</td>
 				 			<td><center>{{ $list->category }}</center></td>
-				 			<td><a class="btn btn-medium btn-flat" href="{{ route('hardware_equipment.show', $list->id) }}" ><i style="font-size:18px;"class="small material-icons">arrow_drop_up</i></a></td>
-				 			
+				 			<td><a class="btn btn-medium btn-flat" href="{{ route('hardware_equipment.updatedetails',['id' => $list->id]) }}"><i style="font-size:18px;"class="small material-icons">create</i></a></td>
+				 			<td><a class="btn btn-medium btn-flat" ><i style="font-size:18px;"class="small material-icons">delete</i></a></td>
 				 			
 				 		</tr>
                        
