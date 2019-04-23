@@ -163,29 +163,176 @@ class HardwareEquipmentController extends Controller
      * @param  \App\hardware_equipment  $hardware_equipment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         //
-        $error_warning = '';
         $photo_name  = '';
-        $old_photo_name_value ='';
+        $photo_status = '';
+        $error_title ='';
+        $error_message = '';
+        $error_icon = '';
+        $error_warning = '';
+
 
         $hardware_equipment = new hardware_equipment;
-        $error_warning = $hardware_equipment::get_error_warning($request->tag_no, $request->serial_no, $request->mac_address);
+        $query_results = $hardware_equipment::flexible_search('id', $id);
 
-        if($error_warning == 0) {
+        if($request->tag_no != $query_results[0]->tag_no || $request->serial_no != $query_results[0]->serial_no || $request->mac_address != $query_results[0]->mac_address ) {   //user has changed value in tagno, serialno or mac_address
 
-            if($request->serial_no !='') {
-                $old_photo_name_value = $hardware_equipment::flexible_search('serial_no', $request->serial_no);
-            }
-            else if($request->tag_no !='') {
-              $old_photo_name_value = $hardware_equipment::flexible_search('serial_no', $request->tag_no);   
-            }
-
-            
+                $error_warning = $hardware_equipment::get_update_error_warning($request->tag_no, $request->serial_no, $request->mac_address, $id);
+         
+              if($error_warning[0] == 0 && $error_warning[1] == 0 && $error_warning[2] == 0 ) {
 
 
-        } 
+                    if($request->hiddentext =='new_photo' ) { //user has opted to change  the photo
+                    
+                            $photofile = $request->file('photofile');
+                            if($photofile) { //user has selected a new photo/picture
+                                                
+                                 if(Storage::exists('public/hardware_photo/IT/'.$query_results[0]->photo_name)) {
+                                    Storage::delete('public/hardware_photo/IT/'.$query_results[0]->photo_name);
+                                 }
+                                 else{
+                                    Storage::delete('public/hardware_photo/Non-IT/'.$query_results[0]->photo_name);  
+                                 }
+
+                                 if ($request->category == 'IT'){ //test what category will the photo will be saved
+                                      $photo_name = $request->serial_no.'.jpg';
+                                       //$qrcode_name= $request->serial_no.'.png';
+                                 }
+                                 else {
+                                      $photo_name = $request->tag_no.'.jpg';
+                                        //$qrcode_name= $request->tag_no.'.png';
+                                 }
+
+                                 $photofile->storeAs('public/hardware_photo/'.$request->category, $photo_name); //save photo
+
+
+                                
+                            }
+                            else {  //no photo was selected
+                                $photo_name = $query_results[0]->photo_name; //retain the old photo name saved in dbase
+
+                            }
+                    }
+                    else if ($request->hiddentext == 'no_photo') {
+
+                        if(Storage::exists('public/hardware_photo/IT/'.$query_results[0]->photo_name)) {
+                               Storage::delete('public/hardware_photo/IT/'.$query_results[0]->photo_name);
+                        }
+                        else{
+                              Storage::delete('public/hardware_photo/Non-IT/'.$query_results[0]->photo_name);  
+                        }
+
+                        $photo_name = ''; //set null to photo_name since photo is removed or there is no photo at all from the start
+
+                    } 
+                    else { //user has not selected any of the option regarding photos
+
+                        $photo_name = $query_results[0]->photo_name; //retain the old photo name saved in dbase
+                    }
+                
+                    //save changes made
+                    $update_data = $hardware_equipment::update_data($id, $request->tag_no, $request->serial_no,$request->category,$request->type,$request->origin,$request->mac_addres,$request->description,$photo_name,$request->status,$request->date_acquired, $query_results[0]->qrcode_name, $request->brand);
+
+                   $updatevalue = 2;
+              }
+              else {  //error warning was detected
+
+                    if($error_warning[0] != 0 && $error_warning[1] != 0 && $error_warning[2] != 0 ){
+
+                         $error_title = "Duplicated Entry";
+                         $error_icon = "warning";
+                         $error_message = "An Existing Entry was found. Please check the following: Equipment Tag No and Equipment Serial No.";
+
+                    }
+                    else if($error_warning[0] != 0){
+
+                         $error_title = "Existing Equipment Tag No.";
+                         $error_icon = "warning";
+                         $error_message ="You have entered an existing Equipment Tag No. Please check your entry.";
+
+                    }
+                    else if($error_warning[1] != 0) {
+
+                         $error_title = "Existing Equipment Serial No.";
+                         $error_icon = "warning";
+                         $error_message ="You have entered an existing Equipment Serial No. Please check your entry.";
+
+                    }
+                    else if($error_warning[2] != 0) {
+
+                         $error_title = "Existing MAC Address/ Code.";
+                         $error_icon = "warning";
+                         $error_message ="You have entered an existing MAC Address/ Code. Please check your entry.";
+
+                    }
+
+                    $updatevalue = 1;
+
+                }
+        }
+        else { // no changes has been made in serialno, tagno or mac_address
+
+                   if($request->hiddentext =='new_photo' ) { //user has opted to change  the photo
+                    
+                            $photofile = $request->file('photofile');
+                            if($photofile) { //user has selected a new photo/picture
+                                                
+                                 if(Storage::exists('public/hardware_photo/IT/'.$query_results[0]->photo_name)) {
+                                    Storage::delete('public/hardware_photo/IT/'.$query_results[0]->photo_name);
+                                 }
+                                 else{
+                                    Storage::delete('public/hardware_photo/Non-IT/'.$query_results[0]->photo_name);  
+                                 }
+
+                                 if ($request->category == 'IT'){ //test what category will the photo will be saved
+                                      $photo_name = $request->serial_no.'.jpg';
+                                       //$qrcode_name= $request->serial_no.'.png';
+                                 }
+                                 else {
+                                      $photo_name = $request->tag_no.'.jpg';
+                                        //$qrcode_name= $request->tag_no.'.png';
+                                 }
+
+                                 $photofile->storeAs('public/hardware_photo/'.$request->category, $photo_name); //save photo
+
+
+                                
+                            }
+                            else {  //no photo was selected
+                                $photo_name = $query_results[0]->photo_name; //retain the old photo name saved in dbase
+
+                            }
+                    }
+                    else if ($request->hiddentext == 'no_photo') {
+
+                        if(Storage::exists('public/hardware_photo/IT/'.$query_results[0]->photo_name)) {
+                               Storage::delete('public/hardware_photo/IT/'.$query_results[0]->photo_name);
+                        }
+                        else{
+                              Storage::delete('public/hardware_photo/Non-IT/'.$query_results[0]->photo_name);  
+                        }
+
+                        $photo_name = ''; //set null to photo_name since photo is removed or there is no photo at all from the start
+
+                    } 
+                    else { //user has not selected any of the option regarding photos
+
+                        $photo_name = $query_results[0]->photo_name; //retain the old photo name saved in dbase
+                    }
+                
+                    //save changes made
+                    $update_data = $hardware_equipment::update_data($id, $request->tag_no, $request->serial_no,$request->category,$request->type,$request->origin,$request->mac_addres,$request->description,$photo_name,$request->status,$request->date_acquired, $query_results[0]->qrcode_name, $request->brand);
+
+                    $updatevalue = 2;
+
+        }
+
+         $query_results = $hardware_equipment::flexible_search('id', $id);
+
+         return view('module2.equipment.update_details_equipment',compact('query_results','updatevalue', 'error_title','error_message','error_icon','photo_status'));
+         
     }
 
     /**
@@ -264,9 +411,15 @@ class HardwareEquipmentController extends Controller
     }
     /* 5 */ public function update_details_equipment($id)
     {
+        $error_title ='';
+        $error_message = '';
+        $error_icon = '';
+        $updatevalue = '';
         $photo_status = '';
+
+
         $hardware_equipment = new hardware_equipment;
         $query_results = $hardware_equipment::show_details($id);
-        return view('module2.equipment.update_details_equipment',compact('query_results','photo_status'));
+        return view('module2.equipment.update_details_equipment',compact('query_results','photo_status','error_title','error_icon','error_message','updatevalue'));
     }
 }

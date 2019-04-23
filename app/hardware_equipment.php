@@ -32,6 +32,26 @@ class hardware_equipment extends Model
 		$hardware_equipment->save();
 
 	}
+	public static function update_data($id, $tag_no, $serial_no,$category,$type,$origin,$mac_address,$description,$photo_name,$status,$date_acquired, $qrcode_name, $brand) {
+
+		$update = new hardware_equipment;
+        $hardware_equipment = $update::find($id);
+
+		$hardware_equipment->tag_no = $tag_no;
+		$hardware_equipment->serial_no = $serial_no;
+		$hardware_equipment->category = $category;
+		$hardware_equipment->type = $type;
+		$hardware_equipment->origin = $origin;
+		$hardware_equipment->mac_address = $mac_address;
+		$hardware_equipment->description = $description;
+		$hardware_equipment->brand = $brand;
+		$hardware_equipment->status = $status;
+		$hardware_equipment->photo_name = $photo_name;
+		$hardware_equipment->qrcode_name = $qrcode_name;
+		$hardware_equipment->date_acquired = Carbon::parse($date_acquired)->format('Y-m-d');
+		$hardware_equipment->save();
+
+	}
    	
    	public static function show_details($id) {
 
@@ -44,6 +64,33 @@ class hardware_equipment extends Model
    	}
 
 
+   	public static function get_update_error_warning($tag_no, $serial_no, $mac_address,$id){
+
+   		$count_tag_no = 0;
+   		$count_serial_no = 0;
+   		$count_mac_address = 0;
+
+   		$hardware_equipment = new hardware_equipment;
+   		$query_results = $hardware_equipment::where('id','=',$id)
+   			->whereNull('deleted_at')
+   			->get();
+
+   		if($query_results[0]->tag_no != $tag_no){
+   			$count_tag_no = $hardware_equipment::where('tag_no','=',$tag_no)->count();
+   		}
+
+   		if($query_results[0]->serial_no != $serial_no){
+   			$count_serial_no = $hardware_equipment::where('serial_no','=',$serial_no)->count();
+   		}
+
+   		if($query_results[0]->mac_address != $mac_address){
+   			$count_mac_address = $hardware_equipment::where('mac_address','=',$mac_address)->count();
+   		}
+
+   		return [$count_tag_no, $count_serial_no, $count_mac_address];
+
+   	}
+   	
    	public static function get_error_warning($tag_no, $serial_no, $mac_address) {
 
 		$hardware_equipment = new hardware_equipment;
@@ -93,7 +140,7 @@ class hardware_equipment extends Model
 		return $query_result;
 	}
 
-	public function flexible_search($criteria, $search_value) {
+	public static function flexible_search($criteria, $search_value) {
 
 		$query_results = '';
 		$hardware_equipment = new hardware_equipment;

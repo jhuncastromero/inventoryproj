@@ -26,7 +26,7 @@
   </div>
   <div class="row">
     
-    <FORM ACTION="" METHOD="" enctype="multipart/form-data">
+    <FORM ACTION="{{ route('hardware_equipment.update',$query_results[0]->id)}}" METHOD="POST" enctype="multipart/form-data">
       {{ csrf_field() }}
       {{ method_field('PUT') }}            
             
@@ -154,17 +154,34 @@
             </button> <span style="padding-left:20px; text-align: center;"><a href="">Cancel</a></span>
             
      
-     </FORM>
+
          
     </div>
 
     <div class="row">
 
-      <div><input type="text" id="hiddentext" name="hiddentext" value="{{ $photo_status }}"></div>
+     	   <div><input type="text" id="hiddentext" name="hiddentext" value="{{ $photo_status }}"></div>
+	      @if(session()->has('updatevalue'))
+		  	<div><input type="hidden" id="hidden_updatevalue" name="hidden_updatevalue" value="{{ 	session()->get('updatevalue') }}"></div>
+		  @else
+		  	<div><input type="hidden" id="hidden_updatevalue" name="hidden_updatevalue" value="{{ $updatevalue }}"></div>
+		  @endif
 
     </div>
+ </FORM>
 
 </div>
+ <!-- Modal Structure -->
+  <div id="messageprompt" class="modal">
+    <div class="modal-content">
+      <h4> <i class="medium material-icons" style="color:red;">{{ $error_icon }}</i>&nbsp;{{ $error_title }}</h4>
+      <p>{{ $error_message }}</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">OK</a>
+    </div>
+  </div>	
+
 
 
   
@@ -181,7 +198,8 @@
       });
     
     $(document).ready(function() {
-    	$("#no_photo").click(function(){
+
+    	   $("#no_photo").click(function(){
 				$("#new_photo").prop("checked", false);
 				$("#browse_photo").prop("enabled",false);
 				$("#browse_photo").css('visibility','hidden');
@@ -194,6 +212,25 @@
 				$("#browse_photo").css('visibility','visible');
 				$("#hiddentext").val("new_photo");
 			})
+
+			 var xValue;
+	          xValue = 0;
+	          xValue = $('#hidden_updatevalue').val();
+
+	          if(xValue=='1')
+	          {
+	             $('#messageprompt').modal('open');
+	             $('#hidden_updatevalue').val(''); 
+	             $('#hiddentext').val('');
+	          }
+	          else if(xValue=='2')
+	          {
+	             
+	          	 $('#hidden_updatevalue').val('');
+	             $('#hiddentext').val('');
+	             M.toast({html:"Profile Update(s) was successfully made!"});
+
+	          }
        
       
     });
