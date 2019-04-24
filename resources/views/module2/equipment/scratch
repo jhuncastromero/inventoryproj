@@ -1,49 +1,15 @@
-$error_warning = '';
-        $photo_name  = '';
-        $old_photo_name_value ='';
+$output.='</tr>';
 
-        $hardware_equipment = new hardware_equipment;
-        $error_warning = $hardware_equipment::get_error_warning($request->tag_no, $request->serial_no, $request->mac_address);
-
-        if($error_warning == 0) {
-
-            //get the saved photo_name data on the table
-            if($request->serial_no !='') {
-                $query_results = $hardware_equipment::flexible_search('serial_no', $request->serial_no);
-                $old_photo_name_value = $query_results[0]->photo_name;
-            }
-            else if($request->tag_no !='') {
-                  $query_results = $hardware_equipment::flexible_search('tag_no', $request->tag_no);   
-                  $old_photo_name_value = $query_results[0]->photo_name;
-            }
-
-            //test if user had selected a new picture/photo for the equipment
-            $photofile = $request->file('photofile'); //save photo
-                
-            if($photofile) { //user has selected a photo/picture
-
-                 /*$file_name = $photo_name;  
-                 $file_category = $request->category;
-
-                 if(File::exists('public/hardware_photo/'.$file_category.'/'.$old_photo_name_value)) {
-                    return 'existing photo';
-                 }
-                 else {
-                    return 'non-existing photo';
-                 }
-                    
-
-                 //$photofile->storeAs('public/hardware_photo/'.$file_category, $file_name);
-
-                */
-                 return 'selected photo';
-            }
-            else {
-
-                return 'no photo selected';
-            }
-
-            
-
-
-        } 
+                           $output.='<tr>';
+                            $output.='<td style="font-weight: bold;">Equipment Tag No.</td>';
+                            if($query_results[0]->tag_no != '') {
+                                
+                                $output.='<td>'.$query_result[0]->tag_no.'</td>';
+                            }
+                            else{
+                                $output.='<td> ------ </td>';
+                            }
+                           $output.='</tr>';
+                           $output.='<tr>';
+                           $output.='<td style="font-weight: bold;">Type </td>';
+                           $output.='<td>'.$query_results[0]->type.'</td>';

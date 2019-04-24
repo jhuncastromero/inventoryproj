@@ -136,16 +136,34 @@
 
             <div class="row">
 
-              <div class="input-field col s6">
-                  <input type="text" id="status" name="status" maxlength="20" value="{{ $query_results[0]->status}}">
-                  <label for="status">Status</label>
-              </div>
-            
-              <div class="input-field col s6">
-                  <input type="text" id="date_acquired" name="date_acquired" class="datepicker" required="" value="{{ $query_results[0]->date_acquired  }}">
-                  <label for="date_acquired">Date Acquired</label>
-              </div>  
+                <div class="input-field col s6">
+                    <input type="text" id="status" name="status" maxlength="20" value="{{ $query_results[0]->status}}">
+                    <label for="status">Status</label>
+                </div>
+              
+                <div class="input-field col s6">
+                    <input type="text" id="date_acquired" name="date_acquired" class="datepicker" required="" value="{{ $query_results[0]->date_acquired  }}">
+                    <label for="date_acquired">Date Acquired</label>
+                </div>  
 
+
+            </div>
+
+            <div class = "row" style="padding-bottom: 40px;">
+                  <div class ="col s4">
+                        <div id="qr_div">
+                            @if(!empty($query_results[0]->QRCode_name))
+                                 <img class="" src="{{ asset(Storage::url('qrcode/'.$query_results[0]->QRCode_name)) }}" width="100px" height="100">
+                             @else
+                                  <p><i> ( QR Code Not Generated ) </i></p>
+                            @endif
+                        </div>
+                        <div>
+                            <a class="" href="#" id="{{ $query_results[0]->id}}" name="update_qr">Update QR Code</a>
+
+                        </div>
+                    </div>
+              
 
             </div>
 
@@ -160,7 +178,8 @@
 
     <div class="row">
 
-     	   <div><input type="text" id="hiddentext" name="hiddentext" value="{{ $photo_status }}"></div>
+     	   <div><input type="hidden" id="hiddentext" name="hiddentext" value="{{ $photo_status }}"></div>
+         <div><input type="hidden" id="qr" name="qr" value ="{{ $query_results[0]->id}}"
 	      @if(session()->has('updatevalue'))
 		  	<div><input type="hidden" id="hidden_updatevalue" name="hidden_updatevalue" value="{{ 	session()->get('updatevalue') }}"></div>
 		  @else
@@ -199,42 +218,90 @@
     
     $(document).ready(function() {
 
-    	   $("#no_photo").click(function(){
-				$("#new_photo").prop("checked", false);
-				$("#browse_photo").prop("enabled",false);
-				$("#browse_photo").css('visibility','hidden');
-				$("#hiddentext").val("no_photo");
-			});		
+    	 $("#no_photo").click(function(){
+			
+        	$("#new_photo").prop("checked", false);
+  				$("#browse_photo").prop("enabled",false);
+  				$("#browse_photo").css('visibility','hidden');
+  				$("#hiddentext").val("no_photo");
+			 
+       });		
 
-			$("#new_photo").click(function(){
-				$("#no_photo").prop("checked", false);
-				$("#browse_photo").prop("enabled",true);
-				$("#browse_photo").css('visibility','visible');
-				$("#hiddentext").val("new_photo");
-			})
+			 $("#new_photo").click(function(){
+  				$("#no_photo").prop("checked", false);
+  				$("#browse_photo").prop("enabled",true);
+  				$("#browse_photo").css('visibility','visible');
+  				$("#hiddentext").val("new_photo");
+			 });
 
-			 var xValue;
-	          xValue = 0;
-	          xValue = $('#hidden_updatevalue').val();
+		   var xValue;
+	      xValue = 0;
+        xValue = $('#hidden_updatevalue').val();
 
-	          if(xValue=='1')
-	          {
-	             $('#messageprompt').modal('open');
-	             $('#hidden_updatevalue').val(''); 
-	             $('#hiddentext').val('');
-	          }
-	          else if(xValue=='2')
-	          {
-	             
-	          	 $('#hidden_updatevalue').val('');
-	             $('#hiddentext').val('');
-	             M.toast({html:"Profile Update(s) was successfully made!"});
+        if(xValue=='1')
+        {
+           $('#messageprompt').modal('open');
+           $('#hidden_updatevalue').val(''); 
+           $('#hiddentext').val('');
+        }
+        else if(xValue=='2')
+        {
+           
+        	 $('#hidden_updatevalue').val('');
+           $('#hiddentext').val('');
+           M.toast({html:"Hardware Equipment update(s) was successfully made!"});
 
-	          }
-       
+        }
+   
       
     });
 
+    $('#category').change(function() {
+        
+       var xID = $("#qr").val();
+        var dataString = "qr=" + $("#qr").val() + "&category=" + $("#category").val() + "&tag_no=" + $("#tag_no").val() + "&serial_no=" + $("#serial_no").val();
+
+        if($('#category').val() =='IT'){
+          $('#mac_address').removeAttr('disabled');
+        }
+        else if($('#category').val()=='Non-IT') {
+            $('#mac_address').val('');
+            $('#mac_address').attr('disabled','disabled');
+
+        }
+        
+
+        $.ajax({
+            type: "POST",
+            url: "/hardware_equipment/updateqrcode",
+            data : dataString,
+            success: function(data){
+              $("#qr_div").html('');
+              $("#qr_div").html(data);
+            }
+
+        })
+    });  
+
+
+    $("[name='update_qr']").click(function(){
+
+        var xID = $("#qr").val();
+        var dataString = "qr=" + $("#qr").val() + "&category=" + $("#category").val() + "&tag_no=" + $("#tag_no").val() + "&serial_no=" + $("#serial_no").val();
+      
+      $.ajax({
+            type: "POST",
+            url: "/hardware_equipment/updateqrcode",
+            data : dataString,
+            success: function(data){
+              $("#qr_div").html('');
+              $("#qr_div").html(data);
+            }
+
+        })
+       
+        
+    });
            
       
 

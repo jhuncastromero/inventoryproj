@@ -61,7 +61,7 @@
 				 			<td>{{ $list->type }}</td>
 				 			<td><center>{{ $list->category }}</center></td>
 				 			<td><a class="btn btn-medium btn-flat" href="{{ route('hardware_equipment.updatedetails',['id' => $list->id]) }}"><i style="font-size:18px;"class="small material-icons">create</i></a></td>
-				 			<td><a class="btn btn-medium btn-flat" ><i style="font-size:18px;"class="small material-icons">delete</i></a></td>
+				 			<td><a class="btn btn-medium btn-flat" onclick="document.getElementById('hidden_r_index').value=this.id; showModal();" id="{{$list->id}}" name="previewDelete"><i style="font-size:18px;"class="small material-icons">delete</i></a></td>
 				 			
 				 		</tr>
                        
@@ -75,6 +75,37 @@
 			
 
 		</div>
+		<div>
+			       @if(session()->has('deletevalue'))
+	      				<div><input type="hidden" id="hidden_deletevalue" name="hidden_deletevalue" value="{{ session()->get('deletevalue') }}"></div>
+	      			@else
+	      				<div><input type="hidden" id="hidden_deletevalue" name="hidden_deletevalue" value="{{ $deletevalue }}"></div>
+	      			@endif
+	    </div>
+		<!-- FORM Below is for MODAL Window-->
+		 <form action="{{ route('hardware_equipment.destroy',0) }}" method="POST" id="delete-form">
+	          {{ csrf_field() }}
+              {{ method_field('DELETE') }}
+	
+			 <!-- Modal Structure -->
+			  <div id="messageprompt" class="modal">
+		    		<div class="modal-content">
+		      			<h4> <i class="medium material-icons" style="color:red;">info</i>&nbsp;</h4>
+		      				<b>Are you sure you want to delete this hardware equipment?</b>
+		      				<div id="div_hardware"></div>
+		    		</div>
+		    		<div class="modal-footer">
+		      			
+		      			<a href="#!" class="modal-close waves-effect waves-green btn-flat" id="yesDelete" onclick="document.getElementById('delete-form').submit();">Yes</a>
+		      			<a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
+		    		</div>
+		  		</div>		
+
+			<div class="row">
+				<input type="hidden" id="hidden_r_index" name = "hidden_r_index">
+				<input type="hidden" id="quick_search" name = "quick_search">
+			</div>			
+		  </form>
 </div>
 
 
@@ -91,7 +122,47 @@
 		      		}
 		     	});
 
-			    
+				     	// JQuery
+				$(document).ready(function(){
+
+		          var xValue;
+		          xValue = 0;
+		          xValue = $('#hidden_deletevalue').val();
+
+		           if(xValue==3)
+		          {
+		             
+		          	 M.toast({html:"Hardware Equipment was Deleted Successfully!"});
+		          	 $('#hidden_deletevalue').val('');
+		          }
+
+				});
+
+			     function showModal()
+				 {
+				 	$('#messageprompt').modal('open');
+				 }
+
+				  //for delete button already visible		
+				 $("[name='previewDelete'").click(function(){
+
+				 	var hidden_r_index = $('#hidden_r_index').val();
+				 	var dataString = "hidden_r_index=" + hidden_r_index;
+				 	
+				 	$.ajax({
+		      			type: "POST",
+		      			url: "/hardware_equipment/preview_hardware",
+		      			data : dataString,
+		      			success: function(data){
+		      				
+		      				$('#div_hardware').html(data);
+		      			}
+
+		     		})
+		     		
+				 	
+				 });
+				
 		     	
 		</script>
 

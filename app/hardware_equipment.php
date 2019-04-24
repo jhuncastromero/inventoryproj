@@ -52,6 +52,13 @@ class hardware_equipment extends Model
 		$hardware_equipment->save();
 
 	}
+	public static function delete_data($id) {
+
+		$hardware_equipment = new hardware_equipment;
+		$query_results = $hardware_equipment::find($id);
+		$query_results->delete();
+		
+	}
    	
    	public static function show_details($id) {
 
@@ -83,12 +90,12 @@ class hardware_equipment extends Model
    			$count_serial_no = $hardware_equipment::where('serial_no','=',$serial_no)->count();
    		}
 
-   		if($query_results[0]->mac_address != $mac_address){
+   		/*if($query_results[0]->mac_address != $mac_address || ){
    			$count_mac_address = $hardware_equipment::where('mac_address','=',$mac_address)->count();
    		}
 
-   		return [$count_tag_no, $count_serial_no, $count_mac_address];
-
+   		return [$count_tag_no, $count_serial_no, $count_mac_address];*/
+   		return [$count_tag_no, $count_serial_no];
    	}
    	
    	public static function get_error_warning($tag_no, $serial_no, $mac_address) {
@@ -96,7 +103,7 @@ class hardware_equipment extends Model
 		$hardware_equipment = new hardware_equipment;
 		$query_result = $hardware_equipment::get_duplicate_tag_serial_mac($tag_no, $serial_no, $mac_address);
 
-		if ($query_result[0] != 0 || $query_result[1] != 0 || $query_result[2] !=0 ) {
+		if ($query_result[0] != 0 || $query_result[1] != 0 ) {
 			
 			if  ( $query_result[0] != 0 && $query_result[1] != 0 && $query_result[2] != 0) {
 				
@@ -110,10 +117,10 @@ class hardware_equipment extends Model
 
 				return 3; //user entered duplicated serial no.
 			}
-			else if ( $query_result[2] != 0 ) {
+			/*else if ( $query_result[2] != 0 ) {
 
 				return 4; //user entered duplicated mac address
-			}
+			}*/
 			
 		} 
 
@@ -129,7 +136,7 @@ class hardware_equipment extends Model
 		$count_serial_no = hardware_equipment::where('serial_no','=',$serial_no)->count();
 		$count_mac_address = hardware_equipment::where('mac_address','=',$mac_address)->count();
 
-		return[$count_tag_no, $count_serial_no, $mac_address];
+		return[$count_tag_no, $count_serial_no];
 
 	}
 

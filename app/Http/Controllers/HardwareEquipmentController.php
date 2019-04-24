@@ -19,6 +19,7 @@ class HardwareEquipmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         return view('module2.equipment.home');
@@ -115,13 +116,13 @@ class HardwareEquipmentController extends Controller
                  $error_message ="You have entered an existing Equipment Serial No. Please check your entry.";
 
             }
-            else if($error_warning == 4) {
+           /* else if($error_warning == 4) {
 
                  $error_title = "Existing MAC Address/ Code.";
                  $error_icon = "warning";
                  $error_message ="You have entered an existing MAC Address/ Code. Please check your entry.";
 
-            }
+            }*/
 
             $createvalue=1;
             
@@ -172,7 +173,10 @@ class HardwareEquipmentController extends Controller
         $error_message = '';
         $error_icon = '';
         $error_warning = '';
-
+        $qr_code ='';
+        $qr_notice = '';
+        
+        
 
         $hardware_equipment = new hardware_equipment;
         $query_results = $hardware_equipment::flexible_search('id', $id);
@@ -180,15 +184,16 @@ class HardwareEquipmentController extends Controller
         if($request->tag_no != $query_results[0]->tag_no || $request->serial_no != $query_results[0]->serial_no || $request->mac_address != $query_results[0]->mac_address ) {   //user has changed value in tagno, serialno or mac_address
 
                 $error_warning = $hardware_equipment::get_update_error_warning($request->tag_no, $request->serial_no, $request->mac_address, $id);
+
          
-              if($error_warning[0] == 0 && $error_warning[1] == 0 && $error_warning[2] == 0 ) {
+              if($error_warning[0] == 0 && $error_warning[1] == 0 ) {
 
 
                     if($request->hiddentext =='new_photo' ) { //user has opted to change  the photo
                     
                             $photofile = $request->file('photofile');
                             if($photofile) { //user has selected a new photo/picture
-                                                
+                                            
                                  if(Storage::exists('public/hardware_photo/IT/'.$query_results[0]->photo_name)) {
                                     Storage::delete('public/hardware_photo/IT/'.$query_results[0]->photo_name);
                                  }
@@ -211,7 +216,9 @@ class HardwareEquipmentController extends Controller
                                 
                             }
                             else {  //no photo was selected
+                               
                                 $photo_name = $query_results[0]->photo_name; //retain the old photo name saved in dbase
+                                    
 
                             }
                     }
@@ -229,11 +236,63 @@ class HardwareEquipmentController extends Controller
                     } 
                     else { //user has not selected any of the option regarding photos
 
-                        $photo_name = $query_results[0]->photo_name; //retain the old photo name saved in dbase
+                        if($request->category != $query_results[0]->category){
+                                if(Storage::exists('public/hardware_photo/IT/'.$query_results[0]->photo_name)) {
+                                       Storage::move('public/hardware_photo/IT/'.$query_results[0]->photo_name, 'public/hardware_photo/Non-IT/'.$request->tag_no.'.jpg');
+
+                                       
+                                            $photo_name = $request->tag_no.'.jpg';    
+
+                                }
+                                else if(Storage::exists('public/hardware_photo/Non-IT/'.$query_results[0]->photo_name)) {
+                                     Storage::move('public/hardware_photo/Non-IT/'.$query_results[0]->photo_name, 'public/hardware_photo/IT/'.$request->serial_no.'.jpg');  
+                                        
+                                             $photo_name = $request->serial_no.'.jpg';    
+                                       
+                                }
+
+                         }
+                         else {
+
+                             $photo_name = $query_results[0]->photo_name; //retain the old photo name saved in dbase
+                         }
+
                     }
                 
-                    //save changes made
-                    $update_data = $hardware_equipment::update_data($id, $request->tag_no, $request->serial_no,$request->category,$request->type,$request->origin,$request->mac_addres,$request->description,$photo_name,$request->status,$request->date_acquired, $query_results[0]->qrcode_name, $request->brand);
+                    //SAVE CHANGES MADE
+
+                    //qr code generation
+                    $qr_notice = session('qr_notice');
+
+                    if($qr_notice =='generated') { //test if user has updated the qrcode of the item
+                        if($request->category =='IT') {
+
+                                if($request->serial_no !=''){
+                                    $qr_code  = $request->serial_no.'.png';
+                                }
+                                else {
+                                 $qr_code  = '';   
+                                }
+
+                        }
+                        else if($request->category == 'Non-IT') {
+
+                               if($request->tag_no !=''){
+                                    $qr_code  = $request->tag_no.'.png';
+                                }
+                                else {
+                                 $qr_code  = '';   
+                                }  
+
+                        }
+                        $temp = $this->update_qr_code($request->category,$request->tag_no, $request->serial_no, $query_results[0]->QRCode_name); 
+                    }
+                    else {
+                         $qr_code  = $query_results[0]->QRCode_name; 
+                    }
+
+                    //save operation
+                    $update_data = $hardware_equipment::update_data($id, $request->tag_no, $request->serial_no,$request->category,$request->type,$request->origin,$request->mac_address,$request->description,$photo_name,$request->status,$request->date_acquired, $qr_code, $request->brand);
 
                    $updatevalue = 2;
               }
@@ -260,13 +319,13 @@ class HardwareEquipmentController extends Controller
                          $error_message ="You have entered an existing Equipment Serial No. Please check your entry.";
 
                     }
-                    else if($error_warning[2] != 0) {
+                    /*else if($error_warning[2] != 0) {
 
                          $error_title = "Existing MAC Address/ Code.";
                          $error_icon = "warning";
                          $error_message ="You have entered an existing MAC Address/ Code. Please check your entry.";
 
-                    }
+                    }*/
 
                     $updatevalue = 1;
 
@@ -319,11 +378,68 @@ class HardwareEquipmentController extends Controller
                     } 
                     else { //user has not selected any of the option regarding photos
 
-                        $photo_name = $query_results[0]->photo_name; //retain the old photo name saved in dbase
+                        if($request->category != $query_results[0]->category){
+                                if(Storage::exists('public/hardware_photo/IT/'.$query_results[0]->photo_name)) {
+                                       Storage::move('public/hardware_photo/IT/'.$query_results[0]->photo_name, 'public/hardware_photo/Non-IT/'.$request->tag_no.'.jpg');
+
+                                            $photo_name = $request->tag_no.'.jpg';    
+                                        
+
+                                }
+                                else if(Storage::exists('public/hardware_photo/Non-IT/'.$query_results[0]->photo_name)) {
+                                     Storage::move('public/hardware_photo/Non-IT/'.$query_results[0]->photo_name, 'public/hardware_photo/IT/'.$request->serial_no.'.jpg');  
+                                     
+                                         $photo_name = $request->serial_no.'.jpg';    
+                                       
+                                }
+
+                         }
+                         else {
+
+                             $photo_name = $query_results[0]->photo_name; //retain the old photo name saved in dbase
+                         }
+
+                       
                     }
                 
-                    //save changes made
-                    $update_data = $hardware_equipment::update_data($id, $request->tag_no, $request->serial_no,$request->category,$request->type,$request->origin,$request->mac_addres,$request->description,$photo_name,$request->status,$request->date_acquired, $query_results[0]->qrcode_name, $request->brand);
+                    //SAVE CHANGES MADE
+
+                   //qr code generation
+                    $qr_notice = session('qr_notice');
+
+                    if($qr_notice =='generated') { //test if user has updated the qrcode of the item
+                        if($request->category =='IT') {
+                                
+                                if($request->serial_no !=''){
+                                    $qr_code  = $request->serial_no.'.png';
+                                }
+                                else {
+                                 $qr_code  = '';   
+                                }
+
+
+                        }
+                        else if($request->category == 'Non-IT') {
+
+                                if($request->tag_no !=''){
+                                    $qr_code  = $request->tag_no.'.png';
+                                }
+                                else {
+                                 $qr_code  = '';   
+                                }  
+
+
+                        }
+                        $temp = $this->update_qr_code($request->category,$request->tag_no, $request->serial_no, $query_results[0]->QRCode_name); 
+                    }
+                    else {
+                         $qr_code  = $query_results[0]->QRCode_name; 
+                    }
+
+                    //save operation
+                    $update_data = $hardware_equipment::update_data($id, $request->tag_no, $request->serial_no,$request->category,$request->type,$request->origin,$request->mac_address,$request->description,$photo_name,$request->status,$request->date_acquired, $qr_code, $request->brand);
+
+
 
                     $updatevalue = 2;
 
@@ -341,9 +457,20 @@ class HardwareEquipmentController extends Controller
      * @param  \App\hardware_equipment  $hardware_equipment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(hardware_equipment $hardware_equipment)
+    public function destroy(Request $request)
     {
         //
+
+       $deletevalue = 3;
+       $id = '';
+       
+       $id = $request->hidden_r_index;
+           
+       $hardware_equipment = new hardware_equipment;
+       $delete_query= $hardware_equipment::delete_data($id);
+       $query_results = $hardware_equipment::list_view_equipment();
+
+       return view('module2.equipment.update_list_equipment',compact('query_results','deletevalue'));
     }
 
 
@@ -386,7 +513,7 @@ class HardwareEquipmentController extends Controller
         if($category == 'IT') {
             $qr_data = $serial_no;    
         }
-        else if($request->category == 'Non-IT') {
+        else if($category == 'Non-IT') {
             $qr_data = $tag_no;
         }
         
@@ -405,9 +532,10 @@ class HardwareEquipmentController extends Controller
     }
     /* 4 */ public function update_list_equipment()
     {
-       $hardware_equipment = new hardware_equipment;
+        $deletevalue ='';
+        $hardware_equipment = new hardware_equipment;
         $query_results = $hardware_equipment::list_view_equipment();
-        return view('module2.equipment.update_list_equipment',compact('query_results'));
+        return view('module2.equipment.update_list_equipment',compact('query_results','deletevalue'));
     }
     /* 5 */ public function update_details_equipment($id)
     {
@@ -421,5 +549,128 @@ class HardwareEquipmentController extends Controller
         $hardware_equipment = new hardware_equipment;
         $query_results = $hardware_equipment::show_details($id);
         return view('module2.equipment.update_details_equipment',compact('query_results','photo_status','error_title','error_icon','error_message','updatevalue'));
+    }
+
+    /* 6 */ public function ajax_equipment_update_qr(Request $request)
+    {
+        
+        if($request->category == 'IT'){
+            if($request->serial_no != '') {
+                 $qr_code = QrCode::format('png')->size(100)->generate($request->serial_no);
+            }
+            else {
+                 
+                 $qr_code ='';
+            }
+        }
+        else if($request->category =='Non-IT') {
+          
+            if($request->tag_no !='') {
+              $qr_code = QrCode::format('png')->size(100)->generate($request->tag_no);   
+            }
+            else{
+
+                $qr_code ='';
+            }
+        }
+        
+        
+        if ($qr_code == '')
+        {
+            $output ='';
+        }
+        else {
+
+            $output = '<img class="" src="data:image/png;base64,'.base64_encode($qr_code).'" width="100px" height="100px">'; 
+
+        }
+        
+
+        session(['qr_notice' =>'generated']);
+        
+        return $output;
+    }
+    /* 7 */public function update_qr_code($category, $tag_no, $serial_no, $qrcode_name)
+    {
+      
+        $qr_data = '';
+        
+        if(Storage::exists('public/qrcode/'.$qrcode_name)) {
+            Storage::delete('public/qrcode/'.$qrcode_name);
+        }
+
+        if($category == 'IT') {
+            $qr_data = $serial_no;    
+        }
+        else if($category == 'Non-IT') {
+            $qr_data = $tag_no;
+        }
+        
+        if($qr_data != '') {
+      
+          Storage::makeDirectory('public/qrcode');   
+          $qr_code = QrCode::format('png')->size(100)->generate($qr_data, storage_path().'/app/public/qrcode/'.$qr_data.'.png');
+        }   
+    }
+    /* 8*/ public function ajax_equipment_preview_hardware(Request $request)
+    {
+        
+
+        $hardware_equipment = new hardware_equipment;
+        $query_results = $hardware_equipment::flexible_search('id', $request->hidden_r_index);
+        
+        $output = '<div class="row">';
+        $output.= '<div class="col s3 m3 l3">';
+        $output.= '<div style="padding-top:10px;">';
+
+                if(!empty($query_results[0]->photo_name))
+                {
+                     $output.='<img src="'. asset(Storage::url('hardware_photo/'.$query_results[0]->category.'/'.$query_results[0]->photo_name)).'" width="100px" height="100px">';
+                }
+                else
+                {
+                     $output.='<i class="medium material-icons">photo</i>';
+                 
+                }
+        $output.= '</div>';
+        $output.= '</div>';
+        
+        $output.= '<div class="col s10 m10 l10">';
+        $output.='<table class="responsive-table" style="width: 40%; font-size:14px;">';
+        $output.='<tr>';
+                  $output.='<td style="font-weight: bold;">Serial No.</td>';
+                  if($query_results[0]->serial_no !=''){
+                     $output.='<td>'.$query_results[0]->serial_no.'</td>';
+                  }
+                  else{
+                     $output.='<td> ------ </td>';
+                  }
+        $output.= '</tr>';
+        $output.='<tr>';
+                  $output.='<td style="font-weight: bold;">Tag No.</td>';
+                  if($query_results[0]->tag_no !=''){
+                     $output.='<td>'.$query_results[0]->tag_no.'</td>';
+                  }
+                  else{
+                     $output.='<td> ------ </td>';
+                  }
+        $output.= '</tr>';
+        $output.='<tr>';
+        $output.='<td style="font-weight: bold;">Type</td>';
+        $output.='<td>'.$query_results[0]->type.'</td>';
+        $output.='<tr>';
+                  $output.='<td style="font-weight: bold;">Brand/ Make</td>';
+                  if($query_results[0]->brand !=''){
+                     $output.='<td>'.$query_results[0]->brand.'</td>';
+                  }
+                  else{
+                     $output.='<td> ------ </td>';
+                  }
+        $output.= '</tr>';
+        $output.= '</tr>';
+        $output.='</table>';
+        $output.= '</div>';
+        $output.= '</div>';
+        return $output;
     }
 }
