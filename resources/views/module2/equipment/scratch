@@ -1,15 +1,3 @@
-$output.='</tr>';
-
-                           $output.='<tr>';
-                            $output.='<td style="font-weight: bold;">Equipment Tag No.</td>';
-                            if($query_results[0]->tag_no != '') {
-                                
-                                $output.='<td>'.$query_result[0]->tag_no.'</td>';
-                            }
-                            else{
-                                $output.='<td> ------ </td>';
-                            }
-                           $output.='</tr>';
-                           $output.='<tr>';
-                           $output.='<td style="font-weight: bold;">Type </td>';
-                           $output.='<td>'.$query_results[0]->type.'</td>';
+\$('#tbl_search').dataTable({
+            "bFilter": false
+          });

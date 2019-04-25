@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Filesystem;
 use Intervention\Image\Facades\Image;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
+use App\paginationsetting;
+
 class HardwareEquipmentController extends Controller
 {
     /**
@@ -20,9 +22,9 @@ class HardwareEquipmentController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('module2.equipment.home');
+       return view('module2.equipment.home');
     }
 
     /**
@@ -181,13 +183,37 @@ class HardwareEquipmentController extends Controller
         $hardware_equipment = new hardware_equipment;
         $query_results = $hardware_equipment::flexible_search('id', $id);
 
-        if($request->tag_no != $query_results[0]->tag_no || $request->serial_no != $query_results[0]->serial_no || $request->mac_address != $query_results[0]->mac_address ) {   //user has changed value in tagno, serialno or mac_address
+        if($request->tag_no != $query_results[0]->tag_no || $request->serial_no != $query_results[0]->serial_no) {   //user has changed value in tagno, serialno
 
                 $error_warning = $hardware_equipment::get_update_error_warning($request->tag_no, $request->serial_no, $request->mac_address, $id);
 
          
               if($error_warning[0] == 0 && $error_warning[1] == 0 ) {
 
+                    $temp = $this->update_qr_code($request->category, $request->tag_no, $request->serial_no, $query_results[0]->QRCode_name); //update qr code since user made a change in serial, tagno)
+
+                    if($request->category =='IT') {
+                                
+                                if($request->serial_no !=''){
+                                    $qr_code  = $request->serial_no.'.png';
+                                }
+                                else {
+                                 $qr_code  = '';   
+                                }
+
+
+                        }
+                        else if($request->category == 'Non-IT') {
+
+                                if($request->tag_no !=''){
+                                    $qr_code  = $request->tag_no.'.png';
+                                }
+                                else {
+                                 $qr_code  = '';   
+                                }  
+
+
+                        }
 
                     if($request->hiddentext =='new_photo' ) { //user has opted to change  the photo
                     
@@ -211,14 +237,11 @@ class HardwareEquipmentController extends Controller
                                  }
 
                                  $photofile->storeAs('public/hardware_photo/'.$request->category, $photo_name); //save photo
-
-
                                 
                             }
                             else {  //no photo was selected
                                
                                 $photo_name = $query_results[0]->photo_name; //retain the old photo name saved in dbase
-                                    
 
                             }
                     }
@@ -481,26 +504,26 @@ class HardwareEquipmentController extends Controller
     {
        
     
-    $qr_data = '';
+        $qr_data = '';
 
-    if($request->category == 'IT') {
-        $qr_data = $request->serial_no;    
-    }
-    else if($request->category == 'Non-IT') {
-        $qr_data = $request->tag_no;
-    }
-    
-    if($qr_data == '') {
-        $output ='<i style="font-size: 14px;">(Please Choose a Category and Input Serial and Tag No for QR Code Generation) </i>';
-    }
-    else {
+        if($request->category == 'IT') {
+            $qr_data = $request->serial_no;    
+        }
+        else if($request->category == 'Non-IT') {
+            $qr_data = $request->tag_no;
+        }
+        
+        if($qr_data == '') {
+            $output ='<i style="font-size: 14px;">(Please Choose a Category and Input Serial and Tag No for QR Code Generation) </i>';
+        }
+        else {
 
-        $qr_code = QrCode::format('png')->size(100)->generate($qr_data);
-        $output = '<img class="" src="data:image/png;base64,'.base64_encode($qr_code).'" width="90px" height="90px">';
-        $output.='&nbsp;<i style="font-size:14px;">(QR Code: &nbsp;'.$qr_data.')</i>';    
-    }
-    
-    return $output;
+            $qr_code = QrCode::format('png')->size(100)->generate($qr_data);
+            $output = '<img class="" src="data:image/png;base64,'.base64_encode($qr_code).'" width="90px" height="90px">';
+            $output.='&nbsp;<i style="font-size:14px;">(QR Code: &nbsp;'.$qr_data.')</i>';    
+        }
+        
+        return $output;
     
 
     }
@@ -530,12 +553,22 @@ class HardwareEquipmentController extends Controller
         return view('module2.equipment.view',compact('query_results'));
        
     }
+     /*3-b */public function list_view_equipment_pagination()
+    {
+        $hardware_equipment = new hardware_equipment;
+        $pagination_number = $hardware_equipment::pagination_setting('hardware_equipments');
+        $query_results = $hardware_equipment::list_view_equipment_pagination();
+
+        return view('module2.equipment.view',compact('query_results','pagination_number'));
+       
+    }
     /* 4 */ public function update_list_equipment()
     {
         $deletevalue ='';
         $hardware_equipment = new hardware_equipment;
-        $query_results = $hardware_equipment::list_view_equipment();
-        return view('module2.equipment.update_list_equipment',compact('query_results','deletevalue'));
+        $pagination_number = $hardware_equipment::pagination_setting('hardware_equipments');
+        $query_results = $hardware_equipment::list_view_equipment_pagination();
+        return view('module2.equipment.update_list_equipment',compact('query_results','deletevalue','pagination_number'));
     }
     /* 5 */ public function update_details_equipment($id)
     {
@@ -672,5 +705,24 @@ class HardwareEquipmentController extends Controller
         $output.= '</div>';
         $output.= '</div>';
         return $output;
+    }
+   /* 8*/ public function search_equipment(Request $request)
+    {
+        $query_results = '';
+        $hardware_equipment = new hardware_equipment;
+
+        if (!empty($request->tag_no)) { 
+            $query_results = $hardware_equipment::flexible_search_non_sensitive('tag_no',$request->tag_no); 
+        }
+        else if (!empty($request->serial_no)) { 
+            $query_results = $hardware_equipment::flexible_search_non_sensitive('serial_no',$request->serial_no);
+        }
+        else if (!empty($request->type)) { 
+            $query_results = $hardware_equipment::flexible_search_non_sensitive('type',$request->type);
+        }
+        else if (!empty($request->category)) { 
+            $query_results = $hardware_equipment::flexible_search_non_sensitive('category',$request->category);
+        }
+        return view('module2.equipment.home',compact('query_results'));
     }
 }

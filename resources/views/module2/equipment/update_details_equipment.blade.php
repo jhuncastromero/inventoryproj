@@ -22,7 +22,7 @@
   
 <div class="container">
   <div class="row">
-    <div id="div_header"><i class="material-icons">update</i>&nbsp;Update Equipment Database</div> 
+    <div id="div_header"><i class="material-icons">update</i>&nbsp;Update Equipment Information</div> 
   </div>
   <div class="row">
     

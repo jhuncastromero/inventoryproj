@@ -3,7 +3,7 @@
 	<li><div class="user-view" id="sidenav_motif_style">
 			
 			  <div style="color:#ffffff;font-size:20px; text-align: center">
-			  	<div><i class="medium material-icons">laptop_mac</i></div>Equipment Database
+			  	<div><i class="medium material-icons">laptop_mac</i></div>Equipment
 			  </div>
 			
 		</div>

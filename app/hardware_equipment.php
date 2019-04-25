@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
+use App\paginationsetting;
+
 class hardware_equipment extends Model
 {
    use SoftDeletes;
@@ -146,6 +148,25 @@ class hardware_equipment extends Model
 		$query_result = hardware_equipment::whereNull('deleted_at')->get();
 		return $query_result;
 	}
+	public static function list_view_equipment_pagination() {
+
+		$query_results = '';
+		$paginationsetting = new paginationsetting;
+		$paginate = $paginationsetting::whereNull('deleted_at')
+			->where('pagination_module','=','hardware_equipments')
+			->get();
+
+		if (!empty($paginate)) {
+			$query_results = hardware_equipment::whereNull('deleted_at')->paginate($paginate[0]->pagination_number);
+		}
+		else {
+			$query_results = hardware_equipment::whereNull('deleted_at')->get();	
+		}
+
+		
+		
+		return $query_results;
+	}
 
 	public static function flexible_search($criteria, $search_value) {
 
@@ -156,4 +177,30 @@ class hardware_equipment extends Model
 			->get();
 		return $query_results;
 	}
+	public static function flexible_search_non_sensitive($criteria, $search_value) {
+
+		$query_results = '';
+		$hardware_equipment = new hardware_equipment;
+		$query_results = $hardware_equipment::where( $criteria, 'like', $search_value.'%')
+			->whereNull('deleted_at')
+			->get();
+      //where('last_name','like',$last_name.'%')->whereNull('deleted_at')->get();   
+
+		return $query_results;
+	}
+	public static function pagination_setting($module)
+    {
+      $pagination_number = '';
+
+      $pagination = paginationsetting::whereNull('deleted_at')->where('pagination_module','=',$module)->get();
+      if($pagination=='')
+      {
+        $pagination_number = 0;
+      }
+      else
+      {
+        $pagination_number = $pagination[0]->pagination_number;
+      }
+      return $pagination_number;
+    }
 }

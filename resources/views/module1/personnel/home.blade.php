@@ -57,37 +57,47 @@
 
 		<div class="row">  <!--cards preview row--> 
 		
-				@if(empty($query_personnels))
-				
-				  <!--nothing to display-->
-				@else
+			@if(empty($query_personnels)) 
 
-					@foreach($query_personnels as $query_personnel)
-						<div class="col s10 m5">
-							<div class="card horizontal card-medium">
-								<div class="card-image">
-									
-										@if(!empty($query_personnel->photo_name))
-											<img class="" src="{{ asset(Storage::url('personnel_photo/'.$query_personnel->emp_id.'/'.$query_personnel->photo_name))}}" width="75px" height="75px">
-										@else
-											<i class="medium material-icons">person</i>
-										@endif
-								</div>
-							    <div>
-									<div class="card-stacked">
-										<div class="card-content">
-											<p>{{ $query_personnel->job_position }}</p>
-										</div>
-									</div>
-									<div class="card-action">
-										<a href="{{ route('personnel.showdetails',['id' => $query_personnel->id]) }}">{{ $query_personnel->first_name}} {{ $query_personnel->middle_initial}}. {{ $query_personnel->last_name }} </a>
-									</div>
-								</div>
-							</div>
-						</div>
-					@endforeach
+			@else
+
+				<table class="striped responsive-table" style="width:80%; font-size:14px">
+
+				 	<thead>  <!-- Column headings-->
+ 				 		<tr>
+				 			<th> <i class="small material-icons">photo_camera</i> </th>
+				 			<th> Name </th>
+				 			<th> Designation  </th>
+				 		</tr>
+				 	</thead>
+
+				 	<tbody>	<!-- Table body containing records of personnel-->
+
+				 		@foreach($query_personnels as $query_personnel)
+				 		<tr>
+				 			<td>
+
+								@if(!empty($query_personnel->photo_name))
+									<img class="" src="{{ asset(Storage::url('personnel_photo/'.$query_personnel->emp_id.'/'.$query_personnel->photo_name))}}" width="50px" height="50px">
+								@else
+									<i class="small material-icons">person</i>
+								@endif
+				 			</td>
+				 			<td><a href="{{ route('personnel.show',$query_personnel->id) }}">{{ $query_personnel->last_name }}, {{ $query_personnel->first_name }} {{ $query_personnel->middle_initial }}.</a> </td>
+				 			<td>{{ $query_personnel->job_position }}</a></td>
+				 			
+				 			
+				 		</tr>
+                       
+				 		@endforeach
+				 		
+
+				 	</tbody>
+
+				 </table>
+
 				@endif
-			
+
 
 		</div>
   
@@ -103,4 +113,3 @@
 
 
 @endsection
-

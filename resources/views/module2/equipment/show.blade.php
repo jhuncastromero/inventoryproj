@@ -29,22 +29,19 @@
 			 @if(!empty($query_result))
 
 			 	<div class="row">
-					<div>
-						@if(!empty($query_result[0]->photo_name))
-							<img class="" src="{{ asset(Storage::url('hardware_photo/'.$query_result[0]->category.'/'.$query_result[0]->photo_name)) }}" width="175px" height="175">
-						@else
-							<div><i class="large material-icons">photo</i></div>
-							<div style="font-style: italic; font-size:14px; padding-left: 10px;">(no photo)</div>
-						@endif
+			 		<div class="col s4">
+						<div>
+							@if(!empty($query_result[0]->photo_name))
+								<img class="" src="{{ asset(Storage::url('hardware_photo/'.$query_result[0]->category.'/'.$query_result[0]->photo_name)) }}" width="225px" height="225px">
+							@else
+								<div><i class="large material-icons">photo</i></div>
+								<div style="font-style: italic; font-size:14px; padding-left: 10px;">(no photo)</div>
+							@endif
+						</div>
 					</div>
-				</div>
-			 @else
-			 	<div><i> Whoops! Something went wrong. Please try again.</i> </div>
-			 @endif
-			
-			 <div class="row" style="padding-top:20px;">
+					<div class="col s6">
 
-				    <table class="responsive-table" style="width: 50%; font-size:14px;">
+						<table class="responsive-table" style="width: 100%; font-size:14px;">
 						
 				    	<tr>
 				    		<td style="font-weight: bold;">Serial No.</td>
@@ -63,6 +60,15 @@
 				    			<td> ------ </td>
 				    		@endif
 				    	</tr>
+				    	<tr>
+				    		<td style="font-weight: bold;">Brand/ Make</td>
+				    		@if(!empty($query_result[0]->brand))
+				    			<td> {{ $query_result[0]->brand}}</td>
+				    		@else
+				    			<td> ------ </td>
+				    		@endif
+				    	</tr>
+
 
 				    	<tr>
 				    		<td style="font-weight: bold;">MAC Address/ Code</td>
@@ -139,6 +145,15 @@
 
 				 	</table>
 
+					</div>
+				</div>
+			 @else
+			 	<div><i> Whoops! Something went wrong. Please try again.</i> </div>
+			 @endif
+			
+			 <div class="row" style="padding-top:20px;">
+
+				    
 			 </div>
 
 		</div>
