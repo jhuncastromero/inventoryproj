@@ -42,14 +42,18 @@
 			              </div>
 			          </div>
 		          	  <div class="row">
-						  <div class="input-field col s6">
-				                <input type="text" id="type" name="type">  
-				                <label for="type">By Equipment Type </label>
-			              </div>
-						  <div class="input-field col s6">
-				                <input type="text" id="category" name="category">  
-				                <label for="category">All By Category </label>
-			              </div>
+					  	  <div class="input-field col s6">
+			                   <input type="text" id="type" name="type">  
+			                   <label for="type">By Equipment Type </label>
+		                  </div>
+			              <div class="input-field col s6"> 	
+				               	<select id="category" name="category">
+				              		<option value ="" disabled selected> Choose Category </option>
+				              		<option value ="IT">IT</option>
+				              		<option value ="Non-IT">Non-IT</option>
+			              		</select>
+			                    <label>All By Category</label>
+		                  </div>
 			           </div>
 		           	    <div class="col s4" style="padding-bottom: 50px;">
 		              	  	<button class=" btn waves-effect waves-light" type="submit" name="action" style="background-color: #c62828;">Find<i class="material-icons right">search</i>

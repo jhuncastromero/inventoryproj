@@ -562,6 +562,15 @@ class HardwareEquipmentController extends Controller
         return view('module2.equipment.view',compact('query_results','pagination_number'));
        
     }
+      /*3-c */public function filter_view_equipment_pagination(Request $request)
+    {
+        $hardware_equipment = new hardware_equipment;
+        $pagination_number = $hardware_equipment::pagination_setting('hardware_equipments');
+        $query_results = $hardware_equipment::filter_view_equipment_pagination($request->type, $request->category);
+
+        return view('module2.equipment.view',compact('query_results','pagination_number'));
+       
+    }
     /* 4 */ public function update_list_equipment()
     {
         $deletevalue ='';

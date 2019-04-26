@@ -167,6 +167,54 @@ class hardware_equipment extends Model
 		
 		return $query_results;
 	}
+	public static function filter_view_equipment_pagination($type, $category) {
+
+		$query_results = '';
+		$paginationsetting = new paginationsetting;
+		$paginate = $paginationsetting::whereNull('deleted_at')
+			->where('pagination_module','=','hardware_equipments')
+			->get();
+
+		if (!empty($paginate)) {
+			if($type != ''){
+				$query_results = hardware_equipment::whereNull('deleted_at')
+				->where('type','like', $type.'%')
+				->paginate($paginate[0]->pagination_number);
+			}
+			else if($category != '') {
+				if($category =='All') {
+					$query_results = hardware_equipment::whereNull('deleted_at')
+					->paginate($paginate[0]->pagination_number);	
+				}
+				else {
+					$query_results = hardware_equipment::whereNull('deleted_at')
+				    ->where('category','=', $category)
+				    ->paginate($paginate[0]->pagination_number);
+				}
+			}
+			
+		}
+		else {
+			if($type != ''){
+				$query_results = hardware_equipment::whereNull('deleted_at')
+				->where('type','like', $type.'%')
+				->get();
+			}
+			else if($category != '') {
+					if($category =='All') {
+					$query_results = hardware_equipment::whereNull('deleted_at')
+					->get();	
+				}
+				else {
+					$query_results = hardware_equipment::whereNull('deleted_at')
+				    ->where('category','=', $category)
+				    ->get();
+				}
+			}
+			
+		}
+		return $query_results;
+	}
 
 	public static function flexible_search($criteria, $search_value) {
 

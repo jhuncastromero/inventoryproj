@@ -1,3 +1,8 @@
 \$('#tbl_search').dataTable({
             "bFilter": false
           });
+
+            <div class="input-field col s6">
+				                <input type="text" id="type" name="type">  
+				                <label for="type">By Equipment Type </label>
+			              </div>
