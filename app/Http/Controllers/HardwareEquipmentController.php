@@ -490,10 +490,11 @@ class HardwareEquipmentController extends Controller
        $id = $request->hidden_r_index;
            
        $hardware_equipment = new hardware_equipment;
+       $pagination_number = $hardware_equipment::pagination_setting('hardware_equipments');
        $delete_query= $hardware_equipment::delete_data($id);
-       $query_results = $hardware_equipment::list_view_equipment();
+        $query_results = $hardware_equipment::list_view_equipment_pagination();
 
-       return view('module2.equipment.update_list_equipment',compact('query_results','deletevalue'));
+       return view('module2.equipment.update_list_equipment',compact('query_results','deletevalue','pagination_number'));
     }
 
 
@@ -591,6 +592,18 @@ class HardwareEquipmentController extends Controller
         $hardware_equipment = new hardware_equipment;
         $query_results = $hardware_equipment::show_details($id);
         return view('module2.equipment.update_details_equipment',compact('query_results','photo_status','error_title','error_icon','error_message','updatevalue'));
+    }
+    //update_filter_equipment_pagination
+     /*5-b */public function update_filter_equipment_pagination(Request $request)
+    {
+        $deletevalue ='';
+        $hardware_equipment = new hardware_equipment;
+        $pagination_number = $hardware_equipment::pagination_setting('hardware_equipments');
+        $query_results = $hardware_equipment::update_filter_equipment_pagination($request->type, $request->category);
+
+        
+         return view('module2.equipment.update_list_equipment',compact('query_results','deletevalue','pagination_number'));
+       
     }
 
     /* 6 */ public function ajax_equipment_update_qr(Request $request)

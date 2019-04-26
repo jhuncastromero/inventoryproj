@@ -45,37 +45,42 @@
 				 	</thead>
 
 				 	<tbody>	<!-- Table body containing records of personnel-->
-				 		@foreach($query_results as $list)
-				 		<tr>
-				 			<td>
-
-								@if(!empty($list->photo_name))
-									<img class="" src="{{ asset(Storage::url('hardware_photo/'.$list->category.'/'.$list->photo_name)) }}" width="50px" height="50px">
-
-									
-								@else
-									<i style="font-size:12px;">( no photo )</i>
-								@endif
-				 			</td>
-				 			@if(!empty($list->tag_no))
-				 			   <td><a href="{{ route('hardware_equipment.show', $list->id) }}">{{ $list->tag_no }}</a></td>
-				 			@else 
-				 			   <td>------</td>
-				 			@endif
-
-				 			@if(!empty($list->serial_no))
-				 			   <td><a href="{{ route('hardware_equipment.show', $list->id) }}">{{ $list->serial_no }}</a></td>
-				 			@else 
-				 			   <td>------</td>
-				 			@endif
-				 			<td>{{ $list->type }}</td>
-				 			<td>{{ $list->category }}</td>
-				 			
-				 			
-				 		</tr>
-                       
-				 		@endforeach
 				 		
+				 		@if(empty($query_results))
+
+				 		@else
+
+					 		@foreach($query_results as $list)
+					 		<tr>
+					 			<td>
+
+									@if(!empty($list->photo_name))
+										<img class="" src="{{ asset(Storage::url('hardware_photo/'.$list->category.'/'.$list->photo_name)) }}" width="50px" height="50px">
+
+										
+									@else
+										<i style="font-size:12px;">( no photo )</i>
+									@endif
+					 			</td>
+					 			@if(!empty($list->tag_no))
+					 			   <td><a href="{{ route('hardware_equipment.show', $list->id) }}">{{ $list->tag_no }}</a></td>
+					 			@else 
+					 			   <td>------</td>
+					 			@endif
+
+					 			@if(!empty($list->serial_no))
+					 			   <td><a href="{{ route('hardware_equipment.show', $list->id) }}">{{ $list->serial_no }}</a></td>
+					 			@else 
+					 			   <td>------</td>
+					 			@endif
+					 			<td>{{ $list->type }}</td>
+					 			<td>{{ $list->category }}</td>
+					 			
+					 			
+					 		</tr>
+	                       
+					 		@endforeach
+				 		@endif
 
 				 	</tbody>
 
@@ -113,8 +118,8 @@
 
 		</div>
 
-		<Form action="{{ route('hardware_equipment.filterview') }}" method="POST">
-			@csrf
+		<Form action="{{ route('hardware_equipment.filterview') }}" method="GET">
+			
 			<div class="row">
 				   <div style="padding-top: 20px;">
 				   	  <i class="material-icons">filter</i> &nbsp;<b>Filter List</b>

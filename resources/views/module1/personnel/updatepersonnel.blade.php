@@ -189,6 +189,8 @@
 		  </form>
 
 </div>
+
+
 @endsection
 
 @section('jquery-section')

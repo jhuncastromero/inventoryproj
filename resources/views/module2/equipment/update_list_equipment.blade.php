@@ -110,6 +110,33 @@
 	      				<div><input type="hidden" id="hidden_deletevalue" name="hidden_deletevalue" value="{{ $deletevalue }}"></div>
 	      			@endif
 	    </div>
+
+	    <Form action="{{ route('hardware_equipment.updatefilterview') }}" method="GET">
+			
+			<div class="row">
+				   <div style="padding-top: 20px;">
+				   	  <i class="material-icons">filter</i> &nbsp;<b>Filter List</b>
+				   </div>
+			  	  	<div class="input-field col s4">
+	                   <input type="text" id="type" name="type">  
+	                   <label for="type">By Equipment Type </label>
+	              	</div>
+
+	              	<div class="input-field col s4"> 	
+		               	<select id="category" name="category">
+		              		<option value ="" disabled selected> Choose Category </option>
+		              		<option value ="IT">IT</option>
+		              		<option value ="Non-IT">Non-IT</option>
+		              		<option value = "All">All</option>
+	              		</select>
+	                    <label>All By Category</label>
+	              	</div>
+			</div>
+			<div class="col s4" style="padding-bottom: 50px;">
+			            <button class=" btn waves-effect waves-light btn-small " type="submit" name="action" style="background-color: #c62828;">Filter<i class="material-icons right">search</i>
+				        </button> 
+			</div>
+		</Form>
 		<!-- FORM Below is for MODAL Window-->
 		 <form action="{{ route('hardware_equipment.destroy',0) }}" method="POST" id="delete-form">
 	          {{ csrf_field() }}

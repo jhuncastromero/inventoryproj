@@ -1,8 +1,18 @@
-\$('#tbl_search').dataTable({
-            "bFilter": false
-          });
+@if($pagination_number != 0)
+				<div>
+					<ul class="pagination">
+		   		         <li class="waves-effect"><a href="{{$query_results->previousPageUrl()}}"><i class="material-icons">chevron_left</i></a></li>
 
-            <div class="input-field col s6">
-				                <input type="text" id="type" name="type">  
-				                <label for="type">By Equipment Type </label>
-			              </div>
+		   		         	@if(($query_results->total()% $pagination_number) > 0)
+		   		         		@for($i=1; $i<=($query_results->total()/ $pagination_number)+1; $i++)
+		   		         			 <li class="waves-effect circle"><a href="{{$query_results->url($i)}}">{{$i}}</a></li>
+		   		         		@endfor
+		   		         	@else
+		   		         		@for($i=1; $i<=($query_results->total()/ $pagination_number); $i++)
+		   		         			 <li class="waves-effect"><a href="{{$query_results->url($i)}}">{{$i}}</a></li>
+		   		         		@endfor
+		   		         	@endif
+
+		   		         <li class="waves-effect"><a href="{{$query_results->nextPageUrl()}}"><i class="material-icons">chevron_right</i></a></li>
+		   		    </ul> 
+		   		  </div>
