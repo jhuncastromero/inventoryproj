@@ -147,6 +147,9 @@
 
 					</div>
 				</div>
+				 <div>
+			       <a href="javascript:history.back()" class="modal-close waves-effect waves-green btn-small"><i class="material-icons">arrow_back</i></a>
+			    </div>
 			 @else
 			 	<div><i> Whoops! Something went wrong. Please try again.</i> </div>
 			 @endif

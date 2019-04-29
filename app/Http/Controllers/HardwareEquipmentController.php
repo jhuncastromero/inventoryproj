@@ -566,10 +566,11 @@ class HardwareEquipmentController extends Controller
       /*3-c */public function filter_view_equipment_pagination(Request $request)
     {
         $hardware_equipment = new hardware_equipment;
-        $pagination_number = $hardware_equipment::pagination_setting('hardware_equipments');
+        $pagination_number = 0;
+        $action ='filter';
         $query_results = $hardware_equipment::filter_view_equipment_pagination($request->type, $request->category);
 
-        return view('module2.equipment.view',compact('query_results','pagination_number'));
+        return view('module2.equipment.view',compact('query_results','pagination_number','action'));
        
     }
     /* 4 */ public function update_list_equipment()
@@ -596,13 +597,16 @@ class HardwareEquipmentController extends Controller
     //update_filter_equipment_pagination
      /*5-b */public function update_filter_equipment_pagination(Request $request)
     {
+        
         $deletevalue ='';
+        $query_results = '';
         $hardware_equipment = new hardware_equipment;
-        $pagination_number = $hardware_equipment::pagination_setting('hardware_equipments');
+        $action = 'filter';
+        $pagination_number = 0;
         $query_results = $hardware_equipment::update_filter_equipment_pagination($request->type, $request->category);
 
-        
-         return view('module2.equipment.update_list_equipment',compact('query_results','deletevalue','pagination_number'));
+
+        return view('module2.equipment.update_list_equipment',compact('query_results','deletevalue','action','pagination_number'));
        
     }
 

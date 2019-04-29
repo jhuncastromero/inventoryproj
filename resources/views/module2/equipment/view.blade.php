@@ -92,7 +92,7 @@
 		<div class="row">
 			
 			<!---->
-			@if($pagination_number != 0)
+			@if($pagination_number != 0 || $action !='filter')
 				<div>
 					<ul class="pagination">
 		   		         <li class="waves-effect"><a href="{{$query_results->previousPageUrl()}}"><i class="material-icons">chevron_left</i></a></li>
@@ -110,10 +110,7 @@
 		   		         <li class="waves-effect"><a href="{{$query_results->nextPageUrl()}}"><i class="material-icons">chevron_right</i></a></li>
 		   		    </ul> 
 		   		  </div>
-		    @else
-		    	<div style="font-size:14px; font-style:italic;">
-		    		<p> (A Pagination Control should appear here. However, Pagination was not properly set. Please see PAGINATION on Settings Module)</p>
-		    	</div>
+		   
    		    @endif    
 
 		</div>
@@ -134,14 +131,14 @@
 		              		<option value ="" disabled selected> Choose Category </option>
 		              		<option value ="IT">IT</option>
 		              		<option value ="Non-IT">Non-IT</option>
-		              		<option value = "All">All</option>
 	              		</select>
-	                    <label>All By Category</label>
+	                    <label>By Category</label>
 	              	</div>
 			</div>
 			<div class="col s4" style="padding-bottom: 50px;">
 			            <button class=" btn waves-effect waves-light btn-small " type="submit" name="action" style="background-color: #c62828;">Filter<i class="material-icons right">search</i>
 				        </button> 
+				         <a href="{{ route('hardware_equipment.view') }}" class="modal-close waves-effect waves-green btn-small"><i class="material-icons">refresh</i></a>
 			</div>
 		</Form>
 </div>
