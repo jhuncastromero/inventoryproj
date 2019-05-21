@@ -483,7 +483,7 @@ class HardwareEquipmentController extends Controller
     public function destroy(Request $request)
     {
         //
-
+       $action = '';
        $deletevalue = 3;
        $id = '';
        
@@ -494,7 +494,7 @@ class HardwareEquipmentController extends Controller
        $delete_query= $hardware_equipment::delete_data($id);
         $query_results = $hardware_equipment::list_view_equipment_pagination();
 
-       return view('module2.equipment.update_list_equipment',compact('query_results','deletevalue','pagination_number'));
+       return view('module2.equipment.update_list_equipment',compact('query_results','deletevalue','pagination_number','action'));
     }
 
 
@@ -556,11 +556,12 @@ class HardwareEquipmentController extends Controller
     }
      /*3-b */public function list_view_equipment_pagination()
     {
+        $action ='';
         $hardware_equipment = new hardware_equipment;
         $pagination_number = $hardware_equipment::pagination_setting('hardware_equipments');
         $query_results = $hardware_equipment::list_view_equipment_pagination();
 
-        return view('module2.equipment.view',compact('query_results','pagination_number'));
+        return view('module2.equipment.view',compact('query_results','pagination_number','action'));
        
     }
       /*3-c */public function filter_view_equipment_pagination(Request $request)
@@ -576,10 +577,11 @@ class HardwareEquipmentController extends Controller
     /* 4 */ public function update_list_equipment()
     {
         $deletevalue ='';
+        $action ='';
         $hardware_equipment = new hardware_equipment;
         $pagination_number = $hardware_equipment::pagination_setting('hardware_equipments');
         $query_results = $hardware_equipment::list_view_equipment_pagination();
-        return view('module2.equipment.update_list_equipment',compact('query_results','deletevalue','pagination_number'));
+        return view('module2.equipment.update_list_equipment',compact('query_results','deletevalue','pagination_number','action'));
     }
     /* 5 */ public function update_details_equipment($id)
     {

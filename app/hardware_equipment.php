@@ -156,7 +156,7 @@ class hardware_equipment extends Model
 			->where('pagination_module','=','hardware_equipments')
 			->get();
 
-		if (!empty($paginate)) {
+		if ($paginate->count() !=0) {
 			$query_results = hardware_equipment::whereNull('deleted_at')->paginate($paginate[0]->pagination_number);
 		}
 		else {
@@ -229,16 +229,16 @@ class hardware_equipment extends Model
 	}
 	public static function pagination_setting($module)
     {
-      $pagination_number = '';
+      $pagination_number = 0;
 
       $pagination = paginationsetting::whereNull('deleted_at')->where('pagination_module','=',$module)->get();
-      if($pagination=='')
+      if($pagination->count()!=0)
       {
-        $pagination_number = 0;
+       	$pagination_number = $pagination[0]->pagination_number;
       }
       else
       {
-        $pagination_number = $pagination[0]->pagination_number;
+        $pagination_number = 0;
       }
       return $pagination_number;
     }

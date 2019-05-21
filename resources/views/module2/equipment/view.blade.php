@@ -92,7 +92,7 @@
 		<div class="row">
 			
 			<!---->
-			@if($pagination_number != 0 || $action !='filter')
+			@if($pagination_number != 0 && $action !='filter')
 				<div>
 					<ul class="pagination">
 		   		         <li class="waves-effect"><a href="{{$query_results->previousPageUrl()}}"><i class="material-icons">chevron_left</i></a></li>
