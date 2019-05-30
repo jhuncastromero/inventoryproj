@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class category_tbl extends Model
+class type_tbl extends Model
 {
     //
 }

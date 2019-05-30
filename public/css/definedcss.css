@@ -6,6 +6,11 @@ nav {
 	font-size:20px;
 	font-weight: bold;
 }
+#div_sub_header{
+	font-size:15px;
+	font-weight: bold;
+	
+}
 #sidenav_motif_style{
 	background-color: #c62828;
 	padding:20px 0;

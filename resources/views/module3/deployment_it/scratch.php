@@ -1,0 +1,2 @@
+<a href="#!" class="modal-close waves-effect waves-green btn-flat" id="yesDelete" onclick="document.getElementById('delete-form').submit();">Yes</a>
+		      			<a href="#!" class="modal-close waves-effect waves-green btn-flat">NO</a>

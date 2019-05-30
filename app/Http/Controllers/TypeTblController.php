@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\category_tbl;
+use App\type_tbl;
 use Illuminate\Http\Request;
 
-class CategoryTblController extends Controller
+class TypeTblController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class CategoryTblController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\category_tbl  $category_tbl
+     * @param  \App\type_tbl  $type_tbl
      * @return \Illuminate\Http\Response
      */
-    public function show(category_tbl $category_tbl)
+    public function show(type_tbl $type_tbl)
     {
         //
     }
@@ -52,10 +52,10 @@ class CategoryTblController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\category_tbl  $category_tbl
+     * @param  \App\type_tbl  $type_tbl
      * @return \Illuminate\Http\Response
      */
-    public function edit(category_tbl $category_tbl)
+    public function edit(type_tbl $type_tbl)
     {
         //
     }
@@ -64,10 +64,10 @@ class CategoryTblController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\category_tbl  $category_tbl
+     * @param  \App\type_tbl  $type_tbl
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, category_tbl $category_tbl)
+    public function update(Request $request, type_tbl $type_tbl)
     {
         //
     }
@@ -75,10 +75,10 @@ class CategoryTblController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\category_tbl  $category_tbl
+     * @param  \App\type_tbl  $type_tbl
      * @return \Illuminate\Http\Response
      */
-    public function destroy(category_tbl $category_tbl)
+    public function destroy(type_tbl $type_tbl)
     {
         //
     }

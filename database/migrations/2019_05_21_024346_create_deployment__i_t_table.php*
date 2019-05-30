@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateDeploymentITTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('deployment_its', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('serial_no',30)->nullable();
+            $table->string('emp_id',10)->nullable();
+            $table->string('deptcode',20)->nullable();
+            $table->string('roomno',5)->nullable();
+            $table->date('date_deployed',50)->nullable();
+            $table->string('remarks',50)->nullable();
+            $table->softDeletes();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('deployment_its');
+    }
+}

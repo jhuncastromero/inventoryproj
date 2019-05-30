@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class AddFieldToRoomTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('rooms', function (Blueprint $table) {
+            //
+          
+              $table->string('roomno',5)->nullable();
+              $table->string('room_desc',50)->nullable();
+              $table->softDeletes();
+           
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('rooms', function (Blueprint $table) {
+            //
+        });
+    }
+}

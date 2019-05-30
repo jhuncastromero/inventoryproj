@@ -19,7 +19,7 @@ Auth::routes();
 
 //PERSONNEL user defined route
 Route::get('/personnel/view','personnelController@listview')->name('personnel.view');
-Route::post('/personnel/viewlist','personnelController@ajax_search_view_list')->name('personnel.viewdlist');
+Route::post('/personnel/viewlist','personnelController@ajax_search_view_list')->name('personnel.viewlist');
 Route::get('/personnel/updatepersonnel','personnelController@personnelUpdate')->name('personnel.updatepersonnel');
 Route::get('/personnel/updatedetails/{id}','personnelController@personnelUpdate_details')->name('personnel.updatedetails');
 Route::post('/personnel/searchpersonnel','personnelController@personnel_query')->name('personnel.searchpersonnel');
@@ -47,16 +47,16 @@ Route::post('/hardware_equipment/updateqrcode','HardwareEquipmentController@ajax
 Route::post('/hardware_equipment/preview_hardware','HardwareEquipmentController@ajax_equipment_preview_hardware')->name('hardware_equipment.preview_hardware');
 Route::post('/hardware_equipment/searchequipment','HardwareEquipmentController@search_equipment')->name('hardware_equipment.searchequipment');
 
-//Route::get('events/{event}/remind/{user}', [
-//'as' => 'remindHelper', 'uses' => 'EventsController@remindHelper']);
 
+//IT EQUIPMENT ASSIGN DEPLOY user defined route
 
-
-
-
-
+Route::get('/deployment_it/deployequipment','DeploymentItController@deploy_equipment')->name('deployment_it.deployequipment');
+Route::post('/deployment_it/equipmentlist','DeploymentItController@ajax_equipment_list')->name('deployment_it.equipmentlist');
+Route::post('/deployment_it/deploydetails','DeploymentItController@deploy_details')->name('deployment_it.deploydetails');
+Route::post('/deployment_it/employeedetails','DeploymentItController@ajax_find_employee')->name('deployment_it.employeedetails');
 
 
 //Resource Route
 Route::resource('personnel','personnelController');
 Route::resource('hardware_equipment','HardwareEquipmentController');
+Route::resource('deployment_it','DeploymentItController');
