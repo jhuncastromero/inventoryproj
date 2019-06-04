@@ -101,28 +101,26 @@
 						<div id="div_sub_header" style="padding-bottom: 30px;"><i class="material-icons" style="color:#c62828; font-size:30px;">group</i>&nbsp;Assign/ Deploy To</div>
 						
 						<div class="row">  <!--find row-->
-							<div class="col s3">
-								  <div class="row">
-									  <div class="input-field">
+							<div class="col s10">
+								<div class = "row">
+									  <div class="input-field col s4">
 							                 <input type="text" id="search_empid" name="search_empid">  
 							                <label for="search_empid">Search Employee ID </label>
 						              </div>
-						           </div>
-						    </div>
-						    <div class="col s3 offset-s1">
-						             <div class="row">
-										  <div class="input-field">
-								                 <input type="text" id="search_lastname" name="search_lastname">  
-								                <label for="search_lastname">Search Employee Lastname </label>
-							              </div>
-						          	 </div>
-						    </div>
+								 	  <div class="input-field col s4">
+							                 <input type="text" id="search_lastname" name="search_lastname">  
+							                <label for="search_lastname">Search Employee Lastname </label>
+						              </div>
+								      <div class="col s4" style="padding-top:25px;">
+							           		<button class=" btn waves-effect waves-light" onclick="ajax_find_employee();showModal();" style="background-color: #c62828;">Find<i class="material-icons right">search</i>
+							           		</button>
+					            	  </div>
+					            </div>
+
+				            </div>
 
 						</div>
-			            <div class="row">
-			           		<button class=" btn waves-effect waves-light" onclick="ajax_find_employee();showModal();">Find<i class="material-icons right">search</i>
-			           		</button>
-			            </div>
+			            
 		         
 						           
 					        
@@ -149,7 +147,7 @@
 		    		</div>
 		    		<div class="modal-footer">
 		      			
-		      			<button class=" btn waves-effect waves-light" type="submit" name="action" style="background-color: #c62828;">Yes </button>
+		      			<button class="waves-effect waves-light btn-small" type="submit" name="action" style="background-color: #c62828;">Yes </button>
 		      			<a href="#!" class="modal-close waves-effect waves-green btn-flat">NO</a>
 
 
@@ -157,10 +155,10 @@
 		  		</div>	
 
 		  		<div>
-		                 <input type="text" name="hidden_serial_no" id="hidden_serial_no" value="{{$query_result[0]->serial_no}}">
-		                 <input type="text" name="hidden_emp_id" id="hidden_emp_id">
-		                 <input type="text" name="hidden_deptcode" id="hidden_deptcode">
-		                 <input type="text" name="hidden_room_no" id="hidden_room_no">
+		                 <input type="hidden" name="hidden_serial_no" id="hidden_serial_no" value="{{$query_result[0]->serial_no}}">
+		                 <input type="hidden" name="hidden_emp_id" id="hidden_emp_id">
+		                 <input type="hidden" name="hidden_deptcode" id="hidden_deptcode">
+		                 <input type="hidden" name="hidden_room_no" id="hidden_room_no">
 
 		        </div>
 		      </FORM>

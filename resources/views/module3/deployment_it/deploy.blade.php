@@ -75,6 +75,8 @@
 					          M.toast({html:'Hardware Equipment was Successfully Assigned to Personnel!'});
 					          $('#hidden_flag').val(''); 
 					       }
+
+					      // $('.dropdown-trigger').dropdown();
 					       
 					});
 					
@@ -113,7 +115,6 @@
 
 			    		$('#hidden_serial_no').val(xSerial);
 			    		$('#type').val("");
-			    		
 
 
 			    	}

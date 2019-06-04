@@ -16,7 +16,7 @@ class deployment_it extends Model
    protected $dates =['deleted_at'];
    protected $fillable = ['serial_no','emp_id','deptcode','roomno','remarks','recalled_reason','date_deployed','date_recalled'];
 
-    public static function load_categories() {
+    public static function load_categories() {  /// this searches or uses TYPE table 
 
     	$types = new type_tbl;
     	$query = $types::whereNull('deleted_at')->get();
@@ -79,4 +79,58 @@ class deployment_it extends Model
         $query->status = 'assigned';
         $query->save();
     }
+
+    public static function ajax_view_deployment_by_personnel($emp_id, $lastname) {
+
+        if($emp_id !='') {
+            $personnel = new personnel;
+            $personal_info = $personnel::where('emp_id','=',$emp_id)->get();
+          
+            if($personal_info->count())
+            {
+                 return $personal_info;
+            }
+
+           
+        }
+        else {
+
+            $personal_info = '';
+            $deployment_query ='';
+
+            $personnel = new personnel;
+            $personal_info = $personnel::where('last_name','=',$lastname)->get();
+          
+            if($personal_info->count())
+            {
+                 return $personal_info;
+            }
+
+
+
+        }
+    }
+
+    public static function get_assigned_hardware($emp_id) {
+
+      
+      $deployment_it  = new deployment_it;
+      $query = $deployment_it::where('emp_id', '=', $emp_id)->get();
+        return $query;
+
+    }
+    public static function get_hardware_info($serial_no) {
+
+        $hardware_equipment = new hardware_equipment;
+        $query = $hardware_equipment::where('serial_no', '=',$serial_no)->whereNull('deleted_at')->get();
+        return $query;
+    }
+
+
+    public static function ajax_view_deployment_by_equipment($serial_no, $tag_no) {
+
+      
+    }
+
+        
 }

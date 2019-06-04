@@ -7,6 +7,8 @@
     $('.tooltipped').tooltip();
     $("#browse_photo").css('visibility','hidden');
     $('.datepicker').datepicker();
+    $('.dropdown-trigger').dropdown();
+     $('.collapsible').collapsible();
     //$('.dropdown-button').dropdown('open');
 
   });

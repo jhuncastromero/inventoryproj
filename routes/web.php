@@ -54,6 +54,13 @@ Route::get('/deployment_it/deployequipment','DeploymentItController@deploy_equip
 Route::post('/deployment_it/equipmentlist','DeploymentItController@ajax_equipment_list')->name('deployment_it.equipmentlist');
 Route::post('/deployment_it/deploydetails','DeploymentItController@deploy_details')->name('deployment_it.deploydetails');
 Route::post('/deployment_it/employeedetails','DeploymentItController@ajax_find_employee')->name('deployment_it.employeedetails');
+Route::get('/deployment_it/viewdeployment','DeploymentItController@view_deployment')->name('deployment_it.viewdeployment');
+Route::get('/deployment_it/viewpersonneldeployment','DeploymentItController@view_personnel_deployment')->name('deployment_it.viewpersonneldeployment');
+Route::post('/deployment_it/viewpersonneldeploymentdetails','DeploymentItController@ajax_view_personnel_deployment_details')->name('deployment_it.viewpersonneldeploymentdetails');
+Route::get('/deployment_it/viewequipmentdeployment','DeploymentItController@view_equipment_deployment')->name('deployment_it.viewequipmentdeployment');
+Route::post('/deployment_it/viewequipmentdeploymentdetails','DeploymentItController@ajax_view_equipment_deployment_details')->name('deployment_it.viewpersonnelequipmentdetails');
+
+
 
 
 //Resource Route
