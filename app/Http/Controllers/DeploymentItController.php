@@ -337,7 +337,7 @@ class DeploymentItController extends Controller
                  $hardware = "<p style='font-style:italic;font-size:13px;font-weight:bold; padding-top:30px;'>No Hardware Record found for this Type.</p>";
         }
         else {
-             $hardware='<table class="responsive-table" style="width:100%; font-size:12px;">';
+             $hardware='<table class="responsive-table" style="width:60%; font-size:12px;">';
              $hardware.='<thead><tr>';
              $hardware.='<th> <i class="small material-icons">photo</i> </th>';
              $hardware.=' <th> Serial No.  </th>';
@@ -356,7 +356,7 @@ class DeploymentItController extends Controller
                                  $hardware.='<td><img src="'. asset(Storage::url('hardware_photo/IT/'.$list->photo_name)).'" width="30px" height="30px"></td>';
                              }
                             
-                             $hardware.="<td><a href='#!'".'onclick="deployment_by_equipment('.$list->serial_no.');">'.$list->serial_no.'</a></td>';
+                             $hardware.="<td><a href='#!'".'onclick=view_equipment_deployment_details("'.$list->serial_no.'");>'.$list->serial_no.'</a></td>';
                              $hardware.='<td>'.$list->brand.'</td>';
                              $hardware.= '</tr>';
              }
@@ -372,7 +372,66 @@ class DeploymentItController extends Controller
 
     public static function ajax_view_equipment_deployment_details(Request $request) {
 
+        $hardware = '';
+        $hardware_photo = '';
+        $deployment_it = new deployment_it;
+        $personnel_info = '';
+        $hadware_info = '';
+        $query_hardware = $deployment_it::ajax_view_deployment_by_equipment($request->serial_no);
+        
 
+        if($query_hardware->isEmpty()) {
+                 $hardware = "<p style='font-style:italic;font-size:13px;font-weight:bold; padding-top:30px;'>No Record Found.</p>";
+
+                 return [$hardware, 0];
+        }
+        else {
+
+            
+             $hardware_info = $deployment_it::get_hardware_info($request->serial_no);
+
+             if($hardware_info[0]->photo_name == '') {
+                
+                $hardware_photo = '<i style="font-size:12px;">-- no photo -- </i>';
+             }
+             else {
+                
+                $hardware_photo ='<img src="'. asset(Storage::url('hardware_photo/IT/'.$hardware_info[0]->photo_name)).'" width="175px" height="175px">';
+                
+
+             }
+             
+
+             
+             $hardware='<div style="font-weight:bold;">'.$hardware_info[0]->brand. ' '.$hardware_info[0]->type.' - S/N:  '.$hardware_info[0]->serial_no .'</div>';
+            
+             $hardware.='<div style="font-weight:bold;font-size:12px; padding-bottom:10px;padding-top:20px">Deployment/ Assignment Record</div>';
+             $hardware.='<table class="responsive-table" style="width:80%; font-size:12px;">';
+             $hardware.='<thead><tr>';
+             $hardware.=' <th> ID No.  </th>';
+             $hardware.=' <th> Personnel Name  </th>';
+             $hardware.=' <th> Department  </th>';
+             $hardware.=' <th> Date Assigned </th>';
+             $hardware.='</thead></tr>';
+
+             foreach($query_hardware as $list) {
+                        
+                             $personnel_info = $deployment_it::get_personnel_info($list->emp_id);
+                             $hardware.='<tr>';
+                             $hardware.='<td>'.$list->emp_id.'</td>';
+                             $hardware.='<td>'.$personnel_info[0]->last_name.', '.$personnel_info[0]->first_name.' '.$personnel_info[0]->middle_initial.'.' .'</td>';
+                             $hardware.='<td>'.$list->deptcode.'</td>';
+                             $hardware.='<td>'.$list->date_deployed.'</td>';
+                             $hardware.= '</tr>';
+             }
+
+             $hardware.='</table>';
+
+            return [$hardware, $hardware_photo];
+             
+        }
+
+       
        
     
     }

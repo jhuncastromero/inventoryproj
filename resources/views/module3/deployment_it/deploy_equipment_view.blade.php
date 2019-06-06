@@ -26,43 +26,57 @@
 			 	 </div>
 
 			 	 
-				    <div class="row">  <!--find row-->
+				    <div class="row"  id="div_drop_down">  <!--find row-->
 				
-					<div class="col s10">
-						  <div class="row">
-							  <div class="input-field col s4">
-					                 <select id="type_list" name="type_list">  
-					                 	@if(!empty($load_categories))
-					                 		<option value ="">Please Choose Equipment Type </option>
-					                 		@foreach($load_categories as $list)
-					                 			<option value ="{{ $list->type }}">{{ $list->type }} </option>
-					                 		@endforeach
-					                 	@else
-					                 		<option value ="">No Equipment Type Record </option>
-					     				@endif
-					                 </select>
-					                 <label for="type_list">Equipment Type List. </label>
-				              </div>
-			                  
-				             
-				          </div>
-				 	
+						 <div class="col s10">
+							
+								  <div class="input-field col s5" >
+						                 <select id="type_list" name="type_list">  
+						                 	@if(!empty($load_categories))
+						                 		<option value ="">Choose Equipment Type </option>
+						                 		@foreach($load_categories as $list)
+						                 			<option value ="{{ $list->type }}">{{ $list->type }} </option>
+						                 		@endforeach
+						                 	@else
+						                 		<option value ="">No Equipment Type Record </option>
+						     				@endif
+						                 </select>
+						                 <label for="type_list">Equipment Type List. </label>
+					              </div>
+					               <div class="input-field col s5">
+						                 <input type="text" id="search_serialno" name="search_serialno">  
+						                 <label for="search_serialno">Equipment Serial No.</label>
+					              </div>
+					              <div class="col s2" style="padding-top:25px;">
+					              	  	<button class=" btn waves-effect waves-light" type="submit" name="action" style="background-color: #c62828;" onclick="find_serial();">Find<i class="material-icons right">search</i>
+						            	</button> 
+						   		  </div>
+				                  
+						   		  
+
+				                 
+						   </div>
+				    </div>
+				    <div class ="row" id="div_row_serial" name = "div_row_serial">
+
+					       <div class="col s8"  id="display_serials" name ="display_serials"></div>
+
 				     </div>
-						     
-					 <div class="row" id="div_found_value" name = "div_found_value">
+		
 
-					 	<div class="col s3">
-					 		<div id="display_serials" name ="display_serials"></div>
-					 	</div>
+				    <div class="row">
 
-					 		<div class="col s9" style="padding-top: 20px;">
-					 		<div id="display_hardware" name ="display_hardware"></div>
-					 	</div>
+				    	<div class ="col s3" id="display_hardware_photo" name="display_hardware_photo"></div>
+				    	<div class ="col s9" id="display_hardware" name ="display_hardware"></div>
+				    	
+				    
+			     
 
-					 </div>
-					 <div class="row" id="div_no_value" name = "div_no_value" style="padding-top: -80px;">
-					 	<div id="no_data" name="no_data"></div>
-					 </div>
+				    </div>
+
+
+					
+					 <div class="row" id="div_no_value" name = "div_no_value" style="padding-top: -80px;"></div>
 
 
 		</div>
@@ -93,19 +107,37 @@
 						xType = '';
 
 						xType = $('#type_list').val();
+						$('#display_row_serial').css('visibility','visible');
+						$('#display_hardware').html('');
+						$('#display_hardware_photo').html('');
+						$('#search_serialno').val('');
+						$('#div_no_value').html('');
 
 						list_serials(xType);	
 
 					})
+
+					$('#search_serialno').on('change',function() {
+
+						$('#display_row_serial').html('');
+
+
+
+					})
+
+					
+
+					function find_serial() {
+
+						var xSerial;
+						xSerial = '';
+
+						xSerial = $('#search_serialno').val();
+						view_equipment_deployment_details(xSerial);
+					}
 					
 					// AJAX
-			    	function deployment_by_equipment(xSerial) {
-
-			    		alert(xSerial);
-					   
-			     
-			    	}
-
+			    	
 			    	function list_serials(xType) {
 
 			    		var dataString;
@@ -142,7 +174,26 @@
 					            data : dataString,
 					            success: function(data){
 
-					            	$('#display_serials').html(data);
+					            	if(data[1] === 0) { //check if ajax return value is empty or not
+					            		$('#div_no_value').html(data[0]);
+					            		$('#display_serials').html('');
+					            		$('#display_row_serial').css('visibility','hidden');
+					            		$('#display_hardware').html('');
+					            		$('#display_hardware_photo').html('');
+
+					            	}
+					            	else {
+
+					            		$('#display_serials').html('');
+					            		$('#div_no_value').html('');
+						            	$('#display_row_serial').css('visibility','hidden');
+						            	$('#display_hardware').html(data[0]);
+						            	$('#display_hardware_photo').html(data[1]);
+
+
+					            	}	
+
+					            	
 					            	
 					            }
 

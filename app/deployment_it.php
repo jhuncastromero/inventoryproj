@@ -136,10 +136,18 @@ class deployment_it extends Model
     }
 
 
-    public static function ajax_view_deployment_by_equipment($serial_no, $tag_no) {
-
-      
-    }
-
+    public static function ajax_view_deployment_by_equipment($serial_no) {
         
+        $deployment_it = new deployment_it;
+        $query = $deployment_it::where('serial_no','=',$serial_no)->whereNull('deleted_at')->get();
+        return $query;
+       
+   }      
+
+     public static function get_personnel_info($emp_id) {
+
+        $personnel = new personnel;
+        $query = $personnel::where('emp_id', '=',$emp_id)->whereNull('deleted_at')->get();
+        return $query;
+    }
 }
