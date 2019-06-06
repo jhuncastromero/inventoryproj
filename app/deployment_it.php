@@ -127,6 +127,15 @@ class deployment_it extends Model
     }
 
 
+    public static function get_hardware_serials($type) {
+
+        $hardware_equipment = new hardware_equipment;
+        $query = $hardware_equipment::where('type', '=',$type)->whereNull('deleted_at')->get();
+        return $query;
+
+    }
+
+
     public static function ajax_view_deployment_by_equipment($serial_no, $tag_no) {
 
       

@@ -52,7 +52,7 @@
 					 <div class="row" id="div_found_value" name = "div_found_value">
 
 					 	<div class="col s3">
-					 		<div id="display_personnel" name ="display_personnel"></div>
+					 		<div id="display_serials" name ="display_serials"></div>
 					 	</div>
 
 					 		<div class="col s9" style="padding-top: 20px;">
@@ -94,20 +94,62 @@
 
 						xType = $('#type_list').val();
 
-						list_serials(xType);
+						list_serials(xType);	
 
 					})
 					
 					// AJAX
-			    	function deployment_by_equipment() {
+			    	function deployment_by_equipment(xSerial) {
 
+			    		alert(xSerial);
 					   
 			     
 			    	}
 
 			    	function list_serials(xType) {
 
-			    		alert(xType);
+			    		var dataString;
+			    		dataString = '';
+			    	
+			    		dataString = 'type=' + xType;
+
+			    		$.ajax({
+					            type: "POST",
+					            url: "/deployment_it/viewequipmentserials",
+					            data : dataString,
+					            success: function(data){
+
+					            	$('#display_serials').html(data);
+					            	
+					            }
+
+
+					        })
+
+
+			    	}
+
+			    	function view_equipment_deployment_details(xSerial) {
+
+			    		var dataString;
+			    		dataString = '';
+			    	
+			    		dataString = 'serial_no=' + xSerial;
+
+			    		$.ajax({
+					            type: "POST",
+					            url: "/deployment_it/viewequipmentdeploymentdetails",
+					            data : dataString,
+					            success: function(data){
+
+					            	$('#display_serials').html(data);
+					            	
+					            }
+
+
+					        })
+
+
 			    	}
 			    	
 
