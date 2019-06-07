@@ -51,13 +51,7 @@ class deployment_it extends Model
         return $query;
         
     }
-    public static function get_deptname($deptcode)  {
-
-        $department = new department;
-        $query = $department::where('deptcode','=',$deptcode)->get();
-        return $query;
-
-    }
+    
 
     public static function save_data($serial_no, $emp_id, $deptcode, $roomno, $remarks) {
 
@@ -111,6 +105,14 @@ class deployment_it extends Model
         }
     }
 
+    public static function get_deptname($deptcode)  {
+
+        $department = new department;
+        $query = $department::where('deptcode','=',$deptcode)->get();
+        return $query;
+
+    }
+
     public static function get_assigned_hardware($emp_id) {
 
       
@@ -150,4 +152,5 @@ class deployment_it extends Model
         $query = $personnel::where('emp_id', '=',$emp_id)->whereNull('deleted_at')->get();
         return $query;
     }
+
 }

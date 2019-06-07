@@ -341,6 +341,7 @@ class DeploymentItController extends Controller
              $hardware.='<thead><tr>';
              $hardware.='<th> <i class="small material-icons">photo</i> </th>';
              $hardware.=' <th> Serial No.  </th>';
+             $hardware.=' <th> Type  </th>';
              $hardware.=' <th> Brand/ Make  </th>';
              $hardware.='</thead></tr>';
 
@@ -357,6 +358,7 @@ class DeploymentItController extends Controller
                              }
                             
                              $hardware.="<td><a href='#!'".'onclick=view_equipment_deployment_details("'.$list->serial_no.'");>'.$list->serial_no.'</a></td>';
+                              $hardware.='<td>'.$list->type.'</td>';
                              $hardware.='<td>'.$list->brand.'</td>';
                              $hardware.= '</tr>';
              }
@@ -392,35 +394,48 @@ class DeploymentItController extends Controller
 
              if($hardware_info[0]->photo_name == '') {
                 
-                $hardware_photo = '<i style="font-size:12px;">-- no photo -- </i>';
+                $hardware_photo = '<i style="font-size:20px;">-- no photo -- </i>';
              }
              else {
                 
-                $hardware_photo ='<img src="'. asset(Storage::url('hardware_photo/IT/'.$hardware_info[0]->photo_name)).'" width="175px" height="175px">';
+                $hardware_photo ='<img src="'. asset(Storage::url('hardware_photo/IT/'.$hardware_info[0]->photo_name)).'" width="250px" height="250px">';
                 
 
              }
              
 
              
-             $hardware='<div style="font-weight:bold;">'.$hardware_info[0]->brand. ' '.$hardware_info[0]->type.' - S/N:  '.$hardware_info[0]->serial_no .'</div>';
-            
+             $hardware='<div style="font-weight:bold;padding-bottom:10px;">'.$hardware_info[0]->brand. ' '.$hardware_info[0]->type.' - S/N:  '.$hardware_info[0]->serial_no .'</div>';
              $hardware.='<div style="font-weight:bold;font-size:12px; padding-bottom:10px;padding-top:20px">Deployment/ Assignment Record</div>';
              $hardware.='<table class="responsive-table" style="width:80%; font-size:12px;">';
              $hardware.='<thead><tr>';
+             $hardware.='<th> <i class="small material-icons">photo</i> </th>';
              $hardware.=' <th> ID No.  </th>';
-             $hardware.=' <th> Personnel Name  </th>';
+             $hardware.=' <th> Assigned to  </th>';
              $hardware.=' <th> Department  </th>';
              $hardware.=' <th> Date Assigned </th>';
              $hardware.='</thead></tr>';
 
              foreach($query_hardware as $list) {
                         
-                             $personnel_info = $deployment_it::get_personnel_info($list->emp_id);
-                             $hardware.='<tr>';
-                             $hardware.='<td>'.$list->emp_id.'</td>';
+                            $personnel_info = $deployment_it::get_personnel_info($list->emp_id);
+                            $hardware.='<tr>';
+                            if(!empty($personnel_info[0]->photo_name))
+                            {
+                                 $hardware.='<td><img src="'. asset(Storage::url('personnel_photo/'.$personnel_info[0]->emp_id.'/'.$personnel_info[0]->photo_name)).'" width="30px" height="30px"></td>';
+                            }
+                            else
+                            {
+                                 $hardware.='<td><i class="medium material-icons">person</i></td>';
+                             
+                            }
+                            
+                            // onclick=get_serial_no("'.$list->serial_no.'")
+                             $hardware.='<td><a href="#!" onclick=personnel_details("'.$personnel_info[0]->emp_id.'");>'.$personnel_info[0]->emp_id.'</a></td>';
+                            
                              $hardware.='<td>'.$personnel_info[0]->last_name.', '.$personnel_info[0]->first_name.' '.$personnel_info[0]->middle_initial.'.' .'</td>';
-                             $hardware.='<td>'.$list->deptcode.'</td>';
+                             $deptname = deployment_it::get_deptname($personnel_info[0]->deptcode);
+                             $hardware.='<td>'.$deptname[0]->deptname.'</td>';
                              $hardware.='<td>'.$list->date_deployed.'</td>';
                              $hardware.= '</tr>';
              }
@@ -431,12 +446,44 @@ class DeploymentItController extends Controller
              
         }
 
+  
+    }
+    public static function ajax_view_personnel_details(Request $request) {
+
+        $deployment_it = new deployment_it;
+        $query_personnels = $deployment_it::get_personnel_info($request->emp_id);
+
+        $output = '<div class="row">';
+        $output .= '<div class="col s3 m3 l3">';
+            //$output .= '<div style="padding-top:10px;">';
+
+                if(!empty($query_personnels[0]->photo_name))
+                {
+                     $output.='<img src="'. asset(Storage::url('personnel_photo/'.$query_personnels[0]->emp_id.'/'.$query_personnels[0]->photo_name)).'" width="150x" height="150px">';
+                }
+                else
+                {
+                     $output.='<i class="medium material-icons">person</i>';
+                 
+                }
+           // $output .= '</div>';
+        $output .= '</div>';
+
+        $output .= '<div class="col s9 m9 l9">';
+                    $output .= '<div style="font-size:26px;padding-top:40px;">'.$query_personnels[0]->first_name.' '.$query_personnels[0]->middle_initial.'. '.$query_personnels[0]->last_name.'</div>';
+                    $output .= '<div style="font-size:18; font-style:italic;">'.$query_personnels[0]->job_position.'</div>';
+                    $deptname = deployment_it::get_deptname($query_personnels[0]->deptcode);
+                    $output .= '<div style="font-size:14px;font-style:italic;">'.$deptname[0]->deptname.' Department</div>';
+        $output .= '</div>';
+        
+        $output .= '</div>';
+        return $output;
+
        
-       
-    
+
     }
 
-  
+//------------------------------------------UPDATE DEPLOYMENT-------------------------------------------->  
 
 
 }

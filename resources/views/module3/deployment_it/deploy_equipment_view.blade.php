@@ -66,19 +66,27 @@
 
 				    <div class="row">
 
-				    	<div class ="col s3" id="display_hardware_photo" name="display_hardware_photo"></div>
-				    	<div class ="col s9" id="display_hardware" name ="display_hardware"></div>
+				    	<div class ="col s4" id="display_hardware_photo" name="display_hardware_photo"></div>
+				    	<div class ="col s8" id="display_hardware" name ="display_hardware"></div>
 				    	
-				    
-			     
-
+			
 				    </div>
-
-
-					
+				
 					 <div class="row" id="div_no_value" name = "div_no_value" style="padding-top: -80px;"></div>
 
+				    <div id="messageprompt" class="modal">
+		    			<div class="modal-content">
 
+		    				<div id="div_personnel" name="div_personnel"></div>
+		      				
+		    			</div>
+		    			<div class="modal-footer">
+		      			
+		      				<a href="#!" class="modal-close waves-effect waves-green btn-flat" id="" onclick="">close</a>
+		      				
+
+		    			</div>
+		  			</div>		
 		</div>
 
 @endsection
@@ -113,6 +121,7 @@
 						$('#search_serialno').val('');
 						$('#div_no_value').html('');
 
+
 						list_serials(xType);	
 
 					})
@@ -120,7 +129,6 @@
 					$('#search_serialno').on('change',function() {
 
 						$('#display_row_serial').html('');
-
 
 
 					})
@@ -157,6 +165,7 @@
 
 
 					        })
+			    		$('#type_list').val('');
 
 
 			    	}
@@ -167,7 +176,7 @@
 			    		dataString = '';
 			    	
 			    		dataString = 'serial_no=' + xSerial;
-
+                        
 			    		$.ajax({
 					            type: "POST",
 					            url: "/deployment_it/viewequipmentdeploymentdetails",
@@ -190,18 +199,44 @@
 						            	$('#display_hardware').html(data[0]);
 						            	$('#display_hardware_photo').html(data[1]);
 
-
 					            	}	
-
-					            	
-					            	
+          	
 					            }
-
 
 					        })
 
-
 			    	}
+
+			    	function personnel_details(xEmpID) {
+
+			    		
+			    		
+
+			    		if(xEmpID === '') {
+			    			
+			    		}
+			    		else {
+
+			    			var dataString;
+				    		dataString = '';
+				    	
+				    		dataString = 'emp_id=' + xEmpID;
+
+			    			$.ajax({
+					            type: "POST",
+					            url: "/deployment_it/viewpersonneldetails",
+					            data : dataString,
+					            success: function(data){
+
+					            	$('#div_personnel').html(data);
+					            	$('#messageprompt').modal('open');
+
+					            }
+					         })
+			    			
+			    		}
+			    	}
+			    	
 			    	
 
 			    	

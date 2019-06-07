@@ -9,13 +9,27 @@
 		</div>
 	</li>
 	<li> <a href="{{ route('deployment_it.deployequipment') }}"><i class="material-icons">transform</i>Assign/Deploy</a></li>
-	<li><a href="#"><i class="material-icons">update</i>Update Deployment</a></li>
+	<ul class="collapsible " style="padding-left: 15px; font-size:14px; ">
+	    <li>
+	      <div class="collapsible-header" style="color:#616161"><i class="material-icons" style="color:#616161;">update</i>&nbsp;&nbsp;&nbsp;Update Deployment</div>
+	      
+		      <div class="collapsible-body">
+		      	<ul style="padding-left: 10px;">
+		      		<li><a href="#!"><i class="material-icons">transfer_within_a_station</i>Re-Assign Equipment</a></li>
+		    		<li><a href="#!"><i class="material-icons">reply_all</i>Recall Equipment</a></li>
+				</ul>
+
+		      </div>
+	  		
+	    </li>
+  	</ul>
+
 	<ul class="collapsible " style="padding-left: 15px; font-size:14px; ">
 	    <li>
 	      <div class="collapsible-header" style="color:#616161"><i class="material-icons" style="color:#616161;">find_in_page</i>&nbsp;&nbsp;&nbsp;View Deployment</div>
 	      
 		      <div class="collapsible-body">
-		      	<ul>
+		      	<ul style="padding-left: 10px;">
 		      		<li><a href="{{ route('deployment_it.viewpersonneldeployment')}}"><i class="material-icons">person</i>By Personnel</a></li>
 		    		<li><a href="{{ route('deployment_it.viewequipmentdeployment')}}"><i class="material-icons">scanner</i>By Equipment</a></li>
 				</ul>
@@ -33,3 +47,4 @@
 </ul>
 
 <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="medium material-icons">menu</i></a>
+

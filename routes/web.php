@@ -63,6 +63,8 @@ Route::get('/deployment_it/viewequipmentdeployment','DeploymentItController@view
 Route::post('/deployment_it/viewequipmentserials','DeploymentItController@ajax_view_equipment_serials')->name('deployment_it.viewequipmentserials');
 Route::post('/deployment_it/viewequipmentdeploymentdetails','DeploymentItController@ajax_view_equipment_deployment_details')->name('deployment_it.viewequipmentdeploymentdetails');
 
+Route::post('/deployment_it/viewpersonneldetails','DeploymentItController@ajax_view_personnel_details')->name('deployment_it.viewpersonneldetails');
+
 
 
 

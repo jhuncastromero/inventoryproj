@@ -173,3 +173,4 @@
   
 
 @endsection
+ $hardware.="<td><a href=".'{{ route('."'personnel.show',".$personnel_info[0]->id.') }}">'.$list->emp_id.'</a></td>';
