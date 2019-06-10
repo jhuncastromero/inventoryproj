@@ -448,6 +448,8 @@ class DeploymentItController extends Controller
 
   
     }
+
+   
     public static function ajax_view_personnel_details(Request $request) {
 
         $deployment_it = new deployment_it;
@@ -479,11 +481,7 @@ class DeploymentItController extends Controller
         $output .= '</div>';
         return $output;
 
-       
-
     }
 
-//------------------------------------------UPDATE DEPLOYMENT-------------------------------------------->  
-
-
+ 
 }

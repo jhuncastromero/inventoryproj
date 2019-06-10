@@ -50,21 +50,28 @@ Route::post('/hardware_equipment/searchequipment','HardwareEquipmentController@s
 
 //IT EQUIPMENT ASSIGN DEPLOY user defined route
 
+//----DEPLOY ROUTE
 Route::get('/deployment_it/deployequipment','DeploymentItController@deploy_equipment')->name('deployment_it.deployequipment');
 Route::post('/deployment_it/equipmentlist','DeploymentItController@ajax_equipment_list')->name('deployment_it.equipmentlist');
 Route::post('/deployment_it/deploydetails','DeploymentItController@deploy_details')->name('deployment_it.deploydetails');
 Route::post('/deployment_it/employeedetails','DeploymentItController@ajax_find_employee')->name('deployment_it.employeedetails');
 Route::get('/deployment_it/viewdeployment','DeploymentItController@view_deployment')->name('deployment_it.viewdeployment');
 
+
+//---BY PERSONNEL DEPLOYMENT ROUTE
 Route::get('/deployment_it/viewpersonneldeployment','DeploymentItController@view_personnel_deployment')->name('deployment_it.viewpersonneldeployment');
 Route::post('/deployment_it/viewpersonneldeploymentdetails','DeploymentItController@ajax_view_personnel_deployment_details')->name('deployment_it.viewpersonneldeploymentdetails');
 
+//---BY EQUIPMENT DEPLOYMENT ROUTE
 Route::get('/deployment_it/viewequipmentdeployment','DeploymentItController@view_equipment_deployment')->name('deployment_it.viewequipmentdeployment');
 Route::post('/deployment_it/viewequipmentserials','DeploymentItController@ajax_view_equipment_serials')->name('deployment_it.viewequipmentserials');
 Route::post('/deployment_it/viewequipmentdeploymentdetails','DeploymentItController@ajax_view_equipment_deployment_details')->name('deployment_it.viewequipmentdeploymentdetails');
-
 Route::post('/deployment_it/viewpersonneldetails','DeploymentItController@ajax_view_personnel_details')->name('deployment_it.viewpersonneldetails');
 
+//---RE-ASSIGN DEPLOYMENT ROUTE
+
+Route::get('/deployment_it/reassigndeployment','ReAssignRecall@re_assign_deploy')->name('deployment_it.reassigndeployment');
+Route::post('/deployment_it/redeploymenthardwaredetails','ReAssignRecall@ajax_view_equipment_redeployment_details')->name('deployment_it.redeploymenthardwaredetails');
 
 
 
@@ -72,3 +79,4 @@ Route::post('/deployment_it/viewpersonneldetails','DeploymentItController@ajax_v
 Route::resource('personnel','personnelController');
 Route::resource('hardware_equipment','HardwareEquipmentController');
 Route::resource('deployment_it','DeploymentItController');
+

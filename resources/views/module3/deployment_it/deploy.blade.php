@@ -80,14 +80,7 @@
 					       
 					});
 
-					$('#li_update_deployment').click(function() {
-
-						$(this).toggleClass('active');
-
-					});
-
-
-					
+									
 					$('#type').on('change',function(){
 
 						generate_equipment_list();
