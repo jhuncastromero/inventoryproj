@@ -6,6 +6,31 @@
 
 @endsection
 
+@section('style-section')
+
+	<style>
+
+		#tbl_equipment thead tr {
+			display: block;
+		}
+		#tbl_equipment th, table td {
+			width: 100px;
+		}
+
+		#tbl_equipment tbody {
+			display: block;
+			height: 200px;
+			overflow: auto;
+		}
+
+		.row .col {
+
+		}
+
+	</style>
+	
+@endsection
+
 @section('navlinks')
       
       @include('module3.deployment_it.equipment-nav-links')  
@@ -21,15 +46,15 @@
 @section('content-section')
 
 		
-		 	 <div class="row">
-		 	  		<div id="div_header"><i class="material-icons">transfer_within_a_station</i>&nbsp;Re-Assign Deployment</div> 
+		 	 <div class="row" style = "">
+		 	  		<div id="div_header"><i class="material-icons">transfer_within_a_station</i>&nbsp;Re-Assign Hardware Equipment</div> 
 		 	 </div>
 
 		 	 <div class="row">
 
 			 	 	<div class = "col s4">
 
-		 	 				<div class="input-field col s8" >
+		 	 				<div class="input-field col s12" >
 					                 
 					                 <select id="type_list" name="type_list">  
 					                 	@if(!empty($load_categories))
@@ -50,39 +75,43 @@
 
 			 	 	<div class = "col s8">
 
-			 	 		<div class ="row" style="padding:0;">
+			 	 		<div class ="row" style="">
 
-				 	 		<div class="col s10" style="padding: 0;">
+				 	 		<div class="col s10" style="">
 
 				 	 		
 
-				 	 				<div class="col s4">
+				 	 				<div class="col s10 offset-s2">
 				 	 					   
 				 	 					 <div id="display_hardware_photo" name="display_hardware_photo"></div>
-
-				 	 				</div>
-
-				 	 				<div class="col s8">
-				 	 					
 				 	 					 <div id="display_hardware" name="display_hardware"></div>
 
 				 	 				</div>
 
+				 	 				
 
 				 	 		
 
 				 	 		</div> 
+
 				 	 	</div>
 
-				 	 	<div class="row" style="padding:0">
+				 	 </div>
+			</div>
 
-				 	 		<div class="col s5" style="">
+	 	 	<div class="row" style="padding:0">
 
-				 	 			<div id="div_current_user" name="div_current_user"></div>
+	 	 		<div class="col s5" style="">
 
-				 	 		</div> 
-				 	 		<div class="col s7" style="">
+	 	 			<div id="div_current_user" name="div_current_user"></div>
 
+	 	 		</div> 
+
+	 	 		<div class="col s7" style="">
+
+	 	 				<div class="col s11">
+
+	 	 					<div class = "row">
 				 	 			<div id="div_re_assign_to" name ="div_re_assign_to">
 				 	 				<div style="color:#ffffff; background-color:#212121;"> <p style="padding-bottom:5px;padding-left:10px; font-size:13px;">Re-Assign To </p>
 				 	 				</div>
@@ -99,17 +128,18 @@
 						                 		<option value ="">No Current Record </option>
 						     				@endif
 						                 </select>
-						                 <label for="deptcode">Department List. </label>
+						                 <label for="deptcode">Department List </label>
 				              		</div>
-				              
-				       
+				                
+				                </div>
+				            </div>
+				        </div>
+		 	 
 
-				 	 			</div>
-
-				 	 		</div> 
-			 	 		</div>
+	 	 		</div> 
 			 	 		
-			 	 	</div>
+			 	 		
+			 	 
 
 		 	 </div>
 		
@@ -152,6 +182,12 @@
 
 					})
 
+					$('#deptcode').on('change',function() {
+						
+						alert();
+
+					})
+
 					function list_serials(xType) {
 
 			    		var dataString;
@@ -161,7 +197,7 @@
 
 			    		$.ajax({
 					            type: "POST",
-					            url: "/deployment_it/viewequipmentserials",
+					            url: "/deployment_it/reassignequipmentserials",
 					            data : dataString,
 					            success: function(data){
 

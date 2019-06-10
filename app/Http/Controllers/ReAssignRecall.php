@@ -101,7 +101,54 @@ class ReAssignRecall extends Controller
         return view('module3.deployment_it.re_assign_deployment',compact('load_categories','department'));
 
     }
-     public static function ajax_view_equipment_redeployment_details(Request $request) {
+
+    public static function ajax_view_equipment_serials(Request $request) {
+
+
+        $hardware = '';
+        $deployment_it = new deployment_it;
+        $query_hardware = $deployment_it::get_hardware_serials($request->type);
+        
+
+        if($query_hardware->isEmpty()) {
+                 $hardware = "<p style='font-style:italic;font-size:13px;font-weight:bold; padding-top:30px;'>No Hardware Record found for this Type.</p>";
+        }
+        else {
+             $hardware='<table class="responsive-table" style="font-size:12px;" id="tbl_equipment" name="tbl_equipment">';
+             $hardware.='<thead><tr>';
+             $hardware.='<th> <i class="small material-icons">photo</i> </th>';
+             $hardware.=' <th>Serial No.  </th>';
+             $hardware.=' <th style="padding-left:30px;">Type  </th>';
+             $hardware.=' <th>Brand/ Make  </th>';
+             $hardware.='</thead></tr>';
+             $hardware.='<tbody>';
+             foreach($query_hardware as $list) {
+                        
+                             $hardware.='<tr>';
+                             if($list->photo_name == '') {
+
+                                 $hardware.='<td><i>---no photo---</i></td>';
+
+                             }
+                             else {
+                                 $hardware.='<td><img src="'. asset(Storage::url('hardware_photo/IT/'.$list->photo_name)).'" width="30px" height="30px"></td>';
+                             }
+                            
+                             $hardware.="<td><a href='#!'".'onclick=view_equipment_deployment_details("'.$list->serial_no.'");>'.$list->serial_no.'</a></td>';
+                              $hardware.='<td style="padding-left:20px;">'.$list->type.'</td>';
+                             $hardware.='<td>'.$list->brand.'</td>';
+                             $hardware.= '</tr>';
+             }
+             $hardware.='</tbody>';
+             $hardware.='</table>';
+        }
+
+        return $hardware;
+       
+    
+    }
+
+    public static function ajax_view_equipment_redeployment_details(Request $request) {
 
         $hardware = '';
         $hardware_photo = '';
@@ -121,7 +168,7 @@ class ReAssignRecall extends Controller
         }
         else {
 
-             //CURRENT USER ---------------------------------------------------------------------->\
+             //CURRENT USER ---------------------------------------------------------------------->
 
             // get hardware details   
 
@@ -132,11 +179,11 @@ class ReAssignRecall extends Controller
              }
              else {
                 
-                $hardware_photo='<img src="'. asset(Storage::url('hardware_photo/IT/'.$hardware_info[0]->photo_name)).'" width="180px" height="180px">';
+                $hardware_photo='<img src="'. asset(Storage::url('hardware_photo/IT/'.$hardware_info[0]->photo_name)).'" width="250px" height="250px" style="padding-top:50px;">';
                 
              }
                         
-            $hardware='<div style="font-weight:bold;padding-top:70px; font-size:20px;">'.$hardware_info[0]->brand. ' '.$hardware_info[0]->type.' - S/N:  '.$hardware_info[0]->serial_no .'</div>';
+            $hardware='<div style="font-weight:bold;padding-top:20px; font-size:18px;">'.$hardware_info[0]->brand. ' '.$hardware_info[0]->type.' - S/N:  '.$hardware_info[0]->serial_no .'</div>';
 
             //get current user 
              
@@ -146,13 +193,13 @@ class ReAssignRecall extends Controller
             }
             else {
 
-                $current_user_display = '<div style="color:#ffffff; background-color:#c62828;"> <p style="padding-bottom:5px;padding-left:10px; font-size:13px;">Current User </p></div>';
-                $current_user_display .= '<div>';
+                $current_user_display = '<div style="color:#ffffff; background-color:#c62828;"> <p style="padding-bottom:5px;padding-left:5px; font-size:13px;">Current User </p></div>';
+                $current_user_display .= '<div class="col s4">';
                 $personnel_info = $deployment_it::get_personnel_info($current_user[0]->emp_id);
-
+  
                 if(!empty($personnel_info[0]->photo_name))
                 {
-                     $current_user_display.='<img src="'. asset(Storage::url('personnel_photo/'.$personnel_info[0]->emp_id.'/'.$personnel_info[0]->photo_name)).'" width="150px" height="150px">';
+                     $current_user_display.='<img src="'. asset(Storage::url('personnel_photo/'.$personnel_info[0]->emp_id.'/'.$personnel_info[0]->photo_name)).'" width="175px" height="175px">';
                 }
                 else
                 {
@@ -160,8 +207,8 @@ class ReAssignRecall extends Controller
                  
                 } 
                  $current_user_display.='</div>';
-
-                 $current_user_display.='<table class="responsive-table" style="width:80%; font-size:11px;">';
+                 $current_user_display .= '<div class="col s7">';
+                 $current_user_display.='<table class="responsive-table" style="width:90%; font-size:11px;">';
                  $current_user_display.= '</tr>';   
                  $current_user_display.= '<tr>';
                  $current_user_display.= '<td>ID No.</td>';
@@ -181,19 +228,23 @@ class ReAssignRecall extends Controller
                  $current_user_display.='<td>'.$deptname[0]->deptname.'</td>';
                  $current_user_display.= '</tr>';  
                  $current_user_display.='</table>';
+                 $current_user_display.='</div>';
                                 
            }
 
-           // RE ASSIGN TO--------------------------------------------------------------------------->
-
-                  
-          return [$hardware, $hardware_photo, $current_user_display];
-
+         return [$hardware, $hardware_photo, $current_user_display];
                         
         }
         
+ 
+    }
 
-  
+
+
+    public static function ajax_personnel_list_deptcode(Request $request) {
+
+
+
     }
 
    

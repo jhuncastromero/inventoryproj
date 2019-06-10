@@ -337,7 +337,7 @@ class DeploymentItController extends Controller
                  $hardware = "<p style='font-style:italic;font-size:13px;font-weight:bold; padding-top:30px;'>No Hardware Record found for this Type.</p>";
         }
         else {
-             $hardware='<table class="responsive-table" style="width:60%; font-size:12px;">';
+             $hardware='<table class="responsive-table" style="width:70%; font-size:12px;">';
              $hardware.='<thead><tr>';
              $hardware.='<th> <i class="small material-icons">photo</i> </th>';
              $hardware.=' <th> Serial No.  </th>';

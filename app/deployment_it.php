@@ -166,5 +166,12 @@ class deployment_it extends Model
         $query = $department::whereNull('deleted_at')->get();
         return $query;
     }
+    public static function get_personnel_deptcode($deptcode) {
+
+        $personnel = new personnel;
+        $query = $personnel::where('deptcode','=',$deptcode)->whereNull('deleted_at')->get();
+        return $query;
+
+    }
 
 }

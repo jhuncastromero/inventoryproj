@@ -10,7 +10,7 @@
 
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/definedcss.css')}} ">
-	
+	@yield('style-section')
 </head>
 <body id="mainpage" name="mainpage">
 		@yield('navlinks')
