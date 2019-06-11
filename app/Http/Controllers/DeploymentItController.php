@@ -281,7 +281,9 @@ class DeploymentItController extends Controller
                  $hardware = "<p style='font-style:italic;font-size:13px;font-weight:bold; padding-top:30px;'>No Hardware Equipment deployed/assigned to this personnel.</p>";
             }
             else {
-                 $hardware='<table class="responsive-table" style="width:80%; font-size:12px;">';
+
+                 $hardware='<div style="font-weight:bold;padding-bottom:10px; font-size:14px;">Assigned/ Deployed Hardware Equipment</div>';
+                 $hardware.='<table class="responsive-table" style="width:80%; font-size:12px;">';
                  $hardware.='<thead><tr>';
                  $hardware.='<th> <i class="small material-icons">photo</i> </th>';
                  $hardware.=' <th> Serial No.  </th>';
@@ -339,7 +341,7 @@ class DeploymentItController extends Controller
         else {
              $hardware='<table class="responsive-table" style="width:70%; font-size:12px;">';
              $hardware.='<thead><tr>';
-             $hardware.='<th> <i class="small material-icons">photo</i> </th>';
+             $hardware.='<th> <i class="small material-icons">photo</i></th>';
              $hardware.=' <th> Serial No.  </th>';
              $hardware.=' <th> Type  </th>';
              $hardware.=' <th> Brand/ Make  </th>';
@@ -430,7 +432,6 @@ class DeploymentItController extends Controller
                              
                             }
                             
-                            // onclick=get_serial_no("'.$list->serial_no.'")
                              $hardware.='<td><a href="#!" onclick=personnel_details("'.$personnel_info[0]->emp_id.'");>'.$personnel_info[0]->emp_id.'</a></td>';
                             
                              $hardware.='<td>'.$personnel_info[0]->last_name.', '.$personnel_info[0]->first_name.' '.$personnel_info[0]->middle_initial.'.' .'</td>';
@@ -457,8 +458,7 @@ class DeploymentItController extends Controller
 
         $output = '<div class="row">';
         $output .= '<div class="col s3 m3 l3">';
-            //$output .= '<div style="padding-top:10px;">';
-
+           
                 if(!empty($query_personnels[0]->photo_name))
                 {
                      $output.='<img src="'. asset(Storage::url('personnel_photo/'.$query_personnels[0]->emp_id.'/'.$query_personnels[0]->photo_name)).'" width="150x" height="150px">';

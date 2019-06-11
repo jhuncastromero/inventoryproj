@@ -70,9 +70,10 @@ Route::post('/deployment_it/viewpersonneldetails','DeploymentItController@ajax_v
 
 //---RE-ASSIGN DEPLOYMENT ROUTE
 
-Route::post('/deployment_it/reassignequipmentserials','ReAssignRecall@ajax_view_equipment_serials')->name('deployment_it.reassignequipmentserials');
-Route::get('/deployment_it/reassigndeployment','ReAssignRecall@re_assign_deploy')->name('deployment_it.reassigndeployment');
-Route::post('/deployment_it/redeploymenthardwaredetails','ReAssignRecall@ajax_view_equipment_redeployment_details')->name('deployment_it.redeploymenthardwaredetails');
+Route::get('/deployment_it/reassignequipment','ReAssignRecall@reassign_equipment')->name('deployment_it.reassignequipment');
+Route::post('/deployment_it/reassignlistequipment','ReAssignRecall@ajax_equipment_type')->name('deployment_it.reassignlistequipment');
+Route::post('/deployment_it/reassignequipmentdetail','ReAssignRecall@ajax_equipment_detail')->name('deployment_it.reassignequipmentdetail');
+Route::post('/deployment_it/reassignlistpersonnel','ReAssignRecall@ajax_personnel_list')->name('deployment_it.reassignlistpersonnel');
 
 
 

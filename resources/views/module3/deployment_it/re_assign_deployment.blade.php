@@ -10,25 +10,18 @@
 
 	<style>
 
-		#tbl_equipment thead tr {
-			display: block;
+		.btn-small {
+			height: 24px;
+			line-height: 24px;
+			font-size:11px;
 		}
-		#tbl_equipment th, table td {
-			width: 100px;
-		}
-
-		#tbl_equipment tbody {
-			display: block;
-			height: 200px;
-			overflow: auto;
-		}
-
-		.row .col {
-
+		.modal {
+			height: 80%;
+			width: 80%;
 		}
 
 	</style>
-	
+		
 @endsection
 
 @section('navlinks')
@@ -45,103 +38,79 @@
 
 @section('content-section')
 
-		
+		<div class="container">
 		 	 <div class="row" style = "">
 		 	  		<div id="div_header"><i class="material-icons">transfer_within_a_station</i>&nbsp;Re-Assign Hardware Equipment</div> 
 		 	 </div>
 
 		 	 <div class="row">
 
-			 	 	<div class = "col s4">
-
-		 	 				<div class="input-field col s12" >
-					                 
-					                 <select id="type_list" name="type_list">  
-					                 	@if(!empty($load_categories))
-					                 		<option value ="">Choose Equipment Type </option>
-					                 		@foreach($load_categories as $list)
-					                 			<option value ="{{ $list->type }}">{{ $list->type }} </option>
-					                 		@endforeach
-					                 	@else
-					                 		<option value ="">No Equipment Type Record </option>
-					     				@endif
-					                 </select>
-					                 <label for="type_list">Equipment Type List. </label>
-				              </div>
+	 	   			<div class="input-field col s6" >
+			                 
+			                 <select id="type_list" name="type_list">  
+			                 	@if(!empty($load_categories))
+			                 		<option value ="">Choose Equipment Type </option>
+			                 		@foreach($load_categories as $list)
+			                 			<option value ="{{ $list->type }}">{{ $list->type }} </option>
+			                 		@endforeach
+			                 	@else
+			                 		<option value ="">No Equipment Type Record </option>
+			     				@endif
+			                 </select>
+			                 <label for="type_list">Equipment Type List </label>
+		             </div>
 				              
-				              <div id="display_serials" name="display_serials"></div>
+				   	  		
+			 	 
+			</div>
+			<div class = "row">
 
-			 	 	</div>
+					<div id="div_hardware_list_bytype"></div>
+					<div class="col s3" style="">
+						<div id="div_hardware_photo"></div>
+					</div>
+					<div class="col s8 offset-s1">
+						<div id="div_hardware_info" style=""></div>
+					</div>
 
-			 	 	<div class = "col s8">
-
-			 	 		<div class ="row" style="">
-
-				 	 		<div class="col s10" style="">
-
-				 	 		
-
-				 	 				<div class="col s10 offset-s2">
-				 	 					   
-				 	 					 <div id="display_hardware_photo" name="display_hardware_photo"></div>
-				 	 					 <div id="display_hardware" name="display_hardware"></div>
-
-				 	 				</div>
-
-				 	 				
-
-				 	 		
-
-				 	 		</div> 
-
-				 	 	</div>
-
-				 	 </div>
 			</div>
 
-	 	 	<div class="row" style="padding:0">
+			 <div id="messageprompt" class="modal">
+    			<div class="modal-content">
+    				<div id="div_header" style="padding-bottom: 10px;"><i class="material-icons">transfer_within_a_station</i>&nbsp;Re-Assign Hardware Equipment</div> 
 
-	 	 		<div class="col s5" style="">
+    				<div class="row">
+    					<div class="col s6" style="">
 
-	 	 			<div id="div_current_user" name="div_current_user"></div>
+    						<select id="dept_list" name="dept_list">  
+			                 	@if(!empty($load_deptcode))
+			                 		<option value ="">Choose a Department </option>
+			                 		@foreach($load_deptcode as $list)
+			                 			<option value ="{{ $list->deptcode }}">{{ $list->deptname }} </option>
+			                 		@endforeach
+			                 	@else
+			                 		<option value ="">No Department Record Found </option>
+			     				@endif
+			                 </select>
+			                 <label for="type_list">Department List </label>
+			                 <div id="div_personnel_info" name="div_personnel_info"></div>
 
-	 	 		</div> 
+    					</div>
+    					<div class="col s5" style="background-color: yellow;"> photo
+    					</div>
+    				</div>
+      				
+    			</div>
+    			<div class="modal-footer">
+      			
+      				<a href="#!" class="modal-close waves-effect waves-green btn-flat" id="" onclick="">Assign</a>
+      				<a href="#!" class="modal-close waves-effect waves-green btn-flat" id="" onclick="">close</a>
 
-	 	 		<div class="col s7" style="">
+    			</div>
+  			</div>		
+		</div>
 
-	 	 				<div class="col s11">
-
-	 	 					<div class = "row">
-				 	 			<div id="div_re_assign_to" name ="div_re_assign_to">
-				 	 				<div style="color:#ffffff; background-color:#212121;"> <p style="padding-bottom:5px;padding-left:10px; font-size:13px;">Re-Assign To </p>
-				 	 				</div>
-
-				 	 				<div class="input-field col s4" >
-					                 
-						                 <select id="deptcode" name="deptcode">  
-						                 	@if(!empty($department))
-						                 		<option value ="">Choose Department </option>
-						                 		@foreach($department as $list)
-						                 			<option value ="{{ $list->deptcode }}">{{ $list->deptname }} </option>
-						                 		@endforeach
-						                 	@else
-						                 		<option value ="">No Current Record </option>
-						     				@endif
-						                 </select>
-						                 <label for="deptcode">Department List </label>
-				              		</div>
-				                
-				                </div>
-				            </div>
-				        </div>
-		 	 
-
-	 	 		</div> 
-			 	 		
-			 	 		
-			 	 
-
-		 	 </div>
+			 	 	
 		
 
 
@@ -165,91 +134,98 @@
 					       
 					});
 
+					$('#type_list').on('change', function(){
+						
+						get_hardware_list($('#type_list').val());
+						$('#div_hardware_list_bytype').css('visibility','visible');
+					})
+
+					$('#dept_list').on('change', function(){
+						
+						get_personnel_list($('#dept_list').val());
+						
+					})
+
+
 					//AJAX and other functions
 
-					$('#type_list').on('change',function() {
-						
-						var xType;
-						xType = '';
+					function open_modal() {
+						$('#messageprompt').modal('open');
+					}
 
-						xType = $('#type_list').val();
-						$('#display_hardware').html('');
-						$('#display_hardware_photo').html('');
-						$('#div_current_user').html('');
-						$('#div_re_assign_to').css('visibility','hidden');
+					function get_personnel_list(xDeptCode) {
 
-						list_serials(xType);	
+						var dataString;
+						dataString = '';
 
-					})
+						dataString ='deptcode=' + xDeptCode;
 
-					$('#deptcode').on('change',function() {
-						
-						alert();
+						$.ajax({
 
-					})
-
-					function list_serials(xType) {
-
-			    		var dataString;
-			    		dataString = '';
-			    	
-			    		dataString = 'type=' + xType;
-
-			    		$.ajax({
-					            type: "POST",
-					            url: "/deployment_it/reassignequipmentserials",
+							    type: "POST",
+					            url: "/deployment_it/reassignlistpersonnel",
 					            data : dataString,
 					            success: function(data){
 
-					            	$('#display_serials').html(data);
-					            	
+					            	$('#div_personnel_info').html(data);
+
+
 					            }
 
+						})
+						$('#dept_list').val('')
 
-					        })
-			    		$('#type_list').val('');
+					}
 
+					function get_hardware_list(xType) {
 
-			    	}
+						var dataString;
+						dataString = '';
 
-			    	function view_equipment_deployment_details(xSerial) {
+						dataString='type=' + xType;
 
-			    		var dataString;
-			    		dataString = '';
-			    	
-			    		dataString = 'serial_no=' + xSerial;
-                        
-			    		$.ajax({
-					            type: "POST",
-					            url: "/deployment_it/redeploymenthardwaredetails",
+						$.ajax({
+
+							    type: "POST",
+					            url: "/deployment_it/reassignlistequipment",
 					            data : dataString,
 					            success: function(data){
 
-					            	if(data[1] === 0) { //check if ajax return value is empty or not
-					            		$('#div_no_value').html(data[0]);
-					               		$('#display_row_serial').css('visibility','hidden');
-					            		$('#display_hardware').html('');
-					            		$('#display_hardware_photo').html('');
-					            		$('#div_current_user').html('');
-					            		$('#div_re_assign_to').html('');
-					            		$('#div_re_assign_to').css('visibility','hidden');
+					            	$('#div_hardware_list_bytype').html(data);
 
-					            	}
-					            	else {
-
-					            		$('#div_no_value').html('');
-						               	$('#display_hardware').html(data[0]);
-						            	$('#display_hardware_photo').html(data[1]);
-						            	$('#div_current_user').html(data[2]);
-						            	$('#div_re_assign_to').css('visibility','visible');
-
-					            	}	
-          	
 					            }
 
-					        })
+						})
+						$('#type_list').val('');
+						$('#div_hardware_photo').html('');
+						$('#div_hardware_info').html('');
+					}
 
-			    	}
+					function get_hardware_detail(xSerial) {
+
+						var dataString;
+						dataString = '';
+
+						dataString = 'serial_no=' + xSerial;
+
+						$.ajax({
+
+							type : "POST",
+							url :"/deployment_it/reassignequipmentdetail",
+							data : dataString,
+							success: function(data) {
+								$('#div_hardware_photo').html(data[0]);
+								$('#div_hardware_info').html(data[1]);
+							}
+
+						})
+						
+						$('#div_hardware_list_bytype').html('');
+						$('#div_hardware_list_bytype').css('visibility','hidden');
+					
+
+					}
+
 
 									
 					

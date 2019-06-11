@@ -93,159 +93,160 @@ class ReAssignRecall extends Controller
 
     //USER DEFINED FUNCTION
 
-    public static function re_assign_deploy() {
+   public function reassign_equipment() {
 
-        $deployment_it  = new deployment_it;
-        $department = $deployment_it::load_deptcode();
+        $deployment_it = new deployment_it;
+        $load_deptcode = $deployment_it::load_deptcode();
         $load_categories = $deployment_it::load_categories();
-        return view('module3.deployment_it.re_assign_deployment',compact('load_categories','department'));
+        return view('module3.deployment_it.re_assign_deployment',compact('load_categories','load_deptcode'));
 
-    }
+   } 
+   
+   public function ajax_equipment_type(Request $request)
+   {
+       $display_data = '';
+       $deployment_it = new deployment_it;
+       $query = $deployment_it::get_hardware_serials($request->type);
 
-    public static function ajax_view_equipment_serials(Request $request) {
+       if($query->isEmpty()) {
 
+             $display_data = "<p style='font-style:italic;font-size:13px;font-weight:bold; padding-top:10px;'>No Hardware Equipment Type Found.</p>";
+           
+       }
+       else {
 
-        $hardware = '';
-        $deployment_it = new deployment_it;
-        $query_hardware = $deployment_it::get_hardware_serials($request->type);
-        
+             $display_data='<table class="responsive-table" style="width:50%; font-size:12px;">';
+             $display_data.='<thead><tr>';
+             $display_data.='<th> <i class="small material-icons">photo</i></th>';
+             $display_data.='<th>Serial No.  </th>';
+             $display_data.='<th>Type</th>';
+             $display_data.='<th>Brand/ Make</th>';
+             $display_data.='</thead></tr>';
+             
+             foreach($query as $list) {
+                $display_data.='<tr>';
+                if($list->photo_name == '') {
 
-        if($query_hardware->isEmpty()) {
-                 $hardware = "<p style='font-style:italic;font-size:13px;font-weight:bold; padding-top:30px;'>No Hardware Record found for this Type.</p>";
-        }
-        else {
-             $hardware='<table class="responsive-table" style="font-size:12px;" id="tbl_equipment" name="tbl_equipment">';
-             $hardware.='<thead><tr>';
-             $hardware.='<th> <i class="small material-icons">photo</i> </th>';
-             $hardware.=' <th>Serial No.  </th>';
-             $hardware.=' <th style="padding-left:30px;">Type  </th>';
-             $hardware.=' <th>Brand/ Make  </th>';
-             $hardware.='</thead></tr>';
-             $hardware.='<tbody>';
-             foreach($query_hardware as $list) {
-                        
-                             $hardware.='<tr>';
-                             if($list->photo_name == '') {
+                        $display_data.='<td><i>---no photo---</i></td>';
 
-                                 $hardware.='<td><i>---no photo---</i></td>';
-
-                             }
-                             else {
-                                 $hardware.='<td><img src="'. asset(Storage::url('hardware_photo/IT/'.$list->photo_name)).'" width="30px" height="30px"></td>';
-                             }
-                            
-                             $hardware.="<td><a href='#!'".'onclick=view_equipment_deployment_details("'.$list->serial_no.'");>'.$list->serial_no.'</a></td>';
-                              $hardware.='<td style="padding-left:20px;">'.$list->type.'</td>';
-                             $hardware.='<td>'.$list->brand.'</td>';
-                             $hardware.= '</tr>';
+                }
+                else {
+                    $display_data.='<td><img src="'. asset(Storage::url('hardware_photo/IT/'.$list->photo_name)).'" width="50px" height="50px"></td>';
+                }
+                $display_data.="<td><a href='#!'".'onclick=get_hardware_detail("'.$list->serial_no.'");>'.$list->serial_no.'</a></td>';
+                $display_data.='<td>'.$list->type.'</td>';
+                $display_data.='<td>'.$list->brand.'</td>';
+                $display_data.='<tr>';
              }
-             $hardware.='</tbody>';
-             $hardware.='</table>';
-        }
+             $display_data.='</table>';
+       }
+       return $display_data;
 
-        return $hardware;
-       
-    
-    }
+   }
+   public function ajax_equipment_detail(Request $request) {
 
-    public static function ajax_view_equipment_redeployment_details(Request $request) {
+        $display_photo = '';
+        $display_data = '';
 
-        $hardware = '';
-        $hardware_photo = '';
-        $current_user ='';
-        $current_user_display='';
-        $re_assign_display = '';
         $deployment_it = new deployment_it;
-        $personnel_info = '';
-        $hadware_info = '';
-        $query_hardware = $deployment_it::ajax_view_deployment_by_equipment($request->serial_no);
-        
+        $query = $deployment_it::get_hardware_info($request->serial_no);
 
-        if($query_hardware->isEmpty()) {
-                 $hardware = "<p style='font-style:italic;font-size:13px;font-weight:bold; padding-top:30px;'>No Record Found.</p>";
 
-                 return [$hardware, 0];
+        if($query[0]->photo_name == '') {
+                
+                $display_photo = '<i style="font-size:20px;">-- no photo -- </i>';
+        }
+        else {
+                
+                $display_photo ='<img src="'. asset(Storage::url('hardware_photo/IT/'.$query[0]->photo_name)).'" width="250px" height="250px">';
+                
+
+        }
+         $display_data='<div style="font-weight:bold;padding-bottom:20px;">'.$query[0]->brand. ' '.$query[0]->type.' - S/N:  '.$query[0]->serial_no .'</div>';
+
+        $query = $deployment_it::get_current_user($request->serial_no);
+        if($query->isEmpty()) {
+
+            $display_data = "<p style='font-style:italic;font-size:13px;font-weight:bold; padding-top:10px;'>No Current Assignment/ Deployment found.</p>";
         }
         else {
 
-             //CURRENT USER ---------------------------------------------------------------------->
+             $display_data.='<div style="font-size:13px; font-weight:bold; padding-bottom:10px;">Hardware Equipment Current User</div>';
+             $display_data.='<table class="responsive-table" style="width:90%; font-size:12px;">';
+             $display_data.='<thead><tr>';
+             $display_data.='<th> <i class="small material-icons">photo</i></th>';
+             $display_data.='<th>ID No.</th>';
+             $display_data.='<th>Name</th>';
+             $display_data.='<th>Department</th>';
+             $display_data.='<th>Date Assigned</th>';
+             $display_data.='<th><center>Action</center></th>';
+             $display_data.='</thead></tr>';
+             $display_data.='<tr>';
+             $personnel_info = $deployment_it::get_personnel_info($query[0]->emp_id);
+             $dept_info = $deployment_it::get_deptname($query[0]->deptcode);
 
-            // get hardware details   
+             if(!empty($personnel_info[0]->photo_name)) {
 
-             $hardware_info = $deployment_it::get_hardware_info($request->serial_no);
-             if($hardware_info[0]->photo_name == '') {
-                
-                $hardware_photo= '<i style="font-size:20px;">-- no photo -- </i>';
+                $display_data.='<td><img src="'. asset(Storage::url('personnel_photo/'.$personnel_info[0]->emp_id.'/'.$personnel_info[0]->photo_name)).'" width="50px" height="50px"></td>';
              }
              else {
-                
-                $hardware_photo='<img src="'. asset(Storage::url('hardware_photo/IT/'.$hardware_info[0]->photo_name)).'" width="250px" height="250px" style="padding-top:50px;">';
-                
-             }
-                        
-            $hardware='<div style="font-weight:bold;padding-top:20px; font-size:18px;">'.$hardware_info[0]->brand. ' '.$hardware_info[0]->type.' - S/N:  '.$hardware_info[0]->serial_no .'</div>';
-
-            //get current user 
-             
-            $current_user = $deployment_it::get_current_user($request->serial_no);
-            if ($current_user[0]->emp_id =='') {
-
-            }
-            else {
-
-                $current_user_display = '<div style="color:#ffffff; background-color:#c62828;"> <p style="padding-bottom:5px;padding-left:5px; font-size:13px;">Current User </p></div>';
-                $current_user_display .= '<div class="col s4">';
-                $personnel_info = $deployment_it::get_personnel_info($current_user[0]->emp_id);
-  
-                if(!empty($personnel_info[0]->photo_name))
-                {
-                     $current_user_display.='<img src="'. asset(Storage::url('personnel_photo/'.$personnel_info[0]->emp_id.'/'.$personnel_info[0]->photo_name)).'" width="175px" height="175px">';
-                }
-                else
-                {
-                     $current_user_display.='<i class="medium material-icons">person</i>';
                  
-                } 
-                 $current_user_display.='</div>';
-                 $current_user_display .= '<div class="col s7">';
-                 $current_user_display.='<table class="responsive-table" style="width:90%; font-size:11px;">';
-                 $current_user_display.= '</tr>';   
-                 $current_user_display.= '<tr>';
-                 $current_user_display.= '<td>ID No.</td>';
-                 $current_user_display.= '<td>'.$personnel_info[0]->emp_id.'</td>';
-                 $current_user_display.= '</tr>';   
-                 $current_user_display.= '<tr>';
-                 $current_user_display.= '<td>Name</td>';
-                 $current_user_display.= '<td>'.$personnel_info[0]->last_name.', '.$personnel_info[0]->first_name.' '.$personnel_info[0]->middle_initial.'</td>';
-                 $current_user_display.= '<tr>';
-                 $current_user_display.= '<td>Position</td>';
-                 $current_user_display.= '<td>'.$personnel_info[0]->job_position.'</td>';
-                 $current_user_display.= '</tr>';   
-                 $current_user_display.= '</tr>'; 
-                 $current_user_display.= '<tr>';
-                 $current_user_display.= '<td>Department</td>';
-                    $deptname = deployment_it::get_deptname($personnel_info[0]->deptcode);
-                 $current_user_display.='<td>'.$deptname[0]->deptname.'</td>';
-                 $current_user_display.= '</tr>';  
-                 $current_user_display.='</table>';
-                 $current_user_display.='</div>';
-                                
-           }
-
-         return [$hardware, $hardware_photo, $current_user_display];
-                        
+                 $display_data.='<td><i class="medium material-icons">person</i></td>';
+                             
+             }
+             $display_data.='<td>'.$query[0]->emp_id.'</td>';
+             $display_data.='<td>'.$personnel_info[0]->last_name.', '.$personnel_info[0]->first_name.' '.$personnel_info[0]->middle_initial.'</td>';
+             $display_data.='<td>'.$dept_info[0]->deptname.'</td>';
+             $display_data.='<td>'.$query[0]->date_deployed.'</td>';
+             $display_data.='<td><center><a class="btn btn-small" onclick="open_modal();">Re-Assign</center></a></td>';
+             $display_data.='<tr>';
+             $display_data.='</table>';
         }
-        
- 
-    }
 
+        return [ $display_photo, $display_data ];
+   }
 
+   public function ajax_personnel_list(Request $request) {
 
-    public static function ajax_personnel_list_deptcode(Request $request) {
+       $display_data = '';
+       $deployment_it = new deployment_it;
+       $query = $deployment_it::get_personnel_deptcode($request->deptcode);
+       
+       if($query->isEmpty()) {
 
+             $display_data = "<p style='font-style:italic;font-size:13px;font-weight:bold; padding-top:10px;'>No Personnel Record Found.</p>";
+           
+       }
+       else {
+             
+             $dept_info = $deployment_it::get_deptname($query[0]->deptcode);
+             $display_data='<table class="responsive-table" style="width:90%; font-size:12px;">';
+             $display_data.='<thead><tr>';
+             $display_data.='<th> <i class="small material-icons">photo</i></th>';
+             $display_data.='<th>ID No.</th>';
+             $display_data.='<th>Name </th>';
+             $display_data.='<th>Department</th>';
+             $display_data.='</thead></tr>';
+             
+             foreach($query as $list) {
+                $display_data.='<tr>';
+                if($list->photo_name == '') {
 
+                        $display_data.='<td><i>---no photo---</i></td>';
 
-    }
+                }
+                else {
+                    $display_data.='<td><img src="'. asset(Storage::url('personnel_photo/'.$list->emp_id.'/'.$list->photo_name)).'" width="50px" height="50px"></td>';
+                }
+                $display_data.='<td>'.$list->emp_id.'</td>';
+                $display_data.='<td>'.$list->last_name.', '.$list->first_name.' '.$list->middle_initial.'</td>';
+                $display_data.='<td>'.$dept_info[0]->deptname.'</td>';
+                $display_data.='<tr>';
+             }
+             $display_data.='</table>';
+       }
+       return $display_data;
 
-   
+   }
+
 }

@@ -100,8 +100,6 @@ class deployment_it extends Model
                  return $personal_info;
             }
 
-
-
         }
     }
 
