@@ -14,6 +14,7 @@
 			height: 24px;
 			line-height: 24px;
 			font-size:11px;
+			
 		}
 		.modal {
 			height: 80%;
@@ -77,8 +78,10 @@
 
 			 <div id="messageprompt" class="modal">
     			<div class="modal-content">
-    				<div id="div_header" style="padding-bottom: 10px;"><i class="material-icons">transfer_within_a_station</i>&nbsp;Re-Assign Hardware Equipment</div> 
-
+    				
+    				<div class="row" style="background-color: #c62828; padding: 5px; color:#ffffff; border-radius: 3px; font-size:15px;">
+    					<div class="col s10"><i class="material-icons">transfer_within_a_station</i>&nbsp;Re-Assign Hardware Equipment</div> 
+    				</div>
     				<div class="row">
     					<div class="col s6" style="">
 
@@ -96,15 +99,16 @@
 			                 <div id="div_personnel_info" name="div_personnel_info"></div>
 
     					</div>
-    					<div class="col s5" style="background-color: yellow;"> photo
+    					<div class="col s6" style="">
+    						 <div id="div_personnel_detail" name="div_personnel_detail"></div>
     					</div>
     				</div>
       				
     			</div>
     			<div class="modal-footer">
       			
-      				<a href="#!" class="modal-close waves-effect waves-green btn-flat" id="" onclick="">Assign</a>
-      				<a href="#!" class="modal-close waves-effect waves-green btn-flat" id="" onclick="">close</a>
+      				<input type="text" id ="hidden_emp_id" name="hidden_emp_id">
+      				<input type="text" id ="hidden_serial_no" name="hidden_serial_no">
 
     			</div>
   			</div>		
@@ -151,6 +155,19 @@
 
 					function open_modal() {
 						$('#messageprompt').modal('open');
+						$('#hidden_emp_id').val('');
+						$('#div_personnel_info').html('');
+						$('#div_personnel_detail').html('')
+
+					}
+
+					function close_modal() {
+						$('#messageprompt').modal('close');
+						$('#hidden_emp_id').val('');
+						$('#hidden_serial_no').val();
+						$('#div_personnel_info').html('');
+						$('#div_personnel_detail').html('')
+
 					}
 
 					function get_personnel_list(xDeptCode) {
@@ -176,6 +193,26 @@
 						$('#dept_list').val('')
 
 					}
+					function get_personnel_detail(xEmpID) {
+
+						var dataString;
+						dataString = '';
+						dataString = 'emp_id=' + xEmpID;
+
+						$.ajax({
+
+								type : "POST",
+								url : "/deployment_it/reassignpersonneldetail",
+								data : dataString,
+								success : function(data){
+
+									$('#div_personnel_detail').html(data);
+
+								}
+						})
+						$('#hidden_emp_id').val(xEmpID);
+
+					}
 
 					function get_hardware_list(xType) {
 
@@ -199,6 +236,7 @@
 						$('#type_list').val('');
 						$('#div_hardware_photo').html('');
 						$('#div_hardware_info').html('');
+
 					}
 
 					function get_hardware_detail(xSerial) {
@@ -222,7 +260,38 @@
 						
 						$('#div_hardware_list_bytype').html('');
 						$('#div_hardware_list_bytype').css('visibility','hidden');
+						$('#hidden_serial_no').val(xSerial);
 					
+
+					}
+
+					function reassign_hardware_equiment() {
+
+						var dataString;
+						dataString = '';
+
+
+						dataString = 'emp_id=' + $('#hidden_emp_id').val() + '&serial_no=' + $('#hidden_serial_no').val();
+
+						$.ajax({
+
+								type : "POST",
+								url : "/deployment_it/reassignhardwareequipment",
+								data : dataString,
+								success : function(data) {
+
+								 	if(data === 1) {
+								 		alert(data);
+								 		
+
+								 	}
+						
+								}
+						})
+						close_modal();
+						M.toast({html:"Hardware Equipment Re-assignment was successfully made!"});
+						get_hardware_detail($('#hidden_serial_no').val());
+						
 
 					}
 

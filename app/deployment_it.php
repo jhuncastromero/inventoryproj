@@ -154,7 +154,7 @@ class deployment_it extends Model
     public static function get_current_user($serial_no) {
 
         $deployment_it = new deployment_it;
-        $query = $deployment_it::where('serial_no','=',$serial_no)->whereNull('deleted_at')->orderBy('date_deployed','DESC')->get();
+        $query = $deployment_it::where('serial_no','=',$serial_no)->whereNull('deleted_at')->orderBy('created_at','DESC')->get();
         return $query;
     }
 

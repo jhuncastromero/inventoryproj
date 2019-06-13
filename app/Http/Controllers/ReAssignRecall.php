@@ -162,7 +162,7 @@ class ReAssignRecall extends Controller
                 
 
         }
-         $display_data='<div style="font-weight:bold;padding-bottom:20px;">'.$query[0]->brand. ' '.$query[0]->type.' - S/N:  '.$query[0]->serial_no .'</div>';
+         $display_data='<div style="font-weight:bold; font-size:18px;padding-bottom:20px;">'.$query[0]->brand. ' '.$query[0]->type.' - S/N:  '.$query[0]->serial_no .'</div>';
 
         $query = $deployment_it::get_current_user($request->serial_no);
         if($query->isEmpty()) {
@@ -171,12 +171,12 @@ class ReAssignRecall extends Controller
         }
         else {
 
-             $display_data.='<div style="font-size:13px; font-weight:bold; padding-bottom:10px;">Hardware Equipment Current User</div>';
+             $display_data.='<div style="font-size:16px; font-weight:bold; padding-bottom:10px; color:#c62626;">Hardware Equipment Current User</div>';
              $display_data.='<table class="responsive-table" style="width:90%; font-size:12px;">';
              $display_data.='<thead><tr>';
              $display_data.='<th> <i class="small material-icons">photo</i></th>';
              $display_data.='<th>ID No.</th>';
-             $display_data.='<th>Name</th>';
+             $display_data.='<th>Current User Name</th>';
              $display_data.='<th>Department</th>';
              $display_data.='<th>Date Assigned</th>';
              $display_data.='<th><center>Action</center></th>';
@@ -198,7 +198,7 @@ class ReAssignRecall extends Controller
              $display_data.='<td>'.$personnel_info[0]->last_name.', '.$personnel_info[0]->first_name.' '.$personnel_info[0]->middle_initial.'</td>';
              $display_data.='<td>'.$dept_info[0]->deptname.'</td>';
              $display_data.='<td>'.$query[0]->date_deployed.'</td>';
-             $display_data.='<td><center><a class="btn btn-small" onclick="open_modal();">Re-Assign</center></a></td>';
+             $display_data.='<td><center><a class="btn btn-small" onclick="open_modal()"; style="background-color:#c62828;">Re-Assign</center></a></td>';
              $display_data.='<tr>';
              $display_data.='</table>';
         }
@@ -238,7 +238,7 @@ class ReAssignRecall extends Controller
                 else {
                     $display_data.='<td><img src="'. asset(Storage::url('personnel_photo/'.$list->emp_id.'/'.$list->photo_name)).'" width="50px" height="50px"></td>';
                 }
-                $display_data.='<td>'.$list->emp_id.'</td>';
+                $display_data.='<td><a href="#!" onclick=get_personnel_detail("'.$list->emp_id.'")>'.$list->emp_id.'</a></td>';
                 $display_data.='<td>'.$list->last_name.', '.$list->first_name.' '.$list->middle_initial.'</td>';
                 $display_data.='<td>'.$dept_info[0]->deptname.'</td>';
                 $display_data.='<tr>';
@@ -247,6 +247,64 @@ class ReAssignRecall extends Controller
        }
        return $display_data;
 
+   }
+
+   public function ajax_personnel_detail(Request $request) {
+
+        $display_data = '';
+        $deployment_it = new deployment_it;
+        $query = $deployment_it::get_personnel_info($request->emp_id);
+        $dept_info = $deployment_it::get_deptname($query[0]->deptcode);
+
+        $display_data='<div class="row">';
+        $display_data.='<div style="padding:5px; padding-left:10px; font-size:12px;border-radius:3px; ;color:#ffffff;background-color:#212121;">Re-assign equipment to</div>';
+        $display_data.='</div>';
+
+        $display_data.='<div class="row" style="background-color:#f5f5f5;padding-top:5px;">';        
+        $display_data.='<div class="col s4" style="padding-top:10px; padding-bottom:10px;">';
+        $display_data.='<img src="'. asset(Storage::url('personnel_photo/'.$query[0]->emp_id.'/'.$query[0]->photo_name)).'" width=140px" height="140px">';
+        
+        $display_data.='</div>';
+        $display_data.='<div class="col s8" style="padding-top:30px;">';
+        $display_data.='<div style="padding-left:30px;font-size:17px; font-weight:bold">'.$query[0]->last_name.', '.$query[0]->first_name.' '.$query[0]->middle_initial.'.</div>';
+        $display_data.='<div style="padding-left:30px;font-size:13px; font-style:italic;">'.$query[0]->job_position.'</div>';
+        $display_data.='<div style="padding-left:30px;font-size:11px; font-style:italic;">'.$dept_info[0]->deptname.' Department</div>';
+        $display_data.='</div>';
+        $display_data.='</div>';
+
+         $display_data.='<div class="row">';
+        $display_data.='<div class="col s12" style="padding:0">';
+        $display_data.='<div style="font-size:11px;">Re-Assignment Comments/ Remarks <i>(optional)</i></div>';
+        $display_data.='<input type="text" id="remarks" name="remarks" maxlength=50;>';
+        $display_data.='</div>';
+        $display_data.='</div>';
+
+        $display_data.='<div class="row">';
+        $display_data.='<div class="col s6" style="padding:0"></div>';
+        $display_data.='<div class="col s3" style="padding-left:23px;"><a class="btn btn-small" onclick="reassign_hardware_equiment();"  style="background-color:#c62828; width:100px;">Change</a></div>';
+          $display_data.='<div class="col s3" ><a class="btn btn-small" onclick=close_modal(); style="width:100px;">cancel</a></div>';
+        $display_data.='</div>';
+
+
+        return $display_data;
+
+   }
+
+   public function ajax_reassign_equipment(Request $request) {
+
+      $personnel = '';
+      $department = '';
+      $remarks = '';
+      $query = '';
+      
+      $deployment_it = new deployment_it;
+      $personnel = $deployment_it::get_personnel_info($request->emp_id);
+      $department = $deployment_it::get_deptname($personnel[0]->deptcode);
+      $remarks = $request->remarks;
+      //$serial_no, $emp_id, $deptcode, $roomno, $remarks
+      $query = $deployment_it::save_data($request->serial_no, $request->emp_id, $personnel[0]->deptcode, $department[0]->roomno,$remarks);
+
+     return 1;
    }
 
 }
