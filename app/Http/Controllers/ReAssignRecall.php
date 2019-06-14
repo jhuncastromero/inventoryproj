@@ -302,9 +302,9 @@ class ReAssignRecall extends Controller
       $department = $deployment_it::get_deptname($personnel[0]->deptcode);
       $remarks = $request->remarks;
       //$serial_no, $emp_id, $deptcode, $roomno, $remarks
-      $query = $deployment_it::save_data($request->serial_no, $request->emp_id, $personnel[0]->deptcode, $department[0]->roomno,$remarks);
+      $query = $deployment_it::save_data_reassignment($request->serial_no, $request->emp_id, $personnel[0]->deptcode, $department[0]->roomno,$remarks);
 
-     return 1;
+     return $query;
    }
 
 }

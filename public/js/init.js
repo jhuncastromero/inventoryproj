@@ -13,6 +13,7 @@
 
     //initialize html object as hidden
     $('#div_re_assign_to').css('visibility','hidden');
+    $('#filter_display').css('visibility','hidden');
     //$('.dropdown-button').dropdown('open');
 
   });

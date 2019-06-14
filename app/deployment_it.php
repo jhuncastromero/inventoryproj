@@ -55,7 +55,7 @@ class deployment_it extends Model
 
     public static function save_data($serial_no, $emp_id, $deptcode, $roomno, $remarks) {
 
-        $date_today = Carbon::now();
+        $date_today = Carbon::now('UTC');
         deployment_it::create(['serial_no' => $serial_no, 'emp_id' => $emp_id, 'deptcode' => $deptcode, 'roomno' => $roomno, 'date_deployed' =>$date_today,'remarks' => $remarks]);
         
         //change the status of hardware deployed to ASSIGNED
@@ -116,7 +116,26 @@ class deployment_it extends Model
       
       $deployment_it  = new deployment_it;
       $query = $deployment_it::where('emp_id', '=', $emp_id)->get();
-        return $query;
+      return $query;
+
+    }
+    public static function get_assigned_hardware_by_month_year($emp_id, $month, $year) {
+
+      
+      $deployment_it  = new deployment_it;
+      $query ='';
+      if(($month != '') && ($year != '')) {
+         $query = $deployment_it::where('emp_id', '=', $emp_id)->whereMonth('created_at',$month)->whereYear('created_at',$year)->get();
+
+      }
+      else if($month != '') {
+        $query = $deployment_it::where('emp_id', '=', $emp_id)->whereMonth('created_at',$month)->get();
+      }
+      else if ($year !='') {
+        $query = $deployment_it::where('emp_id', '=', $emp_id)->whereYear('created_at',$year)->get();
+      }
+      
+      return $query;
 
     }
     public static function get_hardware_info($serial_no) {
@@ -170,6 +189,17 @@ class deployment_it extends Model
         $query = $personnel::where('deptcode','=',$deptcode)->whereNull('deleted_at')->get();
         return $query;
 
+    }
+      public static function save_data_reassignment($serial_no, $emp_id, $deptcode, $roomno, $remarks) {
+
+        $date_today = Carbon::now();
+
+        deployment_it::create(['serial_no' => $serial_no, 'emp_id' => $emp_id, 'deptcode' => $deptcode, 'roomno' => $roomno, 'date_deployed' =>$date_today,'remarks' => $remarks]);
+        
+        //change the status of hardware deployed to ASSIGNED
+        $hardware_change_status = deployment_it::hardware_equipment_change_status($serial_no);
+
+        return $date_today;
     }
 
 }

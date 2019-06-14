@@ -61,6 +61,8 @@ Route::get('/deployment_it/viewdeployment','DeploymentItController@view_deployme
 //---BY PERSONNEL DEPLOYMENT ROUTE
 Route::get('/deployment_it/viewpersonneldeployment','DeploymentItController@view_personnel_deployment')->name('deployment_it.viewpersonneldeployment');
 Route::post('/deployment_it/viewpersonneldeploymentdetails','DeploymentItController@ajax_view_personnel_deployment_details')->name('deployment_it.viewpersonneldeploymentdetails');
+Route::get('/deployment_it/viewpersonneldeploymentfilter','DeploymentItController@ajax_view_personnel_deployment_month_year')->name('deployment_it.viewpersonneldeploymentfilter');
+
 
 //---BY EQUIPMENT DEPLOYMENT ROUTE
 Route::get('/deployment_it/viewequipmentdeployment','DeploymentItController@view_equipment_deployment')->name('deployment_it.viewequipmentdeployment');
