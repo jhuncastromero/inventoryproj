@@ -115,28 +115,47 @@ class deployment_it extends Model
 
       
       $deployment_it  = new deployment_it;
-      $query = $deployment_it::where('emp_id', '=', $emp_id)->get();
+      $query = $deployment_it::where('emp_id', '=', $emp_id)->OrderBy('created_at','DESC')->get();
       return $query;
 
     }
-    public static function get_assigned_hardware_by_month_year($emp_id, $month, $year) {
+    public static function get_assigned_personnel_by_month_year($emp_id, $month, $year) {
 
       
       $deployment_it  = new deployment_it;
       $query ='';
       if(($month != '') && ($year != '')) {
-         $query = $deployment_it::where('emp_id', '=', $emp_id)->whereMonth('created_at',$month)->whereYear('created_at',$year)->get();
+         $query = $deployment_it::where('emp_id', '=', $emp_id)->whereMonth('created_at',$month)->whereYear('created_at',$year)->OrderBy('created_at','DESC')->get();
 
       }
       else if($month != '') {
-        $query = $deployment_it::where('emp_id', '=', $emp_id)->whereMonth('created_at',$month)->get();
+        $query = $deployment_it::where('emp_id', '=', $emp_id)->whereMonth('created_at',$month)->OrderBy('created_at','DESC')->get();
       }
       else if ($year !='') {
-        $query = $deployment_it::where('emp_id', '=', $emp_id)->whereYear('created_at',$year)->get();
+        $query = $deployment_it::where('emp_id', '=', $emp_id)->whereYear('created_at',$year)->OrderBy('created_at','DESC')->get();
       }
       
       return $query;
 
+    }
+
+    public static function get_assigned_hardware_by_month_year($serial_no, $month, $year) {
+
+          $deployment_it = new deployment_it;
+          $query ='';
+          if(($month != '') && ($year != '')) {
+             $query = $deployment_it::where('serial_no', '=', $serial_no)->whereMonth('created_at',$month)->whereYear('created_at',$year)->OrderBy('created_at','DESC')->get();
+
+          }
+          else if($month != '') {
+            $query = $deployment_it::where('serial_no', '=', $serial_no)->whereMonth('created_at',$month)->OrderBy('created_at','DESC')->get();
+          }
+          else if ($year !='') {
+            $query = $deployment_it::where('serial_no', '=', $serial_no)->whereYear('created_at',$year)->OrderBy('created_at','DESC')->get();
+          }
+          
+          return $query;
+       
     }
     public static function get_hardware_info($serial_no) {
 
@@ -158,7 +177,7 @@ class deployment_it extends Model
     public static function ajax_view_deployment_by_equipment($serial_no) {
         
         $deployment_it = new deployment_it;
-        $query = $deployment_it::where('serial_no','=',$serial_no)->whereNull('deleted_at')->get();
+        $query = $deployment_it::where('serial_no','=',$serial_no)->whereNull('deleted_at')->OrderBy('created_at','DESC')->get();
         return $query;
        
    }      

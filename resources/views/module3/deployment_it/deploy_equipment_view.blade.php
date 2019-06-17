@@ -65,12 +65,52 @@
 		
 
 				    <div class="row">
-
-				    	<div class ="col s4" id="display_hardware_photo" name="display_hardware_photo"></div>
-				    	<div class ="col s8" id="display_hardware" name ="display_hardware"></div>
-				    	
-			
+						
+						<div class ="col s12" id="display_hardware_photo" name="display_hardware_photo"></div>
+				    		
 				    </div>
+				    <div class="row">
+				    	
+				    	<div class ="col s12" id="display_hardware" name ="display_hardware"></div>
+
+				    </div>
+				     <div class="row">
+
+			 		<div class="col s10" style="padding-top: 20px;">
+			 		
+			 		<div id="filter_display" name="filter_display_hardware" class="row" style = "padding-top:30px; font-size: 12px;">
+			 				<div>Filter Hardware Equipment Deployment</div>
+				 			<div class="input-field col s3" >
+				 				<select id="month" name="month" style="font-size: 10px;">
+				 					<option value ="">Choose Month</option>
+				 					<option value ="01">Jan</option>
+				 					<option value ="02">Feb</option>
+				 					<option value ="03">Mar</option>
+				 					<option value ="04">Apr</option>
+				 					<option value ="05">May</option>
+				 					<option value ="06">Jun</option>
+				 					<option value ="07">Jul</option>
+				 					<option value ="08">Aug</option>
+				 					<option value ="09">Sep</option>
+				 					<option value ="10">Oct</option>
+				 					<option value ="11">Nov</option>
+				 					<option value ="12">Dec</option>
+				 				</select>
+				 			
+				 				
+				 			</div>
+				 			<div class="input-field col s4" >
+				 				<input type="text" id="year" name="year" maxlength="4">
+				 				<label for="year">Year</label>
+				 			</div>
+				 			<div class="col s3" style="padding-top: 30px;">
+				 				<a class="btn btn-small" style="width:75px; height: 30px;font-size:11px;" id="filter_btn" onclick="deployment_by_equipment_month_year();clear_content();">Filter</a>
+				 			</div>
+
+			 		</div>
+			 	</div>
+
+			 </div>
 				
 					 <div class="row" id="div_no_value" name = "div_no_value" style="padding-top: -80px;"></div>
 
@@ -86,7 +126,14 @@
 		      				
 
 		    			</div>
-		  			</div>		
+		  			</div>	
+
+		  	 <div class="row">
+
+			 	<input type="hidden" id="hidden_serial_no" name="hidden_serial_no">
+			 	
+
+			 </div>	
 		</div>
 
 @endsection
@@ -133,6 +180,12 @@
 
 					})
 
+					function clear_content() {
+						$('#month').val('');
+			    		$('#year').val('');
+
+					}
+
 					
 
 					function find_serial() {
@@ -145,6 +198,41 @@
 					}
 					
 					// AJAX
+
+					function deployment_by_equipment_month_year() {
+
+			    			var dataString;
+			    			var xMonth;
+			    			var xYear;
+			    			xYear ='';
+			    			xMonth = '';
+			    			dataString ='';
+
+
+			    			xMonth = $('#month').val();
+			    			xYear = $('#year').val();
+			    			xSerial = $('#hidden_serial_no').val();
+
+			    			dataString = 'month=' + xMonth + '&serial_no=' + xSerial + '&year=' + xYear;
+
+			    			$.ajax({
+
+			    				type : "GET",
+			    				url : "/deployment_it/viewequipmentdeploymentfilter",
+			    				data : dataString,
+			    				success : function(data) {
+
+			    						$('#display_hardware').html(data);
+			    						$('#month').val('');
+			    						$('#year').val('');
+			    						
+			    				}
+			    			})
+
+			    			$('#month').val('');
+			    			$('#year').val('');
+
+			    	}
 			    	
 			    	function list_serials(xType) {
 
@@ -175,6 +263,7 @@
 			    		var dataString;
 			    		dataString = '';
 			    	
+			    		$('#hidden_serial_no').val(xSerial);
 			    		dataString = 'serial_no=' + xSerial;
                         
 			    		$.ajax({
@@ -204,12 +293,12 @@
 					            }
 
 					        })
+			    		 $('#filter_display').css('visibility','visible')	  
 
 			    	}
 
 			    	function personnel_details(xEmpID) {
-
-			    		
+    		
 			    		
 
 			    		if(xEmpID === '') {

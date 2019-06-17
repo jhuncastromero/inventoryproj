@@ -64,7 +64,7 @@
 			 				<div>Filter Hardware Equipment Deployment</div>
 				 			<div class="input-field col s3" >
 				 				<select id="month" style="font-size: 10px;">
-				 					<option value ="">Choose Month</option>
+				 					<option value ="00">Choose Month</option>
 				 					<option value ="01">Jan</option>
 				 					<option value ="02">Feb</option>
 				 					<option value ="03">Mar</option>
@@ -139,8 +139,9 @@
 					// AJAX
 
 					function clear_content() {
-						$('#month').val('');
-			    		$('#year').val('');
+						//$('#month').find('option:first').attr('selected','selected');
+						$('#year').val('');
+			    	
 					}
 			    	function deployment_by_personnel() {
 
@@ -201,9 +202,9 @@
 			    	}
 
 			    	function deployment_by_personnel_month_year() {
-
-			    			var dataString
-			    			var xMonth
+			    			
+			    			var dataString;
+			    			var xMonth;
 			    			xMonth = '';
 			    			dataString ='';
 
@@ -211,6 +212,10 @@
 			    			xYear = $('#year').val();
 			    			xLastName = $('#hidden_last_name').val();
 			    			xEmpID = $('#hidden_emp_id').val();
+
+			    			
+
+
 
 			    			dataString = 'month=' + xMonth + '&emp_id=' + xEmpID + '&lastname=' + xLastName + '&year=' + xYear;
 
@@ -220,12 +225,13 @@
 			    				url : "/deployment_it/viewpersonneldeploymentfilter",
 			    				data : dataString,
 			    				success : function(data) {
-
+			    								    						
 			    						$('#display_hardware').html(data);
-			    						$('#month').val('');
 			    						$('#year').val('');
+			    						$('#month').val('');
 			    				}
 			    			})
+
 			    			
 
 			    	}

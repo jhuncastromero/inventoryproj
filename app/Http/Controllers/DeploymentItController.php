@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Filesystem;
 use Intervention\Image\Facades\Image;
+use Carbon\Carbon;
 
 class DeploymentItController extends Controller
 {
@@ -290,7 +291,7 @@ class DeploymentItController extends Controller
                  $hardware='<div style="font-weight:bold;padding-bottom:10px; font-size:14px;">Assigned/ Deployed Hardware Equipment</div>';
 
             
-                 $hardware.='<table class="responsive-table" style="width:80%; font-size:12px;">';
+                 $hardware.='<table class="responsive-table" style="width:90%; font-size:12px;">';
                  $hardware.='<thead><tr>';
                  $hardware.='<th> <i class="small material-icons">photo</i> </th>';
                  $hardware.=' <th> Serial No.  </th>';
@@ -314,7 +315,7 @@ class DeploymentItController extends Controller
                                  $hardware.='<td>'.$list->serial_no.'</td>';
                                  $hardware.='<td>'.$hardware_info[0]->tag_no.'</td>';
                                  $hardware.='<td>'.$hardware_info[0]->brand.'</td>';
-                                 $hardware.='<td>'.$list->date_deployed.'</td>';
+                                 $hardware.='<td>'.Carbon::parse($list->date_deployed)->format('m/d/Y').'</td>';
                                  $hardware.= '</tr>';
                  }
 
@@ -337,13 +338,13 @@ class DeploymentItController extends Controller
 
         if($query_result->isEmpty()){
 
-             $hardware = "<p style='font-style:italic;font-size:13px;font-weight:bold; padding-top:20px;'>Month/ Year Not Found. Please check your Entry.</p>";
+             $hardware = "<p style='font-style:italic;font-size:13px;font-weight:bold; padding-top:20px;'>Month/ Year of Assingment/ Deployment was not found. Please check your Entry.</p>";
 
         }
         else {
 
                 $emp_id = $query_result[0]->emp_id;
-                $query_hardware = $deployment_it::get_assigned_hardware_by_month_year($emp_id, $request->month, $request->year);
+                $query_hardware = $deployment_it::get_assigned_personnel_by_month_year($emp_id, $request->month, $request->year);
 
                 if($query_hardware->isEmpty()) {
                      $hardware = "<p style='font-style:italic;font-size:13px;font-weight:bold; padding-top:30px;'>Month/ Year Not Found. Please check your Entry.</p>";
@@ -353,7 +354,7 @@ class DeploymentItController extends Controller
                      $hardware='<div style="font-weight:bold;padding-bottom:10px; font-size:14px;">Assigned/ Deployed Hardware Equipment</div>';
 
                 
-                     $hardware.='<table class="responsive-table" style="width:80%; font-size:12px;">';
+                     $hardware.='<table class="responsive-table stripped" style="width:80%; font-size:12px;">';
                      $hardware.='<thead><tr>';
                      $hardware.='<th> <i class="small material-icons">photo</i> </th>';
                      $hardware.=' <th> Serial No.  </th>';
@@ -377,7 +378,7 @@ class DeploymentItController extends Controller
                                      $hardware.='<td>'.$list->serial_no.'</td>';
                                      $hardware.='<td>'.$hardware_info[0]->tag_no.'</td>';
                                      $hardware.='<td>'.$hardware_info[0]->brand.'</td>';
-                                     $hardware.='<td>'.$list->date_deployed.'</td>';
+                                     $hardware.='<td>'.Carbon::parse($list->date_deployed)->format('m/d/Y').'</td>';
                                      $hardware.= '</tr>';
                      }
 
@@ -390,6 +391,60 @@ class DeploymentItController extends Controller
         return $hardware;
 
     }
+
+     public static function ajax_view_equipment_deployment_month_year(Request $request) {
+
+        $hardware = '';
+        $deployment_it = new deployment_it;
+        $personnel_info = '';
+        $hadware_info = '';
+        $query_hardware = $deployment_it::get_assigned_hardware_by_month_year($request->serial_no, $request->month, $request->year);
+        //return $query_hardware;
+
+        if($query_hardware->isEmpty()) {
+                 $hardware = "<p style='font-style:italic;font-size:13px;font-weight:bold; padding-top:30px;'>Month/ Year of Assingment/ Deployment was not found. Please check your Entry.</p>";
+
+                 return $hardware;
+        }
+        else {
+
+            $hardware.='<div style="font-weight:bold;font-size:12px; padding-bottom:10px;padding-top:20px">Deployment/ Assignment Record</div>';
+             $hardware.='<table class="responsive-table" style="width:80%; font-size:12px;">';
+             $hardware.='<thead><tr>';
+             $hardware.='<th> <i class="small material-icons">photo</i> </th>';
+             $hardware.=' <th> ID No.  </th>';
+             $hardware.=' <th> Assigned to  </th>';
+             $hardware.=' <th> Department  </th>';
+             $hardware.=' <th> Date Assigned </th>';
+             $hardware.='</thead><tbody></tr>';
+
+             foreach($query_hardware as $list) {
+                        
+                            $personnel_info = $deployment_it::get_personnel_info($list->emp_id);
+                            $hardware.='<tr>';
+                            if(!empty($personnel_info[0]->photo_name))
+                            {
+                                 $hardware.='<td><img src="'. asset(Storage::url('personnel_photo/'.$personnel_info[0]->emp_id.'/'.$personnel_info[0]->photo_name)).'" width="30px" height="30px"></td>';
+                            }
+                            else
+                            {
+                                 $hardware.='<td><i class="medium material-icons">person</i></td>';
+                             
+                            }
+                            
+                             $hardware.='<td><a href="#!" onclick=personnel_details("'.$personnel_info[0]->emp_id.'");>'.$personnel_info[0]->emp_id.'</a></td>';
+                            
+                             $hardware.='<td>'.$personnel_info[0]->last_name.', '.$personnel_info[0]->first_name.' '.$personnel_info[0]->middle_initial.'.' .'</td>';
+                             $deptname = deployment_it::get_deptname($personnel_info[0]->deptcode);
+                             $hardware.='<td>'.$deptname[0]->deptname.'</td>';
+                             $hardware.='<td>'.Carbon::parse($list->date_deployed)->format('m/d/Y').'</td>';
+                             $hardware.= '</tr></tbody>';
+             }
+
+             $hardware.='</table>';
+        }
+        return $hardware;
+     }
 
     public static function  view_equipment_deployment () {
 
@@ -463,23 +518,28 @@ class DeploymentItController extends Controller
         }
         else {
 
-            
+             $hardware_photo= '<div class="row">';
+             $hardware_photo.= '<div class="col s3" >';
+
              $hardware_info = $deployment_it::get_hardware_info($request->serial_no);
 
              if($hardware_info[0]->photo_name == '') {
                 
-                $hardware_photo = '<i style="font-size:20px;">-- no photo -- </i>';
+                $hardware_photo.= '<i style="font-size:20px;">-- no photo -- </i>';
              }
              else {
                 
-                $hardware_photo ='<img src="'. asset(Storage::url('hardware_photo/IT/'.$hardware_info[0]->photo_name)).'" width="250px" height="250px">';
+                $hardware_photo.='<img src="'. asset(Storage::url('hardware_photo/IT/'.$hardware_info[0]->photo_name)).'" width="250px" height="250px">';
                 
 
              }
-             
+             $hardware_photo.='</div>';
 
-             
-             $hardware='<div style="font-weight:bold;padding-bottom:10px;">'.$hardware_info[0]->brand. ' '.$hardware_info[0]->type.' - S/N:  '.$hardware_info[0]->serial_no .'</div>';
+             $hardware_photo.= '<div class="col s7">';
+             $hardware_photo.='<div style="font-weight:bold;font-size:20px; padding-top:80px; padding-left:70px;">'.$hardware_info[0]->brand. ' '.$hardware_info[0]->type.' - S/N:  '.$hardware_info[0]->serial_no .'</div>';
+             $hardware_photo.='</div>';
+             $hardware_photo.='</div>';
+
              $hardware.='<div style="font-weight:bold;font-size:12px; padding-bottom:10px;padding-top:20px">Deployment/ Assignment Record</div>';
              $hardware.='<table class="responsive-table" style="width:80%; font-size:12px;">';
              $hardware.='<thead><tr>';
@@ -509,7 +569,7 @@ class DeploymentItController extends Controller
                              $hardware.='<td>'.$personnel_info[0]->last_name.', '.$personnel_info[0]->first_name.' '.$personnel_info[0]->middle_initial.'.' .'</td>';
                              $deptname = deployment_it::get_deptname($personnel_info[0]->deptcode);
                              $hardware.='<td>'.$deptname[0]->deptname.'</td>';
-                             $hardware.='<td>'.$list->date_deployed.'</td>';
+                             $hardware.='<td>'.Carbon::parse($list->date_deployed)->format('m/d/Y').'</td>';
                              $hardware.= '</tr></tbody>';
              }
 

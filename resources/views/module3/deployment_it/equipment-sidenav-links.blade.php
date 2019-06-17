@@ -16,7 +16,7 @@
 		      <div class="collapsible-body">
 		      	<ul style="padding-left: 10px;">
 		      		<li><a href="{{ route('deployment_it.reassignequipment') }}"><i class="material-icons">transfer_within_a_station</i>Re-Assign Equipment</a></li>
-		    		<li><a href="#!"><i class="material-icons">reply_all</i>Recall Equipment</a></li>
+		    		<li><a href="{{route('deployment_it.recallequipment')}}"><i class="material-icons">rotate_left</i>Recall Equipment</a></li>
 				</ul>
 
 		      </div>
