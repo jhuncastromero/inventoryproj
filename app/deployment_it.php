@@ -74,7 +74,38 @@ class deployment_it extends Model
         $query->save();
     }
 
-    public static function ajax_view_deployment_by_personnel($emp_id, $lastname) {
+    public static function deployment_it_reassign_update($serial_no) {
+        
+        $deployment_it = new deployment_it;
+        $query = $deployment_it::get_current_user($serial_no);
+        $update_deploy_it_reassignment = $deployment_it::find($query[0]->id);
+        $update_deploy_it_reassignment->date_recalled = now();
+        $update_deploy_it_reassignment->save();
+
+
+    }
+
+    public static function hardware_equipment_change_status_unassigned($serial_no) {
+
+        $hardware_equipment = new hardware_equipment;
+        $id = $hardware_equipment::where('serial_no', '=', $serial_no)->get();
+
+        $query = $hardware_equipment::find($id[0]->id);
+        $query->status = 'unassigned';
+        $query->save();
+    }
+     public static function deployment_it_recall_update($serial_no) {
+
+      $deployment_it = new deployment_it;
+      $query1 = $deployment_it::where('serial_no','=',$serial_no)->whereNull('date_recalled')->whereNull('deleted_at')->orderBy('created_at','DESC')->get();
+
+      $query2 = $deployment_it::find($query1[0]->id);
+      $query2->date_recalled = now();
+      $query2->save();
+
+    }
+
+       public static function ajax_view_deployment_by_personnel($emp_id, $lastname) {
 
         if($emp_id !='') {
             $personnel = new personnel;
@@ -163,8 +194,7 @@ class deployment_it extends Model
         $query = $hardware_equipment::where('serial_no', '=',$serial_no)->whereNull('deleted_at')->get();
         return $query;
     }
-
-
+   
     public static function get_hardware_serials($type) {
 
         $hardware_equipment = new hardware_equipment;
@@ -192,7 +222,13 @@ class deployment_it extends Model
     public static function get_current_user($serial_no) {
 
         $deployment_it = new deployment_it;
-        $query = $deployment_it::where('serial_no','=',$serial_no)->whereNull('deleted_at')->orderBy('created_at','DESC')->get();
+        $query = $deployment_it::where('serial_no','=',$serial_no)->whereNull('date_recalled')->whereNull('deleted_at')->orderBy('created_at','DESC')->get();
+        return $query;
+    }
+     public static function get_current_user_recall_code($serial_no) {
+
+        $deployment_it = new deployment_it;
+        $query = $deployment_it::where('serial_no','=',$serial_no)->whereNull('date_recalled')->whereNull('deleted_at')->orderBy('created_at','DESC')->get();
         return $query;
     }
 
@@ -211,13 +247,19 @@ class deployment_it extends Model
     }
       public static function save_data_reassignment($serial_no, $emp_id, $deptcode, $roomno, $remarks) {
 
-        $date_today = Carbon::now();
+        $date_today = Carbon::now('utc');
+        $query = '';
+        $query_previous_user = '';
+
+        //change the status of hardware deployed to ASSIGNED and update deployment_it table field date recalled
+        $hardware_change_status = deployment_it::hardware_equipment_change_status($serial_no);
+        $update_deployment_it_reassignment = deployment_it::deployment_it_reassign_update($serial_no);
 
         deployment_it::create(['serial_no' => $serial_no, 'emp_id' => $emp_id, 'deptcode' => $deptcode, 'roomno' => $roomno, 'date_deployed' =>$date_today,'remarks' => $remarks]);
         
-        //change the status of hardware deployed to ASSIGNED
-        $hardware_change_status = deployment_it::hardware_equipment_change_status($serial_no);
+        
 
+       
         return $date_today;
     }
 

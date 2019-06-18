@@ -416,6 +416,7 @@ class DeploymentItController extends Controller
              $hardware.=' <th> Assigned to  </th>';
              $hardware.=' <th> Department  </th>';
              $hardware.=' <th> Date Assigned </th>';
+             $hardware.=' <th> Date Recalled </th>';
              $hardware.='</thead><tbody></tr>';
 
              foreach($query_hardware as $list) {
@@ -438,6 +439,12 @@ class DeploymentItController extends Controller
                              $deptname = deployment_it::get_deptname($personnel_info[0]->deptcode);
                              $hardware.='<td>'.$deptname[0]->deptname.'</td>';
                              $hardware.='<td>'.Carbon::parse($list->date_deployed)->format('m/d/Y').'</td>';
+                             if($list->date_recalled =='') {
+                                $hardware.='<td>---</td>';
+                             }
+                             else {
+                                $hardware.='<td>'.Carbon::parse($list->date_recalled)->format('m/d/Y').'</td>';
+                             }
                              $hardware.= '</tr></tbody>';
              }
 
@@ -548,6 +555,7 @@ class DeploymentItController extends Controller
              $hardware.=' <th> Assigned to  </th>';
              $hardware.=' <th> Department  </th>';
              $hardware.=' <th> Date Assigned </th>';
+             $hardware.=' <th> Date Recalled </th>';
              $hardware.='</thead><tbody></tr>';
 
              foreach($query_hardware as $list) {
@@ -570,6 +578,12 @@ class DeploymentItController extends Controller
                              $deptname = deployment_it::get_deptname($personnel_info[0]->deptcode);
                              $hardware.='<td>'.$deptname[0]->deptname.'</td>';
                              $hardware.='<td>'.Carbon::parse($list->date_deployed)->format('m/d/Y').'</td>';
+                             if($list->date_recalled =='') {
+                                $hardware.='<td>---</td>';
+                             }
+                             else {
+                                $hardware.='<td>'.Carbon::parse($list->date_recalled)->format('m/d/Y').'</td>';
+                             }
                              $hardware.= '</tr></tbody>';
              }
 

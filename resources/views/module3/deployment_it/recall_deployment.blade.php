@@ -78,6 +78,9 @@
 
 			</div>
 
+			<div class = "row">
+				<input type="hidden" id="hidden_serial_no" name="hidden_serial_no">
+			</div>
 
 		 	 
 		</div>
@@ -161,6 +164,33 @@
 						$('#hidden_serial_no').val(xSerial);
 					
 
+					}
+
+					function get_serial_no() {
+
+						recall_change_status($('#hidden_serial_no').val());
+
+					}
+					function recall_change_status(xSerial) {
+
+						var dataString;
+						dataString = '';
+
+						dataString = 'serial_no=' + xSerial;
+
+						$.ajax({
+
+								type: "POST",
+								url : '/deployment_it/recallequipmentupdate',
+								data : dataString,
+								success: function(data) {
+
+									$('#div_hardware_info').html('');
+									$('#div_hardware_photo').html('');
+									$('#hidden_serial_no').val('');
+								}
+						})
+						M.toast({html:"Hardware Recall was successfully made!"});
 					}
 
 					

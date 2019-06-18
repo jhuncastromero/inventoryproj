@@ -85,6 +85,8 @@ Route::post('/deployment_it/reassignhardwareequipment','ReAssignRecall@ajax_reas
 Route::get('/deployment_it/recallequipment','ReAssignRecall@recall_equipment')->name('deployment_it.recallequipment');
 Route::get('/deployment_it/recalllistequipment','ReAssignRecall@ajax_equipment_type')->name('deployment_it.recalllistequipment');
 Route::post('/deployment_it/recallequipmentdetail','ReAssignRecall@ajax_equipment_detail_recall')->name('deployment_it.recallequipmentdetail');
+Route::post('/deployment_it/recallequipmentupdate','ReAssignRecall@ajax_recall_equipment')->name('deployment_it.recallequipmentupdate');
+
 
 //Resource Route
 Route::resource('personnel','personnelController');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\deployment_it;
+use App\hardware_equipment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
@@ -156,6 +157,7 @@ class ReAssignRecall extends Controller
 
         $display_photo = '';
         $display_data = '';
+        $current_user_emp_id = '';
 
         $deployment_it = new deployment_it;
         $query = $deployment_it::get_hardware_info($request->serial_no);
@@ -179,6 +181,10 @@ class ReAssignRecall extends Controller
             $display_data = "<p style='font-style:italic;font-size:13px;font-weight:bold; padding-top:10px;'>No Current Assignment/ Deployment found.</p>";
         }
         else {
+
+             $current_user_emp_id = $query[0]->emp_id;
+
+             //return $current_user_emp_id;
 
              $display_data.='<div style="font-size:16px; font-weight:bold; padding-bottom:10px; color:#c62626;">Hardware Equipment Current User</div>';
              $display_data.='<table class="responsive-table" style="width:90%; font-size:12px;">';
@@ -212,7 +218,7 @@ class ReAssignRecall extends Controller
              $display_data.='</table>';
         }
 
-        return [ $display_photo, $display_data ];
+        return [ $display_photo, $display_data, $current_user_emp_id ];
    }
 
    public function ajax_equipment_detail_recall(Request $request) {
@@ -223,61 +229,60 @@ class ReAssignRecall extends Controller
         $deployment_it = new deployment_it;
         $query = $deployment_it::get_hardware_info($request->serial_no);
 
+                if($query[0]->photo_name == '') {
+                        
+                        $display_photo = '<i style="font-size:20px;">-- no photo -- </i>';
+                }
+                else {
+                        
+                        $display_photo ='<img src="'. asset(Storage::url('hardware_photo/IT/'.$query[0]->photo_name)).'" width="250px" height="250px">';
+                        
 
-        if($query[0]->photo_name == '') {
-                
-                $display_photo = '<i style="font-size:20px;">-- no photo -- </i>';
-        }
-        else {
-                
-                $display_photo ='<img src="'. asset(Storage::url('hardware_photo/IT/'.$query[0]->photo_name)).'" width="250px" height="250px">';
-                
+                }
+                 $display_data='<div style="font-weight:bold; font-size:18px;padding-bottom:20px;">'.$query[0]->brand. ' '.$query[0]->type.' - S/N:  '.$query[0]->serial_no .'</div>';
 
-        }
-         $display_data='<div style="font-weight:bold; font-size:18px;padding-bottom:20px;">'.$query[0]->brand. ' '.$query[0]->type.' - S/N:  '.$query[0]->serial_no .'</div>';
+                $query = $deployment_it::get_current_user_recall_code($request->serial_no);
+                if($query->isEmpty()) {
 
-        $query = $deployment_it::get_current_user($request->serial_no);
-        if($query->isEmpty()) {
+                    $display_data = "<p style='font-style:italic;font-size:13px;font-weight:bold; padding-top:10px;'>No Current Assignment/ Deployment record found. Either Hardware equipment is new or was recently recalled/ unassigned. </p>";
+                }
+                else {
 
-            $display_data = "<p style='font-style:italic;font-size:13px;font-weight:bold; padding-top:10px;'>No Current Assignment/ Deployment found.</p>";
-        }
-        else {
+                     $display_data.='<div style="font-size:16px; font-weight:bold; padding-top:30px;padding-bottom:10px; color:#c62626;">Hardware Equipment Details</div>';
+                     $display_data.='<table class="responsive-table" style="width:90%; font-size:12px;">';
+                     $display_data.='<thead><tr>';
+                     $display_data.='<th> <i class="small material-icons">photo</i></th>';
+                     $display_data.='<th>Current User</th>';
+                     $display_data.='<th>ID No.</th>';
+                     $display_data.='<th>Department</th>';
+                     $display_data.='<th>Room No</th>';
+                     $display_data.='<th>Date Assigned</th>';
+                     $display_data.='<th><center>Action</center></th>';
+                     $display_data.='</thead></tr>';
+                     $display_data.='<tr>';
+                     $personnel_info = $deployment_it::get_personnel_info($query[0]->emp_id);
+                     $dept_info = $deployment_it::get_deptname($query[0]->deptcode);
 
-             $display_data.='<div style="font-size:16px; font-weight:bold; padding-top:30px;padding-bottom:10px; color:#c62626;">Hardware Equipment Details</div>';
-             $display_data.='<table class="responsive-table" style="width:90%; font-size:12px;">';
-             $display_data.='<thead><tr>';
-             $display_data.='<th> <i class="small material-icons">photo</i></th>';
-             $display_data.='<th>Current User</th>';
-             $display_data.='<th>ID No.</th>';
-             $display_data.='<th>Department</th>';
-             $display_data.='<th>Room No</th>';
-             $display_data.='<th>Date Assigned</th>';
-             $display_data.='<th><center>Action</center></th>';
-             $display_data.='</thead></tr>';
-             $display_data.='<tr>';
-             $personnel_info = $deployment_it::get_personnel_info($query[0]->emp_id);
-             $dept_info = $deployment_it::get_deptname($query[0]->deptcode);
+                     if(!empty($personnel_info[0]->photo_name)) {
 
-             if(!empty($personnel_info[0]->photo_name)) {
+                        $display_data.='<td><img src="'. asset(Storage::url('personnel_photo/'.$personnel_info[0]->emp_id.'/'.$personnel_info[0]->photo_name)).'" width="50px" height="50px"></td>';
+                     }
+                     else {
+                         
+                         $display_data.='<td><i class="medium material-icons">person</i></td>';
+                                     
+                     }
+                    $display_data.='<td>'.$personnel_info[0]->last_name.', '.$personnel_info[0]->first_name.' '.$personnel_info[0]->middle_initial.'</td>';
+                     $display_data.='<td>'.$query[0]->emp_id.'</td>';
+                     $display_data.='<td>'.$dept_info[0]->deptname.'</td>';
+                     $display_data.='<td>'.$query[0]->roomno.'</td>';
+                     $display_data.='<td>'.Carbon::parse($query[0]->date_deployed)->format('m/d/Y').'</td>';
+                     $display_data.='<td><center><a class="btn btn-small" onclick="get_serial_no();"; style="background-color:#c62828;">Recall Equipment</center></a></td>';
+                     $display_data.='<tr>';
+                     $display_data.='</table>';
+                }
 
-                $display_data.='<td><img src="'. asset(Storage::url('personnel_photo/'.$personnel_info[0]->emp_id.'/'.$personnel_info[0]->photo_name)).'" width="50px" height="50px"></td>';
-             }
-             else {
-                 
-                 $display_data.='<td><i class="medium material-icons">person</i></td>';
-                             
-             }
-            $display_data.='<td>'.$personnel_info[0]->last_name.', '.$personnel_info[0]->first_name.' '.$personnel_info[0]->middle_initial.'</td>';
-             $display_data.='<td>'.$query[0]->emp_id.'</td>';
-             $display_data.='<td>'.$dept_info[0]->deptname.'</td>';
-             $display_data.='<td>'.$query[0]->roomno.'</td>';
-             $display_data.='<td>'.Carbon::parse($query[0]->date_deployed)->format('m/d/Y').'</td>';
-             $display_data.='<td><center><a class="btn btn-small" onclick=""; style="background-color:#c62828;">Recall Equipment</center></a></td>';
-             $display_data.='<tr>';
-             $display_data.='</table>';
-        }
-
-        return [ $display_photo, $display_data ];
+                return [ $display_photo, $display_data ];
    }
 
    public function ajax_personnel_list(Request $request) {
@@ -375,10 +380,21 @@ class ReAssignRecall extends Controller
       $personnel = $deployment_it::get_personnel_info($request->emp_id);
       $department = $deployment_it::get_deptname($personnel[0]->deptcode);
       $remarks = $request->remarks;
-      //$serial_no, $emp_id, $deptcode, $roomno, $remarks
-      $query = $deployment_it::save_data_reassignment($request->serial_no, $request->emp_id, $personnel[0]->deptcode, $department[0]->roomno,$remarks);
+      $current_emp_id = $request->current_emp_id;
+  
+      $query = $deployment_it::save_data_reassignment($request->serial_no, $request->emp_id, $personnel[0]->deptcode, $department[0]->roomno,$remarks, $current_emp_id);
 
      return $query;
+   }
+
+   public function ajax_recall_equipment(Request $request) {
+        
+        $deployment_it = new deployment_it;
+        $query_recall = $deployment_it::deployment_it_recall_update($request->serial_no);
+        $query_recall = $deployment_it::hardware_equipment_change_status_unassigned($request->serial_no);
+        return 1;
+
+        
    }
 
 }

@@ -5,3 +5,9 @@ $display_data='<table class="responsive-table" style="width:90%; font-size:12px;
         $display_data.='<td>'.$dept_info[0]->deptname.'</td></tr>';
 
         $display_data.='</table>';
+
+          /*$deployment_it = new deployment_it;
+        $query = $deployment_it::where('emp_id','=',$current_emp_id);
+        $query_previous_user = $deployment_it::find($query[0]->id);
+        $query_previous_user->date_recalled = $date_today;
+        $query_previous_user->save();*/

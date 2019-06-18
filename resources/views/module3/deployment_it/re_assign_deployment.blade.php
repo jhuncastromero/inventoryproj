@@ -107,8 +107,8 @@
     			</div>
     			<div class="modal-footer">
       			
-      				<input type="hidden" id ="hidden_emp_id" name="hidden_emp_id">
-      				<input type="hidden" id ="hidden_serial_no" name="hidden_serial_no">
+      				<input type="text" id ="hidden_emp_id" name="hidden_emp_id">
+      				<input type="text" id ="hidden_serial_no" name="hidden_serial_no">
 
     			</div>
   			</div>		
@@ -254,6 +254,7 @@
 							success: function(data) {
 								$('#div_hardware_photo').html(data[0]);
 								$('#div_hardware_info').html(data[1]);
+								
 							}
 
 						})
