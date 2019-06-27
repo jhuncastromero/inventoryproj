@@ -57,14 +57,15 @@
 			 	</div>
 			 </div>
 			 <div class="row">
-
+			 	<FORM ACTION = "{{ route('deployment_it.deploymentpersonnelreport')}}" METHOD="GET">
+			 		
 			 		<div class="col s10" style="padding-top: 20px;">
 			 		<div id="display_hardware" name ="display_hardware"></div>
 			 		<div id="filter_display" name="filter_display_hardware" class="row" style = "padding-top:30px; font-size: 12px;">
 			 				<div>Filter Hardware Equipment Deployment</div>
 				 			<div class="input-field col s3" >
 				 				<select id="month" style="font-size: 10px;">
-				 					<option value ="00">Choose Month</option>
+				 					<option value ="">Choose Month</option>
 				 					<option value ="01">Jan</option>
 				 					<option value ="02">Feb</option>
 				 					<option value ="03">Mar</option>
@@ -87,7 +88,14 @@
 				 			</div>
 				 			<div class="col s3" style="padding-top: 30px;">
 				 				<a class="btn btn-small" style="width:75px; height: 30px;font-size:11px;" id="filter_btn" onclick="deployment_by_personnel_month_year();clear_content();">Filter</a>
+				 				
+				 				<button class="btn btn-small" type="submit" style="height: 30px;font-size:11px;"><i class="material-icons">print</i></button>
+				 			
+
+				 				<a class="btn btn-small" style="height: 30px;font-size:11px;" id="filter_btn" onclick=""><i class="material-icons">email</i></a>
 				 			</div>
+				 			
+				 			
 
 			 		</div>
 			 	</div>
@@ -98,11 +106,11 @@
 			 </div>
 			 <div class="row">
 
-			 	<input type="hidden" id="hidden_emp_id" name="hidden_emp_id">
-			 	<input type="hidden" id="hidden_last_name" name="hidden_last_name">
+			 	<input type="text" id="hidden_emp_id" name="hidden_emp_id">
+			 	<input type="text" id="hidden_last_name" name="hidden_last_name">
 
 			 </div>
-			
+			</FORM>
 	</div>
 		
 
@@ -227,8 +235,8 @@
 			    				success : function(data) {
 			    								    						
 			    						$('#display_hardware').html(data);
-			    						$('#year').val('');
-			    						$('#month').val('');
+			    						//$('#year').val('');
+			    						//$('#month').val('');
 			    				}
 			    			})
 

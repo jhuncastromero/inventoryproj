@@ -107,8 +107,8 @@
     			</div>
     			<div class="modal-footer">
       			
-      				<input type="text" id ="hidden_emp_id" name="hidden_emp_id">
-      				<input type="text" id ="hidden_serial_no" name="hidden_serial_no">
+      				<input type="hidden" id ="hidden_emp_id" name="hidden_emp_id">
+      				<input type="hidden" id ="hidden_serial_no" name="hidden_serial_no">
 
     			</div>
   			</div>		

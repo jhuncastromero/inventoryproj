@@ -263,4 +263,41 @@ class deployment_it extends Model
         return $date_today;
     }
 
+
+
+    // --------REPORT GENERATION ----->
+
+     public static function deployment_it_personnel_print_all_data($emp_id, $lastname)
+    {
+      
+        
+        if($emp_id !='') {
+              $personnel = new personnel;
+              $personal_info = $personnel::where('emp_id','=',$emp_id)->get();
+            
+              if($personal_info->count())
+              {
+                   return $personal_info;
+              }
+
+             
+          }
+          else {
+
+              $personal_info = '';
+              $deployment_query ='';
+
+              $personnel = new personnel;
+              $personal_info = $personnel::where('last_name','=',$lastname)->get();
+            
+              if($personal_info->count())
+              {
+                   return $personal_info;
+              }
+
+          }
+        return $query;
+    }
+
+
 }

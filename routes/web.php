@@ -63,6 +63,11 @@ Route::get('/deployment_it/viewpersonneldeployment','DeploymentItController@view
 Route::post('/deployment_it/viewpersonneldeploymentdetails','DeploymentItController@ajax_view_personnel_deployment_details')->name('deployment_it.viewpersonneldeploymentdetails');
 Route::get('/deployment_it/viewpersonneldeploymentfilter','DeploymentItController@ajax_view_personnel_deployment_month_year')->name('deployment_it.viewpersonneldeploymentfilter');
 
+	//report generation - personnel deployment
+Route::get('/deployment_it/generatedeploymentpersonnelreport','DynamicPDFController@deployment_personnel_print_report')->name('deployment_it.deploymentpersonnelreport');
+Route::get('/deployment_it/generatedeploymentpersonnelpdf','DynamicPDFController@pdf_deployment_it_personnel')->name('deployment_it.generatedeploymentpersonnelpdf');
+
+
 
 //---BY EQUIPMENT DEPLOYMENT ROUTE
 Route::get('/deployment_it/viewequipmentdeployment','DeploymentItController@view_equipment_deployment')->name('deployment_it.viewequipmentdeployment');
