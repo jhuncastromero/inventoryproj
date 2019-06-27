@@ -57,7 +57,7 @@
 			 	</div>
 			 </div>
 			 <div class="row">
-			 	<FORM ACTION = "{{ route('deployment_it.deploymentpersonnelreport')}}" METHOD="GET">
+			 	<FORM ACTION = "{{ route('deployment_it.deploymentpersonnelreport')}}" METHOD="GET" target="_blank">
 			 		
 			 		<div class="col s10" style="padding-top: 20px;">
 			 		<div id="display_hardware" name ="display_hardware"></div>
@@ -87,9 +87,9 @@
 				 				<label for="year">Year</label>
 				 			</div>
 				 			<div class="col s3" style="padding-top: 30px;">
-				 				<a class="btn btn-small" style="width:75px; height: 30px;font-size:11px;" id="filter_btn" onclick="deployment_by_personnel_month_year();clear_content();">Filter</a>
+				 				<a class="btn btn-small" style="width:75px; height: 30px;font-size:11px;" id="filter_btn" onclick="deployment_by_personnel_month_year(); clear_content();">Filter</a>
 				 				
-				 				<button class="btn btn-small" type="submit" style="height: 30px;font-size:11px;"><i class="material-icons">print</i></button>
+				 				<button class="btn btn-small" type="submit" style="height: 30px;font-size:11px;" onclick=""><i class="material-icons">print</i></button>
 				 			
 
 				 				<a class="btn btn-small" style="height: 30px;font-size:11px;" id="filter_btn" onclick=""><i class="material-icons">email</i></a>
@@ -108,6 +108,8 @@
 
 			 	<input type="text" id="hidden_emp_id" name="hidden_emp_id">
 			 	<input type="text" id="hidden_last_name" name="hidden_last_name">
+			 	<input type="text" id="hidden_month" name ="hidden_month">
+			 	<input type="text" id="hidden_year" name ="hidden_year"> 
 
 			 </div>
 			</FORM>
@@ -149,8 +151,14 @@
 					function clear_content() {
 						//$('#month').find('option:first').attr('selected','selected');
 						$('#year').val('');
-			    	
+
 					}
+
+					function clear_content2_hidden() {
+						$('#hidden_month').val('');
+					    $('#hidden_year').val('');
+					}
+
 			    	function deployment_by_personnel() {
 
 					      var xEmpID;
@@ -211,6 +219,7 @@
 
 			    	function deployment_by_personnel_month_year() {
 			    			
+			    		
 			    			var dataString;
 			    			var xMonth;
 			    			xMonth = '';
@@ -218,6 +227,8 @@
 
 			    			xMonth = $('#month').val();
 			    			xYear = $('#year').val();
+			    			$('#hidden_month').val(xMonth);
+					      	$('#hidden_year').val(xYear);
 			    			xLastName = $('#hidden_last_name').val();
 			    			xEmpID = $('#hidden_emp_id').val();
 
