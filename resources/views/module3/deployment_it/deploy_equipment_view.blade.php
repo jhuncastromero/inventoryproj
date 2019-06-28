@@ -77,7 +77,7 @@
 				     <div class="row">
 
 			 		<div class="col s10" style="padding-top: 20px;">
-			 		
+			 		<FORM ACTION = "{{ route('deployment_it.deploymenthardwarereport') }}" METHOD="GET" target="_blank">
 			 		<div id="filter_display" name="filter_display_hardware" class="row" style = "padding-top:30px; font-size: 12px;">
 			 				<div>Filter Hardware Equipment Deployment</div>
 				 			<div class="input-field col s3" >
@@ -105,6 +105,8 @@
 				 			</div>
 				 			<div class="col s3" style="padding-top: 30px;">
 				 				<a class="btn btn-small" style="width:75px; height: 30px;font-size:11px;" id="filter_btn" onclick="deployment_by_equipment_month_year();clear_content();">Filter</a>
+
+				 				<button class="btn btn-small" type="submit" style="height: 30px;font-size:11px;" onclick=""><i class="material-icons">print</i></button>
 				 			</div>
 
 			 		</div>
@@ -131,9 +133,12 @@
 		  	 <div class="row">
 
 			 	<input type="hidden" id="hidden_serial_no" name="hidden_serial_no">
+			 	<input type="hidden" id="hidden_month" name="hidden_month">
+			 	<input type="hidden" id="hidden_year" name="hidden_year">
 			 	
 
 			 </div>	
+			</FORM>
 		</div>
 
 @endsection
@@ -181,8 +186,7 @@
 					})
 
 					function clear_content() {
-						$('#month').val('');
-			    		$('#year').val('');
+						$('#year').val('');
 
 					}
 
@@ -212,6 +216,8 @@
 			    			xMonth = $('#month').val();
 			    			xYear = $('#year').val();
 			    			xSerial = $('#hidden_serial_no').val();
+			    			$('#hidden_month').val(xMonth);
+			    			$('#hidden_year').val(xYear);
 
 			    			dataString = 'month=' + xMonth + '&serial_no=' + xSerial + '&year=' + xYear;
 
@@ -223,13 +229,12 @@
 			    				success : function(data) {
 
 			    						$('#display_hardware').html(data);
-			    						$('#month').val('');
-			    						$('#year').val('');
-			    						
+			    									    						
 			    				}
 			    			})
 
-			    			$('#month').val('');
+			    			$('#month').find('option[value=""]').prop('selected',true);
+							$('#month').formSelect();
 			    			$('#year').val('');
 
 			    	}

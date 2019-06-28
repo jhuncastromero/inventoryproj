@@ -76,6 +76,10 @@ Route::post('/deployment_it/viewequipmentdeploymentdetails','DeploymentItControl
 Route::post('/deployment_it/viewpersonneldetails','DeploymentItController@ajax_view_personnel_details')->name('deployment_it.viewpersonneldetails');
 Route::get('/deployment_it/viewequipmentdeploymentfilter','DeploymentItController@ajax_view_equipment_deployment_month_year')->name('deployment_it.viewequipmentdeploymentfilter');
 
+	//report generation -hardware deployment
+Route::get('/deployment_it/generatedeploymenthardwarereport','DynamicPDFController@deployment_hardware_print_report')->name('deployment_it.deploymenthardwarereport');
+
+
 //---RE-ASSIGN DEPLOYMENT ROUTE
 
 Route::get('/deployment_it/reassignequipment','ReAssignRecall@reassign_equipment')->name('deployment_it.reassignequipment');
@@ -93,8 +97,24 @@ Route::post('/deployment_it/recallequipmentdetail','ReAssignRecall@ajax_equipmen
 Route::post('/deployment_it/recallequipmentupdate','ReAssignRecall@ajax_recall_equipment')->name('deployment_it.recallequipmentupdate');
 
 
+
+
+//---REPORT MODULE ROUTE
+
+Route::get('/deployment_it/reportallitdeploymentpersonnel','DynamicPDFController@deployment_personnel_report_all')->name('deployment_it.reportallitdeploymentpersonnel');
+Route::get('/deployment_it/reportallitdeploymenthardware','DynamicPDFController@deployment_hardware_report_all')->name('deployment_it.reportallitdeploymenthardware');
+
+
+
+
+//Email Route
+Route::get('/mail/send','MailController@send');
+Route::get('/mail/test','MailController@test')->name('mail.test');
+
 //Resource Route
 Route::resource('personnel','personnelController');
 Route::resource('hardware_equipment','HardwareEquipmentController');
 Route::resource('deployment_it','DeploymentItController');
+
+
 

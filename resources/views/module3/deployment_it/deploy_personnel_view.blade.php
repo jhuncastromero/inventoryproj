@@ -106,10 +106,10 @@
 			 </div>
 			 <div class="row">
 
-			 	<input type="text" id="hidden_emp_id" name="hidden_emp_id">
-			 	<input type="text" id="hidden_last_name" name="hidden_last_name">
-			 	<input type="text" id="hidden_month" name ="hidden_month">
-			 	<input type="text" id="hidden_year" name ="hidden_year"> 
+			 	<input type="hidden" id="hidden_emp_id" name="hidden_emp_id">
+			 	<input type="hidden" id="hidden_last_name" name="hidden_last_name">
+			 	<input type="hidden" id="hidden_month" name ="hidden_month">
+			 	<input type="hidden" id="hidden_year" name ="hidden_year"> 
 
 			 </div>
 			</FORM>
@@ -247,12 +247,14 @@
 			    								    						
 			    						$('#display_hardware').html(data);
 			    						//$('#year').val('');
-			    						//$('#month').val('');
+			    						
+			    						
 			    				}
 			    			})
 
 			    			
-
+					$('#month').find('option[value=""]').prop('selected',true);
+					$('#month').formSelect();
 			    	}
 			    	
 

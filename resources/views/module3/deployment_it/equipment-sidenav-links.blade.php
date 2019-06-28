@@ -39,7 +39,29 @@
 	    </li>
   	</ul>
   
-	<li><a href="#" data-activates="dropdown2" class="dropdown-button"><i class="material-icons">print</i>Report</a></li>
+	
+	<ul class="collapsible " style="padding-left: 15px; font-size:14px; ">
+	    <li>
+	      <div class="collapsible-header" style="color:#616161"><i class="material-icons" style="color:#616161;">print</i>&nbsp;&nbsp;&nbsp;Report</div>
+	      
+		      <div class="collapsible-body">
+		      	<ul style="padding-left: 10px;">
+		    
+		      		<FORM ACTION="{{ route('deployment_it.reportallitdeploymentpersonnel') }}" METHOD="GET" target="_blank" id="rptForm1">
+		      				<li><a href="" onclick="rptForm1.submit();"><i class="material-icons">chevron_right</i>All By Personnel </a></li>
+		      	   </FORM>
+
+
+		      		<FORM ACTION="{{ route('deployment_it.reportallitdeploymenthardware') }}" METHOD="GET" target="_blank" id="rptForm2">
+		    				<li><a href="#!"  onclick="rptForm2.submit();"><i class="material-icons">chevron_right</i>All By Equipment</a></li>
+		    		</FORM>
+		    
+				</ul>
+
+		      </div>
+	  		
+	    </li>
+  	</ul>
 
 	<li><div class="divider"></div></li>
 

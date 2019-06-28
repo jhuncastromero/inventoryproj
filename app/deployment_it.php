@@ -212,10 +212,24 @@ class deployment_it extends Model
        
    }      
 
-     public static function get_personnel_info($emp_id) {
+    public static function get_personnel_info($emp_id) {
 
         $personnel = new personnel;
         $query = $personnel::where('emp_id', '=',$emp_id)->whereNull('deleted_at')->get();
+        return $query;
+    }
+
+    public static function get_all_personnel() {
+
+        $personnel = new personnel;
+        $query = $personnel::whereNull('deleted_at')->get();
+        return $query;
+    }
+
+    public static function get_all_hardware() {
+
+        $hardware_equipment = new hardware_equipment;
+        $query = $hardware_equipment::whereNull('deleted_at')->get();
         return $query;
     }
 
