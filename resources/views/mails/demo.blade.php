@@ -1,3 +1,5 @@
+{{$sample}}
+
 Hello <i> {{ $demo->receiver }} </i>,
 <p> This is a demo email for testing purposes! also, it's the HTML Version. </p>
 

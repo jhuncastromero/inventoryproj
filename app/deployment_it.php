@@ -150,6 +150,15 @@ class deployment_it extends Model
       return $query;
 
     }
+
+    public static function get_in_used_hardware($emp_id) {
+
+      
+      $deployment_it  = new deployment_it;
+      $query = $deployment_it::where('emp_id', '=', $emp_id)->whereNull('date_recalled')->OrderBy('created_at','DESC')->get();
+      return $query;
+
+    }
     public static function get_assigned_personnel_by_month_year($emp_id, $month, $year) {
 
       

@@ -110,7 +110,8 @@ Route::get('/deployment_it/reportallitdeploymenthardware','DynamicPDFController@
 //Email Route
 Route::get('/mail/send','MailController@send');
 Route::get('/mail/test','MailController@test')->name('mail.test');
-
+Route::get('/deployment_it/email_personnel','MailController@email_assets_to_personnel_individual')->name('deployment_it.email_personnel');
+Route::get('/deployment_it/send_email_personnel','MailController@send')->name('deployment_it.send_email_personnel');
 //Resource Route
 Route::resource('personnel','personnelController');
 Route::resource('hardware_equipment','HardwareEquipmentController');

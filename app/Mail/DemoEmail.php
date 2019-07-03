@@ -16,11 +16,11 @@ class DemoEmail extends Mailable
      *
      * @return void
      */
-    public $demo;
-    public function __construct($demo)
+    //public $demo;
+    public function __construct()
     {
         //
-        $this->demo = $demo;
+       // $this->demo = $demo;
     }
 
     /**
@@ -30,8 +30,8 @@ class DemoEmail extends Mailable
      */
     public function build()
     {
-       // return $this->view('view.name');
-        return $this->from('sender@example.com')
+         return $this->view('mails.sample');
+       /* return $this->from('sender@example.com')
                     ->view('mails.demo')
                     ->text('mails.demo_plain')
                     ->with([
@@ -39,6 +39,6 @@ class DemoEmail extends Mailable
                             'testVarOne' => '1',
                             'testVarTwo' => '2',
 
-                    ]);
+                    ]);*/
     }
 }

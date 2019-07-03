@@ -288,7 +288,7 @@ class DeploymentItController extends Controller
             }
             else {
              
-                 $hardware='<div style="font-weight:bold;padding-bottom:10px; font-size:14px;">Assigned/ Deployed Hardware Equipment</div>';
+                 $hardware='<div style="font-weight:bold;padding-bottom:10px; font-size:14px;">History of Assigned/ Deployed Hardware Equipment</div>';
 
             
                  $hardware.='<table class="responsive-table" style="width:90%; font-size:12px;">';
@@ -358,7 +358,7 @@ class DeploymentItController extends Controller
                 }
                 else {
                  
-                     $hardware='<div style="font-weight:bold;padding-bottom:10px; font-size:14px;">Assigned/ Deployed Hardware Equipment</div>';
+                     $hardware='<div style="font-weight:bold;padding-bottom:10px; font-size:14px;">History of Assigned/ Deployed Hardware Equipment</div>';
 
                 
                      $hardware.='<table class="responsive-table stripped" style="width:80%; font-size:12px;">';
@@ -423,7 +423,7 @@ class DeploymentItController extends Controller
         }
         else {
 
-            $hardware.='<div style="font-weight:bold;font-size:12px; padding-bottom:10px;padding-top:20px">Deployment/ Assignment Record</div>';
+            $hardware.='<div style="font-weight:bold;font-size:12px; padding-bottom:10px;padding-top:20px">Deployment/ Assignment History Record</div>';
              $hardware.='<table class="responsive-table" style="width:80%; font-size:12px;">';
              $hardware.='<thead><tr>';
              $hardware.='<th> <i class="small material-icons">photo</i> </th>';
@@ -643,6 +643,8 @@ class DeploymentItController extends Controller
         return $output;
 
     }
+
+  
 
  
 }
